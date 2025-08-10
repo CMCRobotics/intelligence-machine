@@ -1,5 +1,6 @@
 # :brain: Intelligence Machine 
 
+An educational experience about Artificial Intelligence and Machine Learning.
 
 ## :gear: How to develop
 
