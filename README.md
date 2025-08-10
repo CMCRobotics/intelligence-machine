@@ -1,4 +1,4 @@
-# Intelligence Machine 
+# :brain: Intelligence Machine 
 
 
 ## :gear: How to develop
@@ -28,13 +28,13 @@ In order to obtain the latest dev version of dependencies, you may need a Github
 You need to export your token as **NPM_AUTH_TOKEN**.
 
 
-# How to reset your broker's persistent data (Mosquitto)
+### How to reset your broker's persistent data (Mosquitto)
 
 ```bash
 sudo service mosquitto stop && sudo rm /var/lib/mosquitto/mosquitto.db && sudo service mosquitto start
 ```
 
-## 🛠️ Technical Components
+## 🔬 Technical Components
 
 - WebXR for augmented reality experiences
 - Custom AR utilities for object placement
