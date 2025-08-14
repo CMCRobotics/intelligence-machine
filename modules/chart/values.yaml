@@ -1,0 +1,23 @@
+# Default values for imachine.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: registry.cern.ch/docker.io/node
+  pullPolicy: IfNotPresent
+  tag: "20"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+
+podAnnotations: {}
+
+workingDir: /eos/project-c/club-micro/projects/intelligence-machine/www
+service:
+  type: ClusterIP
+  port: 8080
+

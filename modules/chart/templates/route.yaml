@@ -1,0 +1,20 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: node-http
+  annotations:
+  #  haproxy.router.openshift.io/ip_whitelist: ''
+    haproxy.router.openshift.io/timeout: 10m
+spec:
+  host: "{{ .Values.image.host }}"
+  path: /
+  to:
+    kind: Service
+    name: {{ include "imachine.fullname" . }}
+    weight: 100
+  port:
+    targetPort: http-router
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
