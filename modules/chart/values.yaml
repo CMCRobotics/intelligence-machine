@@ -17,6 +17,9 @@ fullnameOverride: ""
 podAnnotations: {}
 
 workingDir: /eos/project-c/club-micro/projects/intelligence-machine/www
+
+command: ["/usr/local/bin/npm", "install","&&","npm","run","start"]
+
 service:
   type: ClusterIP
   port: 8080
