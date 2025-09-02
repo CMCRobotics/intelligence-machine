@@ -9,6 +9,7 @@ import 'lit-html';
 
 import 'aframe-orbit-controls';
 import 'aframe-extras';
+import 'aframe-environment-component';
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
