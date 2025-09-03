@@ -69,9 +69,12 @@ module.exports = {
     mainFields: ['module', 'browser', 'main']
   },
   devServer: {
+    // https://www.okteto.com/docs/tutorials/webpack/
     static: {
       directory: path.join(__dirname, 'public'),
     },
+    host: '0.0.0.0',
+    hot: true,
     compress: true,
     port: 9000,
   }
