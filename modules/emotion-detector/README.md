@@ -1,4 +1,4 @@
-pi_stream.pi for raspbery pi - takes images, searches for faces, performs inference - detects one of 7 emotions and sends it to the webserver (hosted by pi) 
+pi_stream.py for raspbery pi - takes images, searches for faces, performs inference - detects one of 7 emotions and sends it to the webserver (hosted by pi) 
 pi_detect_emotions.py - for raspberry pi - takes images, searches for faces, performs inference - detects one of 7 emotions and displays it.
 
 for both above --model [base/personalized] will specify whether use a basic model or newly retrained. 
