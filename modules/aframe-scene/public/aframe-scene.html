@@ -17,10 +17,12 @@
             
         </a-assets>
 
-        <a-entity environment="preset: forest; dressing: trees; dressingAmount: 200; dressingColor: #ceebd5; dressingScale: 10; fog: 0.8; fogColor: #adc2d6; playArea: 2; shadow: true; horizonColor: #b1d1f0; skyColor: #88c0f4; lightPosition: 1 2 -0.5; "></a-entity>
+        <a-entity environment="preset: forest; dressing: trees; dressingAmount: 100; dressingColor: #ceebd5; dressingScale: 10; fog: 0.3; fogColor: #adc2d6; playArea: 2; shadow: true; horizonColor: #b1d1f0; skyColor: #88c0f4; lightPosition: 1 2 -0.5; "></a-entity>
 
         <a-entity load-fragment="src: /scene-lab.html; templateId: scene-lab"></a-entity>
     
+        <!-- Spherical wooden floor -->
+        <a-circle radius="8s" rotation="-90 0 0" position="0 0.1 0" color="#8B4513"></a-circle>
 
         <!-- <a-entity camera orbit-controls="zoomSpeed: 1.5; minDistance: 3; maxDistance: 9; initialPosition: 0 6 12; maxPolarAngle: 80; rotateSpeed: 2" position="0 1.6 0"></a-entity> -->
     </a-scene>
