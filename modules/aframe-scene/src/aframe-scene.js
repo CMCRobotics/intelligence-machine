@@ -1,8 +1,6 @@
 import AFRAME from 'aframe';
 // import NoolsSceneController from './reef/NoolsSceneController';
 
-// import './components/bubble';
-// import './components/ocean-shader';
 import 'js-yaml';
 import 'loglevel';
 import 'lit-html';
@@ -10,6 +8,10 @@ import 'lit-html';
 import 'aframe-orbit-controls';
 import 'aframe-extras';
 import 'aframe-environment-component';
+
+import './components/load-fragment';
+import './components/linear-animation';
+import './components/ar-utils';
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
@@ -26,7 +28,7 @@ AFRAME.registerComponent('scene-controller', {
     // this.controller.addCoral('coral1', 0.5);
     // this.controller.addCoral('coral2', 0.7);
     // this.controller.addCoral('coral3', 0.6);
-    console.log("Hello Wonderful World");
+    console.log("Welcome to the lab");
   },
   
 //   tick: function(time, timeDelta) {
