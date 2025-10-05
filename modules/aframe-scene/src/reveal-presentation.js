@@ -7,7 +7,11 @@ import 'reveal.js/dist/theme/white.css';
 Reveal.initialize({
     plugins: [ Markdown ],
     progress: false,
-    controls: true
+    controls: true,
+    autoSlideMethod: "right",
+    transition: "none",
+    // autoSlide: 3000,
+    // loop: true
   }).then(() => {
     // $(document).ready(
     //     function(){
