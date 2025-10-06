@@ -3,18 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AFrame Scene</title>
+    <title>Brain Lab</title>
     <script  defer src="aframe.bundle.js"></script>
 </head>
 <body>
     <a-scene>
-        <!-- <a-assets>
-            <a-asset-item id="cupcake"                src="https://cmc-cdn.web.cern.ch/assets/winter/treats/cupcake.glb"  ></a-asset-item>
+        <a-assets>
+            <!-- https://cmc-cdn.web.cern.ch/assets/intelligence-machine/ -->
+            <a-asset-item id="floor"               src="assets/floor.glb"  ></a-asset-item>
+            <a-asset-item id="base"                src="assets/base.glb"  ></a-asset-item>
+            <a-asset-item id="dome"                src="assets/dome.glb"  ></a-asset-item>
+            <a-asset-item id="cyberbrain"          src="assets/cyberbrain.glb"  ></a-asset-item>
+            <a-asset-item id="lab-device"          src="assets/lab-device.glb"  ></a-asset-item>
+            <a-asset-item id="lab-device-2"        src="assets/lab-device-2.glb"  ></a-asset-item>
+            <a-asset-item id="lab-chair"        src="assets/lab-chair.glb"  ></a-asset-item>
+            <a-asset-item id="lab-desk"        src="assets/lab-desk.glb"  ></a-asset-item>
+            <a-asset-item id="lab-computer"        src="assets/lab-computer.glb"  ></a-asset-item>
             
-        </a-assets> -->
+        </a-assets>
 
-        <a-entity environment="preset: forest; ground: none;  dressing: trees; dressingAmount: 200; dressingColor: #ceebd5; dressingScale: 10; fog: 0.8; fogColor: #adc2d6; playArea: 0.5; shadow: true; horizonColor: #b1d1f0; skyColor: #88c0f4; lightPosition: 1 2 -0.5; "></a-entity>
+        <a-entity environment="preset: forest; dressing: trees; dressingAmount: 100; dressingColor: #ceebd5; dressingScale: 10; fog: 0.3; fogColor: #adc2d6; playArea: 2; shadow: true; horizonColor: #b1d1f0; skyColor: #88c0f4; stageSize: 100; lightPosition: 1 2 -0.5; "></a-entity>
 
+        <a-entity load-fragment="src: /scene-lab.html; templateId: scene-lab"></a-entity>
+    
+        <!-- Spherical wooden floor -->
+        <!--a-circle radius="8" rotation="-90 0 0" position="0 0.1 -3" color="#8B4513"></a-circle-->
 
         <!-- <a-entity camera orbit-controls="zoomSpeed: 1.5; minDistance: 3; maxDistance: 9; initialPosition: 0 6 12; maxPolarAngle: 80; rotateSpeed: 2" position="0 1.6 0"></a-entity> -->
     </a-scene>
