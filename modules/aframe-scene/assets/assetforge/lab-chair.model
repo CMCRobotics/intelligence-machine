@@ -1,0 +1,30 @@
+# Made using Asset Forge (2.5.2)
+
+:materials
+
+[name:wood;color:RGBA(1.000, 0.671, 0.671, 1.000);scale:(1.0, 1.0);texture:Wood/woodVertical.png;shader:Default;mapping:0;valueA:0;valueB:0.7;]
+[name:woodDark;color:RGBA(0.698, 0.316, 0.194, 1.000);scale:(1.0, 1.0);texture:Wood/woodHorizontal.png;shader:Default;mapping:0;valueA:0.35;valueB:0;]
+[name:custom2;color:RGBA(0.351, 0.225, 0.088, 1.000);scale:(1.0, 1.0);texture:Wood/woodVertical.png;shader:Default;mapping:0;valueA:0.5;valueB:0.15;]
+[name:_defaultMat;color:RGBA(0.597, 0.688, 0.993, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0.25;]
+[name:dark;color:RGBA(0.134, 0.201, 0.441, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0;]
+[name:metalLight;color:RGBA(0.698, 0.686, 0.867, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0.25;]
+[name:tan;color:RGBA(0.933, 0.835, 0.663, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0;]
+[name:custom7;color:RGBA(0.632, 0.486, 0.486, 1.000);scale:(1.0, 1.0);texture:Wood/woodVertical.png;shader:Default;mapping:0;valueA:0;valueB:0.7;]
+
+:models
+
+[name:;collection:Furniture;type:surface_round;position:(0.0551, 0.6000, 0.0266);rotation:(0.0000, 345.0000, 0.0000);scale:(0.6170, 0.6300, 0.5507);group:Group_17;locked:False;hidden:False;materials:wood+wood;]
+[name:;collection:Primitives;type:sphere_half;position:(0.3795, 0.8784, 0.0186);rotation:(79.9216, 265.8496, 180.0000);scale:(0.0454, 0.0632, 0.0391);group:Group_17;locked:False;hidden:False;materials:_defaultMat;]
+[name:;collection:Primitives;type:sphere_half;position:(0.3624, 0.6583, 0.0173);rotation:(79.9216, 265.8496, 180.0000);scale:(0.0453, 0.0605, 0.0387);group:Group_17;locked:False;hidden:False;materials:_defaultMat;]
+[name:;collection:Greebles;type:detail_pipeEndRoundSmall;position:(0.3520, 0.6115, 0.0167);rotation:(270.0000, 286.7102, 0.0000);scale:(0.9187, 0.7762, 2.4288);group:Group_17;locked:False;hidden:False;materials:_defaultMat;]
+[name:;collection:Greebles;type:detail_pipeEndRoundSmall;position:(0.3571, 0.6115, 0.0139);rotation:(270.0000, 106.7102, 0.0000);scale:(0.7578, 0.4401, 2.4288);group:Group_17;locked:False;hidden:False;materials:_defaultMat;]
+[name:;collection:Furniture;type:surface_round;position:(0.3890, 1.0012, 0.0309);rotation:(0.0000, 0.0000, 85.0000);scale:(0.4550, 0.5881, 0.5172);group:Group_17;locked:False;hidden:False;materials:wood+wood;]
+[name:;collection:Furniture;type:leg_round;position:(0.2440, 0.2648, 0.1992);rotation:(88.9448, 358.4366, 178.5292);scale:(0.5539, 0.7019, 0.6289);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:leg_roundTaper;position:(0.2578, 0.0043, 0.2287);rotation:(355.0191, 359.5631, 5.0190);scale:(0.9126, 1.2743, 0.9424);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:leg_roundTaper;position:(0.2578, 0.0043, -0.1883);rotation:(4.9809, 0.4369, 5.0190);scale:(0.9126, 1.2743, 0.9424);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:leg_round;position:(-0.1158, 0.2649, -0.1718);rotation:(88.9450, 268.4366, 178.5292);scale:(0.5539, 0.7019, 0.6289);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:leg_round;position:(-0.1165, 0.2648, 0.2182);rotation:(88.9450, 268.4366, 178.5292);scale:(0.5539, 0.7019, 0.6289);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:leg_round;position:(-0.1260, 0.2649, 0.1986);rotation:(88.9448, 358.4366, 178.5292);scale:(0.5539, 0.7019, 0.6289);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:leg_roundTaper;position:(-0.1458, 0.0043, 0.2287);rotation:(355.0191, 0.4369, 354.9810);scale:(0.9126, 1.2743, 0.9424);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:leg_roundTaper;position:(-0.1458, 0.0043, -0.1883);rotation:(4.9809, 359.5631, 354.9810);scale:(0.9126, 1.2743, 0.9424);group:Group_17;locked:False;hidden:False;materials:wood;]
+[name:;collection:Furniture;type:surface_round;position:(0.0550, 0.6100, 0.0295);rotation:(0.0000, 345.0000, 0.0000);scale:(0.5920, 0.6678, 0.5235);group:Group_17;locked:False;hidden:False;materials:wood+wood;]
