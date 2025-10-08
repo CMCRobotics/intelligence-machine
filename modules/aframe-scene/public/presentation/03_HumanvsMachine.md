@@ -19,4 +19,3 @@ A neural network for classification shows how perceptrons connected together for
 
 ![](presentation/images/neural-network-deep-learning.png) <!-- .element style="width:450px" -->
 
---
