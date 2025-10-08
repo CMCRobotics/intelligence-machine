@@ -60,3 +60,15 @@ https://my.clevelandclinic.org/health/body/23418-cerebellum
 "Limbic System"
 by Corbac40/Shutterstock
 https://www.news-medical.net/
+
+---
+
+# Sound credits
+
+--
+
+"Sci-fi Laboratory Ambience" 
+
+[http://freesound.org/people/qubodup/sounds/212025] by [Iwan ‘qubodup’ Gabovitch](http://freesound.org/people/qubodup) <br> under CC-BY 3.0 License with sounds by wolick, swiftoid, Diboz
+
+--
