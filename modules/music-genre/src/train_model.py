@@ -178,7 +178,10 @@ mfccs_librosa = extract_mfccs_librosa(
 display_mfccs(mfccs_librosa)
 
 # Music genres. just to try, can select more and different
-LIST_GENRES = ['disco', 'jazz', 'metal']
+# LIST_GENRES = ['disco', 'jazz', 'metal']
+
+LIST_GENRES = ['classical', 'hiphop', 'pop', 'reggae', 'rock']
+
 
 # Training audio length in seconds
 TRAIN_AUDIO_LENGTH_SEC = 1
@@ -272,7 +275,7 @@ model.compile(optimizer=optimiser,
               loss='sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-NUM_EPOCHS = 30
+NUM_EPOCHS = 60
 BATCH_SIZE = 50
 
 history = model.fit(x_train, y_train, epochs=NUM_EPOCHS, batch_size=BATCH_SIZE,
