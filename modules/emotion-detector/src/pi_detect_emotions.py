@@ -109,10 +109,14 @@ while True:
         inp_q = preprocess_to_int8(roi_gray)
         probs = infer_int8(inp_q)
         cls = int(np.argmax(probs))
+        prob = probs[cls]
         label = emotion_dict.get(cls, "Unknown")
-        cv2.putText(frame, label, (x+20, y-60),
-                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
+        # cv2.putText(frame, label, (x+20, y-60),
+        #             cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
 
+        text = f"{label} ({prob * 100:.1f}%)"
+        cv2.putText(frame, text, (x+20, y-60),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2, cv2.LINE_AA)
     cv2.imshow('Video (INT8 TFLite)', cv2.resize(frame, (1600, 960), interpolation=cv2.INTER_CUBIC))
     if cv2.waitKey(1) & 0xFF == ord('q'): break
 
