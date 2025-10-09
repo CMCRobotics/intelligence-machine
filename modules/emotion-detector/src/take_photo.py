@@ -4,6 +4,7 @@
 # converts to grayscale, searches for face/s, resizes to 48x 48
 # shows and saves the image to the folder for emotion specified from command line
 #
+# saves the images in /data/new/data in respective folders for emotions
 # to run:
 # python take_photo.py --emotion [happy] --number [10]
 #
@@ -24,7 +25,7 @@ emotion = ap.parse_args().emotion
 image_number = int(ap.parse_args().number)
 
 
-DIR = "../data/new_images"
+DIR = "../data/new_data"
 IMAGE_WIDTH = 48
 IMAGE_HEIGHT = 48
 

@@ -17,6 +17,9 @@
 #
 # TODO: IMAGE_WIDTH and IMAGE_HEIGHT to ext module?
 #
+# requires /data/test images to compare the models' accuracy
+# expects new images in /data/new_data
+
 # i fail to send the new model to pi from this script, we may need to just run this command at the end:
 # $ scp /home/kasik/Documents/Books/ai/tinyML/projects/emotion_detection/Emotion-detection/src/model_int8_personalized.tflite pi@192.168.3.231:/home/pi/projects/tinyml/emotions
 #------------------------------------------------------------------------------------------------------------
@@ -40,7 +43,7 @@ matplotlib.use('TkAgg')
 IMAGE_WIDTH = 48
 IMAGE_HEIGHT = 48
 test_dir = '../data/test'
-new_data_dir='../data/processed' #it needs to contain all classes
+new_data_dir='../data/new_data' #it needs to contain all classes
 
 # Labels
 emotion_dict = {
