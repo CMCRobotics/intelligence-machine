@@ -1,7 +1,9 @@
 <a-entity id="floor" gltf-model="#floor" position="0 0.1 -10" scale="1.5 1.5 1.5" material="opacity: 0.1;"></a-entity>
 
 
-<a-entity id="base" gltf-model="#base" scale="1.2 1.2 1.2" rotation="0 180 0" position="-2.204 0.3 -5.697"></a-entity>
+<!-- Base with underwater sound -->
+<a-entity id="base" gltf-model="#base" scale="1.2 1.2 1.2" rotation="0 180 0" position="-2.204 0.3 -5.697"
+          sound="src: #underwaterSound; loop: true; volume: 0.8; autoplay: true; positional: true"></a-entity>
 
 <a-entity id="brain" gltf-model="#cyberbrain" position="-0.87447 2.54043 -4.50151" rotation="0 -30 0" floating-in-jar></a-entity>
 
@@ -18,9 +20,15 @@
 
 <a-entity id="lab-chair2" gltf-model="#lab-chair" position="-0.64515 0.2 -18.93082" scale="3 3 3" rotation="0 -64.84965508408709 0"></a-entity>
 
-<a-entity id="lab-computer" gltf-model="#lab-computer" position="-0.86796 3.51759 -20.19095" scale="0.8 0.8 0.8" rotation="0 179.01550646846954 0"></a-entity>
+<!-- Lab Computer with timed computer sound -->
+<a-entity id="lab-computer" gltf-model="#lab-computer" position="-0.86796 3.51759 -20.19095" scale="0.8 0.8 0.8" rotation="0 179.01550646846954 0"
+          sound="src: #computerSound; volume: 0.2; positional: true; autoplay: false"
+          timed-sound="src: #computerSound; interval: 90000; volume: 0.2; start-offset: 20000"></a-entity>
 
-<a-entity id="lab-device-1" gltf-model="#lab-device-2"   position="-3.787 -0.25 1.092" scale="0.5 0.5 0.5" rotation="0 -28 0" ></a-entity>
+<!-- Lab Device 1 with timed voltmeter sound -->
+<a-entity id="lab-device-1" gltf-model="#lab-device-2"   position="-3.787 -0.25 1.092" scale="0.5 0.5 0.5" rotation="0 -28 0"
+          sound="src: #voltmeterSound; volume: 0.2; positional: true; autoplay: false"
+          timed-sound="src: #voltmeterSound; interval: 30000; volume: 0.2; start-offset: 10000"></a-entity>
 
 <a-entity id="lab-device-2" gltf-model="#lab-device"     position="2.277 -0.3 -1.54"  scale="0.5 0.5 0.5" rotation="0 -132 0"></a-entity>
 <a-entity id="lab-device-3"   gltf-model="#lab-device-2" position="2.49951 -0.62316 -10.17007" scale="0.6 0.8 0.6" rotation="0 -25.136231430184345 0"></a-entity>

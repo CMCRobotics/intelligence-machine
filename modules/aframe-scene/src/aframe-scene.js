@@ -13,6 +13,7 @@ import './components/load-fragment';
 import './components/linear-animation';
 import './components/ar-utils';
 import './components/floating-in-jar';
+import './components/timed-sound';
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';

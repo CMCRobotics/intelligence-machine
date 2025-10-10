@@ -8,7 +8,7 @@
 </head>
 <body>
     <a-scene id="aframe-scene" light="defaultLightsEnabled: false"
-             sound="src: #forestAmbientSound; loop: true; volume: 0.1; autoplay: false">
+             sound="src: #forestAmbientSound; loop: true; volume: 0.05; autoplay: true">
         <a-assets>
             <!-- https://cmc-cdn.web.cern.ch/assets/intelligence-machine/ -->
             <a-asset-item id="floor"               src="assets/floor.glb"  ></a-asset-item>
@@ -23,6 +23,9 @@
             
             <!-- New Sound Assets -->
             <a-asset-item id="forestAmbientSound" src="assets/forest-ambient.mp3" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="underwaterSound"    src="assets/underwater-ambience.mp3" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="voltmeterSound"     src="assets/voltmeter.mp3" response-type="arraybuffer"></a-asset-item>
+            <a-asset-item id="computerSound"      src="assets/computer.mp3" response-type="arraybuffer"></a-asset-item>
         </a-assets>
 
         <a-entity environment="preset: forest; dressing: trees; dressingAmount: 100; dressingColor: #ceebd5; dressingScale: 15; fog: 0.6; fogColor: #adc2d6; playArea: 30; shadow: true; horizonsColor: #b1d1f0; skyColor: #88c0f4; stageSize: 200; lighting: none; "></a-entity>
@@ -36,11 +39,11 @@
         <!-- <a-entity id="main-camera" camera orbit-controls="zoomSpeed: 1.5; minDistance: 3; maxDistance: 9; initialPosition: 0 6 12; maxPolarAngle: 80; rotateSpeed: 2" position="0 1.6 0"></a-entity> -->
     </a-scene>
 
-    <div id="play-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+    <!-- <div id="play-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.8); display: flex; justify-content: center; align-items: center; z-index: 9999;">
         <button id="play-button" style="padding: 20px 40px; font-size: 24px; cursor: pointer;">Enter the lab</button>
-    </div>
+    </div> -->
 
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             const playButton = document.getElementById('play-button');
             const playOverlay = document.getElementById('play-overlay');
@@ -61,6 +64,6 @@
                 playOverlay.style.display = 'none';
             });
         });
-    </script>
+    </script> -->
 </body>
 </html>
