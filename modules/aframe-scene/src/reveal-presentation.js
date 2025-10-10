@@ -10,8 +10,8 @@ Reveal.initialize({
     controls: true,
     autoSlideMethod: "right",
     transition: "none",
-    // autoSlide: 3000,
-    // loop: true
+    autoSlide: 4000,
+    loop: true
   }).then(() => {
     // $(document).ready(
     //     function(){
