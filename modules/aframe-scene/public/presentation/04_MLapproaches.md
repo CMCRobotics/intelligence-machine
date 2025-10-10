@@ -2,8 +2,8 @@
 ### Did you know that a machine can learn following different approaches?
 
 * Supervised 
-* Unsupervised <!-- .element class="fragment"-->
-* Reinforcement learning <!-- .element class="fragment"-->
+* Unsupervised 
+* Reinforcement learning 
 
 ![](presentation/images/polly_enlightened.svg)<!-- .element style="position: fixed; bottom: 50px; right: -120px; width:250px" -->
 

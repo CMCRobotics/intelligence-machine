@@ -11,11 +11,11 @@ The cells in our brain that convey the information about thoughts are the neuron
 
 In the same way Deep Learning models adopt Perceptrons, inspired by the human brain.
 
-![](presentation/images/perceptron.png) <!-- .element style="width:450px" -->
+![](presentation/images/perceptron.png) <!-- .element style="width:400px" -->
 
 --
 
 A neural network for classification shows how perceptrons connected together form a powerful architecture.
 
-![](presentation/images/neural-network-deep-learning.png) <!-- .element style="width:450px" -->
+![](presentation/images/neural-network-deep-learning.png) <!-- .element style="width:400px" -->
 

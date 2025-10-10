@@ -65,9 +65,19 @@ but many researchers argue they show a kind of distributed intelligence. <!-- .e
 
 ## Plants
 
+
+![](presentation/images/roots_of_strength.png)<!-- .element style="width:350px" -->
+
 <p>
 Roots can detect water, nutrients, toxins, and even obstacles, then “decide” which way to grow.
 </p>
+
+--
+## Plants
+
+
+![](presentation/images/myccorhizal_network.png)<!-- .element style="width:350px" -->
+
 <p>
 Plants send chemical signals through the air (volatile organic compounds) and underground via fungal networks (the “wood-wide web”).
 </p>

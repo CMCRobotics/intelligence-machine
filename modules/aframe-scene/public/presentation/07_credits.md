@@ -1,7 +1,7 @@
 # Authors
 
-* Katarzyna Stachyra
 * Francesca Schettino
+* Katarzyna Stachyra
 * Roberto Cittadini
 * Brice Copy
 
@@ -40,25 +40,47 @@ https://www.canva.com/p/brand473124566/
 -- 
 
 "Perceptron diagram"
+
 by Pinar
+
 https://github.com/CodeByPinar/ML-Perceptron-Project
 
 --
 
+"Roots of strength"
+
+by Easy-peasy
+
+https://easy-peasy.ai/ai-image-generator/images/roots-of-strength-tree-symbol-stability-resilience-serene-landscape
+
+--
+"Mycorrhizal Network"
+
+by Sustainability Directory
+
+https://sustainability-directory.com/
+
+--
 "Neural Networks of deep learning"
+
 by Mymemoriesarts
+
 https://www.canva.com/p/id/BACsEKxEDlw/
 
 --
 
 "Brain diagram"
+
 by Cleveland Clinic (copyright 2022)
+
 https://my.clevelandclinic.org/health/body/23418-cerebellum
 
 --
 
 "Limbic System"
+
 by Corbac40/Shutterstock
+
 https://www.news-medical.net/
 
 ---

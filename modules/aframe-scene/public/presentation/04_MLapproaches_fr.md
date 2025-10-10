@@ -1,8 +1,8 @@
 ### Saviez-vous qu'une machine peut apprendre selon différentes approches ?
 
 * Supervisé 
-* Non supervisé <!-- .element class="fragment"-->
-* Apprentissage par renforcement <!-- .element class="fragment"-->
+* Non supervisé
+* Apprentissage par renforcement
 
 ![](presentation/images/polly_enlightened.svg)<!-- .element style="position: fixed; bottom: 50px; right: -120px; width:250px" -->
 
