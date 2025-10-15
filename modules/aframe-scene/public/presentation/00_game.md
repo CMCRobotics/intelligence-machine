@@ -1,7 +1,7 @@
 
-## Core Concept
+# Core Concept
 
-### Collaborative Brain Nurturing
+## Collaborative Brain Nurturing
 
 *   **Goal:** Grow a human brain model in a shared VR space.
 *   **Mechanism:** Players complete challenges to develop specific "Lobes of Intelligence."
@@ -9,9 +9,9 @@
 
 ---
 
-## 2. Our Toolkit
+# 2. Our Toolkit
 
-### Available Resources
+## Available Resources
 
 | Resource | Primary Role | Associated Intelligence |
 | :--- | :--- | :--- |
@@ -22,9 +22,9 @@
 
 ---
 
-## 3. Guiding Philosophy
+# 3. Guiding Philosophy
 
-### AI vs. Human Intelligence
+## AI vs. Human Intelligence
 
 *   **AI (Embedded Devices):** Excels at **analyzing, classifying, and measuring** structured input (Logical, Linguistic, Kinesthetic *patterns*).
 *   **Human Players (VR/Sensors):** Provide the **creative, adaptive, and nuanced** input (Interpersonal, Musical, Empathy).
@@ -32,16 +32,16 @@
 
 ---
 <!-- Game 1: The Empathy Engine (Horizontal Slide) -->
-## Game 1: The Empathy Engine
+# Game 1: The Empathy Engine
 
-### Focus: Interpersonal & Bodily-Kinesthetic Intelligence
+## Focus: Interpersonal & Bodily-Kinesthetic Intelligence
 
 *   **Goal:** Harmonize the team's physical and emotional states to grow the "Emotional/Social Cortex."
 *   **Core Idea:** AI is the *Analyzer* of body language and tone; Humans must generate *Coordination* and *Empathy*.
 
 --
 <!-- Game 1: Vertical Slide 1 -->
-### Challenge 1: Rhythm Sync (Kinesthetic)
+## Challenge 1: Rhythm Sync (Kinesthetic)
 
 *   **Task:** Players perform synchronized gestures (wave, pulse) matching a visual rhythm in VR.
 *   **Tech:** **ESP32/STM32** with IMU/Accelerometer.
@@ -50,7 +50,7 @@
 
 --
 <!-- Game 1: Vertical Slide 2 -->
-### Challenge 2: Social Echo (Interpersonal)
+## Challenge 2: Social Echo (Interpersonal)
 
 *   **Task:** One player acts out a VR-projected emotion (e.g., "Frustration"). The other must use calming speech to stabilize them.
 *   **Tech:** **VR Mic/On-board Processing.**
@@ -59,16 +59,16 @@
 
 ---
 <!-- Game 2: The Logic Synthesizer (Horizontal Slide) -->
-## Game 2: The Logic Synthesizer
+# Game 2: The Logic Synthesizer
 
-### Focus: Logical-Mathematical & Visual-Spatial Intelligence
+## Focus: Logical-Mathematical & Visual-Spatial Intelligence
 
 *   **Goal:** Debug and optimize a digital neural pathway to grow the "Rational/Processing Lobes."
 *   **Core Idea:** AI is the *Competitor* and *Framework*; Humans must *Design* and *Understand* the principles.
 
 --
 <!-- Game 2: Vertical Slide 1 -->
-### Challenge 1: Code Circuit (Logical-Mathematical)
+## Challenge 1: Code Circuit (Logical-Mathematical)
 
 *   **Task:** Solve a Boolean circuit or logic puzzle in VR to route a signal to a target output.
 *   **Tech:** **STM32/ESP32** connected to the VR environment.
@@ -77,7 +77,7 @@
 
 --
 <!-- Game 2: Vertical Slide 2 -->
-### Challenge 2: 3D Neuro-Sculpting (Visual-Spatial)
+## Challenge 2: 3D Neuro-Sculpting (Visual-Spatial)
 
 *   **Task:** Collaboratively manipulate 3D neural fiber blocks in VR to match a target spatial topology shown in fragments.
 *   **Tech:** **VR Headset/Controllers** for precise positional and orientation tracking.
@@ -86,16 +86,16 @@
 
 ---
 <!-- Game 3: The Sensory Conductor (Horizontal Slide) -->
-## Game 3: The Sensory Conductor
+# Game 3: The Sensory Conductor
 
-### Focus: Musical-Rhythmic & Linguistic-Verbal Intelligence
+## Focus: Musical-Rhythmic & Linguistic-Verbal Intelligence
 
 *   **Goal:** Convert abstract sensory input into a new, meaningful concept to grow the "Creative/Communication Lobe."
 *   **Core Idea:** AI is the *Pattern Filter* and *Grammar*; Humans generate **novel patterns** and **creative meaning**.
 
 --
 <!-- Game 3: Vertical Slide 1 -->
-### Challenge 1: Sound Seed Nurturing (Musical-Rhythmic)
+## Challenge 1: Sound Seed Nurturing (Musical-Rhythmic)
 
 *   **Task:** Generate a complex, rhythmic pattern (taps, hums, speech rhythm) that satisfies a constantly shifting pattern requirement.
 *   **Tech:** **BBC Microbit (v2)** with built-in mic/accelerometer.
@@ -104,7 +104,7 @@
 
 --
 <!-- Game 3: Vertical Slide 2 -->
-### Challenge 2: Abstract Labeling (Linguistic-Verbal)
+## Challenge 2: Abstract Labeling (Linguistic-Verbal)
 
 *   **Task:** Given a new, abstract VR visual, players must agree on a unique, meaningful new word (neologism) to label the 'thought'.
 *   **Tech:** **VR Mic, Microbit Radio.**
@@ -113,9 +113,9 @@
 
 ---
 
-## Next Steps
+# Next Steps
 
-### Prototyping Focus
+## Prototyping Focus
 
 1.  **Select:** Choose one game concept for the initial prototype.
 2.  **TinyML Pipeline:** Develop the simple **TFLite Model** for the selected embedded device (e.g., Gesture Recognition on the ESP32).
