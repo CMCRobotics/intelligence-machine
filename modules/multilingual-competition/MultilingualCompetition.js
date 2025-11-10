@@ -6,12 +6,15 @@ export default function WordCompetition() {
   const [numWords, setNumWords] = useState(3);
   const [words, setWords] = useState(['', '', '']);
   const [results, setResults] = useState(null);
+  const [aiExplanation, setAiExplanation] = useState('');
+  const [loadingExplanation, setLoadingExplanation] = useState(false);
 
   const handleNumWordsChange = (num) => {
     setNumWords(num);
     const newWords = Array(num).fill('').map((_, i) => words[i] || '');
     setWords(newWords);
     setResults(null);
+    setAiExplanation('');
   };
 
   const handleWordChange = (index, value) => {
@@ -115,7 +118,120 @@ export default function WordCompetition() {
     return score;
   };
 
-  const evaluateWords = () => {
+  const generateExplanation = (winner, allWords) => {
+    const strengths = [];
+    const comparisons = [];
+    
+    // Identify strengths
+    if (winner.scores.multilingual >= 8) {
+      strengths.push('excellent multilinguistic appeal');
+    } else if (winner.scores.multilingual >= 6) {
+      strengths.push('good cross-linguistic recognizability');
+    }
+    
+    if (winner.scores.adherence >= 8) {
+      strengths.push('strong adherence to the topic');
+    } else if (winner.scores.adherence >= 6) {
+      strengths.push('clear connection to the concept');
+    }
+    
+    if (winner.scores.concision >= 8) {
+      strengths.push('optimal concision');
+    } else if (winner.scores.concision >= 6) {
+      strengths.push('good length and clarity');
+    }
+    
+    // Compare with runner-ups
+    if (allWords.length > 1) {
+      const runnerUp = allWords[1];
+      const scoreDiff = winner.scores.total - runnerUp.scores.total;
+      
+      if (scoreDiff >= 5) {
+        comparisons.push(`significantly outperforming "${runnerUp.word}"`);
+      } else if (scoreDiff >= 2) {
+        comparisons.push(`edging out "${runnerUp.word}"`);
+      } else {
+        comparisons.push(`narrowly beating "${runnerUp.word}"`);
+      }
+      
+      // Mention specific advantage
+      const advantages = [];
+      if (winner.scores.multilingual > runnerUp.scores.multilingual + 1) {
+        advantages.push('better multilinguistic reach');
+      }
+      if (winner.scores.adherence > runnerUp.scores.adherence + 1) {
+        advantages.push('stronger topic alignment');
+      }
+      if (winner.scores.concision > runnerUp.scores.concision + 1) {
+        advantages.push('superior concision');
+      }
+      
+      if (advantages.length > 0) {
+        comparisons.push('particularly due to ' + advantages.join(' and '));
+      }
+    }
+    
+    let explanation = `"${winner.word}" wins with ${strengths.join(', ')}`;
+    if (comparisons.length > 0) {
+      explanation += ', ' + comparisons.join(', ');
+    }
+    explanation += '.';
+    
+    return explanation;
+  };
+
+  const generateAIExplanation = async (winner, allWords, topicText) => {
+    setLoadingExplanation(true);
+    
+    const prompt = `You are judging a multilingual word competition. The topic is "${topicText}".
+
+The competing words and their scores are:
+${allWords.map((w, i) => `${i + 1}. "${w.word}" - Total: ${w.scores.total}/30 (Multilinguistic: ${w.scores.multilingual}/10, Adherence: ${w.scores.adherence}/10, Concision: ${w.scores.concision}/10)`).join('\n')}
+
+The winner is "${winner.word}". 
+
+Explain in 2-3 sentences why "${winner.word}" won. Focus on:
+- Its multilinguistic appeal (works across Italian, German, Spanish, English, French, etc.)
+- How well it captures the topic
+- Its conciseness and clarity
+- How it compares to the other words
+
+Be specific and insightful. Keep it concise.`;
+
+    try {
+      const response = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': 'YOUR_API_KEY_HERE', // User needs to add their API key
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-3-haiku-20240307',
+          max_tokens: 200,
+          messages: [{
+            role: 'user',
+            content: prompt
+          }]
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('API request failed');
+      }
+
+      const data = await response.json();
+      const explanation = data.content[0].text;
+      setAiExplanation(explanation);
+    } catch (error) {
+      console.error('Error getting AI explanation:', error);
+      setAiExplanation('AI explanation unavailable. Please add your Anthropic API key to enable this feature.');
+    } finally {
+      setLoadingExplanation(false);
+    }
+  };
+
+  const evaluateWords = async () => {
     if (!topic.trim()) {
       alert('Please enter a topic!');
       return;
@@ -148,7 +264,15 @@ export default function WordCompetition() {
     }).filter(Boolean);
 
     evaluations.sort((a, b) => b.scores.total - a.scores.total);
+    
+    // Generate explanation
+    const explanation = generateExplanation(evaluations[0], evaluations);
+    evaluations[0].explanation = explanation;
+    
     setResults(evaluations);
+    
+    // Generate AI explanation
+    await generateAIExplanation(evaluations[0], evaluations, topic);
   };
 
   return (
@@ -228,6 +352,22 @@ export default function WordCompetition() {
               <Trophy className="w-8 h-8 text-yellow-500" />
               <h2 className="text-2xl font-bold text-gray-800">Results</h2>
             </div>
+
+            {aiExplanation && (
+              <div className="mb-6 p-5 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border-2 border-purple-300">
+                <h3 className="text-sm font-bold text-purple-800 mb-2 flex items-center gap-2">
+                  <Sparkles className="w-4 h-4" />
+                  AI Analysis
+                </h3>
+                <p className="text-gray-700 leading-relaxed">{aiExplanation}</p>
+              </div>
+            )}
+
+            {loadingExplanation && !aiExplanation && (
+              <div className="mb-6 p-5 bg-gray-50 rounded-xl border-2 border-gray-300">
+                <p className="text-gray-500 italic">Generating AI explanation...</p>
+              </div>
+            )}
 
             <div className="space-y-4">
               {results.map((result, index) => (
