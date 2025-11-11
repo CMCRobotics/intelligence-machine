@@ -4,8 +4,9 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    aframe: './src/aframe-scene.js',
-    presentation: './src/reveal-presentation.js'
+    vr: './src/vr-scene.js',
+    presentation: './src/reveal-presentation.js',
+    lab: './src/hud-panel.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -69,7 +70,6 @@ module.exports = {
     mainFields: ['module', 'browser', 'main']
   },
   devServer: {
-    // https://www.okteto.com/docs/tutorials/webpack/
     static: {
       directory: path.join(__dirname, 'public'),
     },

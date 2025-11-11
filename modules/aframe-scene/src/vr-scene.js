@@ -8,11 +8,14 @@ import 'aframe-orbit-controls';
 import 'aframe-extras';
 import 'aframe-environment-component';
 
-import './components/load-fragment';
-import './components/linear-animation';
-import './components/ar-utils';
-import './components/floating-in-jar';
-import './components/timed-sound';
+import './components/load-fragment.js';
+import './components/linear-animation.js';
+import './components/ar-utils.js';
+import './components/floating-in-jar.js';
+import './components/timed-sound.js';
+
+// Import HUD functions
+import { showHudPanel, hideHudPanel } from './hud-panel.js';
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
@@ -64,6 +67,8 @@ if (container) {
     // Default options: shadows enabled
     const options = { showShadows: true };
     render(renderLabScene(options), container);
+
+    // showHudPanel(); // Show the HUD panel when the scene is rendered
 
     // Example of how you might toggle shadows later (e.g., via a UI element)
     // setTimeout(() => {
