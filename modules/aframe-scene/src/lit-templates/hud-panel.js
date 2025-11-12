@@ -17,12 +17,14 @@ class HudPanel extends LitElement {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%); /* Center the element */
-      width: 60%; /* Adjust width as needed */
-      height: 40%; /* Adjust height as needed */
-      background-color: rgba(245, 122, 122, 0.8); /* Semi-transparent black background */
+      width: 80%; /* Adjust width as needed */
+      height: 80%; /* Adjust height as needed */
+      background-color: rgba(255, 255, 255, 0.8); /* White with 80% opacity */
       pointer-events: auto; /* Allow pointer events to interact with the HUD */
       z-index: 1000; /* Ensure it's on top of other content */
       border-radius: 15px; /* Add rounded corners */
+      border: 15px solid rgba(175, 0, 0, 1); /* Opaque red border */
+      box-shadow: 0 0 15px 5px rgba(175, 0, 0, 0.9); /* Neon glow effect */
     }
 
     :host([visible]) {
@@ -30,11 +32,7 @@ class HudPanel extends LitElement {
     }
 
     .hud-content {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      color: white;
+      color: #050505bc;
       font-size: 24px;
       text-align: center;
     }
