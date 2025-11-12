@@ -17,8 +17,12 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.ts$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
       }
-      
     ]
   },
   plugins: [
@@ -50,6 +54,8 @@ module.exports = {
     }),
   ],
   resolve: {
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
+    extensions: ['.ts', '.js', '.json', '.tsx'],
     fallback: {
       "fs" : false,
       "ws": false,
@@ -65,7 +71,13 @@ module.exports = {
       "buffer": require.resolve("buffer/")
     },
     alias: {
-      '@cmcrobotics/homie-lit': '@cmcrobotics/homie-lit'
+      '@cmcrobotics/homie-lit': '@cmcrobotics/homie-lit',
+      // Add aliases for pronolab modules to point to their .ts files
+      './pronolab/core/session': './pronolab/core/session.ts',
+      './pronolab/view/view-manager': './pronolab/view/view-manager.ts',
+      './pronolab/view/image-view': './pronolab/view/image-view.ts',
+      './pronolab/view/audio-view': './pronolab/view/audio-view.ts',
+      './pronolab/view/pose-view': './pronolab/view/pose-view.ts',
     },
     mainFields: ['module', 'browser', 'main']
   },

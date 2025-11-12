@@ -16,6 +16,13 @@ import './components/homie-brain-scale.js';
 
 import { createMqttHomieObserver } from '@cmcrobotics/homie-lit';
 
+// Import Pronolab components
+import { Session } from './pronolab/core/session.ts';
+import { ViewManager } from './pronolab/view/view-manager.ts';
+import { ImageView } from './pronolab/view/image-view.ts';
+import { AudioView } from './pronolab/view/audio-view.ts';
+import { PoseView } from './pronolab/view/pose-view.ts';
+
 // Import HUD functions
 import { HudPanel } from './lit-templates/hud-panel.js';
 
@@ -54,6 +61,28 @@ const renderLabScene = (options = {}) => {
 // Find the container and render the scene directly
 const container = document.getElementById('aframe-container');
 if (container) {
+    // Initialize Pronolab components
+    const session = new Session();
+    const viewManager = new ViewManager(container, session);
+
+    // Add views to the ViewManager
+    viewManager.addView('image-view', new ImageView(container, session));
+    viewManager.addView('audio-view', new AudioView(container, session));
+    viewManager.addView('pose-view', new PoseView(container, session));
+    // Add other views if they exist and are needed
+
+    // Initialize the ViewManager
+    viewManager.init();
+
+    // Set a default device ID for testing purposes if not already set
+    if (!localStorage.getItem('deviceId')) {
+        localStorage.setItem('deviceId', 'test-device-123');
+    }
+
+    // Optionally, set an initial view or trigger a model load
+    // For example, to show the image view by default:
+    // viewManager.setActiveView('image-view'); // This would need to be called after init() or handled by a message
+
     // Default options: shadows enabled
     const options = { showShadows: true };
     render(renderLabScene(options), container);
