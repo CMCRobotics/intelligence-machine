@@ -6,9 +6,7 @@ export abstract class ModelTestBaseView extends BaseView {
     // labelContainer is now inherited from BaseView
     protected modelURL: string | null = null;
     protected metadataURL: string | null = null;
-    // protected model: any; // Removed redundant declaration
-    // protected maxPredictions: number; // This is declared in BaseView, but ModelTestBaseView needs to initialize it.
-
+    
     constructor(container: HTMLElement, session: Session) {
         super(container, session);
         // The BaseView constructor already initializes maxPredictions to 0.

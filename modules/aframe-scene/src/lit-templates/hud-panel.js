@@ -12,14 +12,14 @@ class HudPanel extends LitElement {
 
   static styles = css`
     :host {
-      display: block; /* Hidden by default */
+      display: block;
       position: fixed;
       top: 50%;
-      left: 50%;
+      left: 65%;
       transform: translate(-50%, -50%); /* Center the element */
-      width: 80%; /* Adjust width as needed */
-      height: 80%; /* Adjust height as needed */
-      background-color: rgba(255, 255, 255, 0.8); /* White with 80% opacity */
+      width: 65%;
+      height: 90%; 
+      background-color: rgba(0, 0, 0, 0.7);
       pointer-events: auto; /* Allow pointer events to interact with the HUD */
       z-index: 1000; /* Ensure it's on top of other content */
       border-radius: 15px; /* Add rounded corners */
@@ -32,16 +32,17 @@ class HudPanel extends LitElement {
     }
 
     .hud-content {
-      color: #050505bc;
+      color: #ffffffbc;
       font-size: 24px;
       text-align: center;
+      height: 100%;
     }
   `;
 
   render() {
     return html`
       <div class="hud-content">
-        <h1>HUD Panel Active</h1>
+        <div id='pronolab-container'></div>
       </div>
     `;
   }

@@ -8,7 +8,7 @@ export class Session {
     public onPrediction = new Subject<any[]>();
     public onConnect = new Subject<void>();
 
-    private mqttClient: mqtt.MqttClient;
+    // private mqttClient: mqtt.MqttClient;
     private model: any;
     private maxPredictions: number;
     private modelURL: string | null = null;
@@ -21,43 +21,30 @@ export class Session {
     private messageSubjects: { [topic: string]: Subject<string> } = {};
 
     constructor() {
-        // The 'mqtt' object is imported directly, and its 'connect' method is used.
-        // The error "connect is not a function" suggests an issue with how the mqtt module is being imported or bundled for the browser.
-        // Using 'mqtt/dist/mqtt.js' is often recommended for browser environments.
-        this.mqttClient = mqtt.connect('ws://localhost:9001');
+        // TODO : Add HomieObserver
+
         this.maxPredictions = 0;
 
         this.onPrediction.subscribe(prediction => {
             this.handlePrediction(prediction);
         });
 
-        this.mqttClient.on('connect', () => {
-            logger.info('connected to mqtt broker');
-            this.onConnect.next();
-        });
-
-        this.mqttClient.on('message', (topic: string, payload: Buffer) => { // Added types
-            const message = payload.toString();
-            if (this.messageSubjects[topic]) {
-                this.messageSubjects[topic].next(message);
-            }
-        });
     }
 
     public topic(topic: string): Observable<string> {
         if (!this.messageSubjects[topic]) {
             this.messageSubjects[topic] = new Subject<string>();
-            this.mqttClient.subscribe(topic, { qos: 0 }, (err: Error | null, granted?: mqtt.ISubscriptionGrant[]) => { // Added types
-                if (err) {
-                    logger.error(`Failed to subscribe to topic: ${topic}`, err);
-                }
-            });
+            // this.mqttClient.subscribe(topic, { qos: 0 }, (err: Error | null, granted?: mqtt.ISubscriptionGrant[]) => { // Added types
+            //     if (err) {
+            //         logger.error(`Failed to subscribe to topic: ${topic}`, err);
+            //     }
+            // });
         }
         return this.messageSubjects[topic].asObservable();
     }
 
     public publish(topic: string, message: string, options?: mqtt.IClientPublishOptions) {
-        this.mqttClient.publish(topic, message, options);
+        // this.mqttClient.publish(topic, message, options);
     }
 
     public testModel(className: string, minConfidence: number, duration: number) {
@@ -78,7 +65,7 @@ export class Session {
                 this.onTestStatusChanged.next(`Testing "${this.testClassName}"... ${Math.ceil(remainingTime / 1000)}s`);
 
                 if (elapsedTime >= this.testDuration) {
-                    this.mqttClient.publish(`pronolab-server/model-test/success`, 'true');
+                    // this.mqttClient.publish(`pronolab-server/model-test/success`, 'true');
                     this.testStartTime = null;
                     this.onTestStatusChanged.next('');
                     logger.info(`[ModelTest] success for class "${this.testClassName}"`);

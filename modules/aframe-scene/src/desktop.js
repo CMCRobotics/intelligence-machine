@@ -51,10 +51,10 @@ const renderLabScene = (options = {}) => {
             ${renderSceneLab()} 
         
             <!-- Explicitly define camera and disable controls -->
-            <a-entity camera look-controls="enabled: false;" position="0 1.6 0"></a-entity>
+            <a-entity camera="fov: 50; zoom: 0.7" look-controls="enabled: false" position="-2.43017 1.6 0.83541" rotation="0 -50.80072994747931 0"></a-entity>
         </a-scene>
 
-        <!-- <hud-panel></hud-panel> -->
+        <hud-panel></hud-panel>
     `;
 };
 
