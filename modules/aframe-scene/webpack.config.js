@@ -4,8 +4,8 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
-    vr: './src/vr-scene.js',
-    presentation: './src/reveal-presentation.js',
+    vr: './src/vr.js',
+    presentation: './src/presentation.js',
     lab: './src/hud-panel.js'
   },
   output: {
