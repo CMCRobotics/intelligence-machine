@@ -2,6 +2,9 @@ import { html } from 'lit-html';
 
 // Define the lit-html template function for assets
 export const renderSceneLab = () => html`
+    <a-entity light="intensity: 0.4; type: ambient" position="-1.17106 1.00163 2.32528"></a-entity>
+    <a-entity light="decay: -2.96; intensity: 0.04; type: spot; castShadow: true; shadowCameraFov: 75.97; shadowCameraNear: 0.78; shadowCameraBottom: -4.24; shadowMapWidth: 512.27" position="-85.94564 27.28891 10.22902" rotation="0 -44.67065449737463 0"></a-entity>
+            
     <a-entity id="floor" gltf-model="#floor" position="0 0.1 -10" scale="1.5 1.5 1.5" material="opacity: 0.1;"></a-entity>
 
     <!-- Base with underwater sound -->

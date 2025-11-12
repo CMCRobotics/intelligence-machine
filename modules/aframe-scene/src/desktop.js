@@ -13,6 +13,8 @@ import './components/ar-utils.js';
 import './components/floating-in-jar.js';
 import './components/timed-sound.js';
 
+// Import HUD functions
+import { HudPanel } from './lit-templates/hud-panel.js';
 
 // Import the asset template function
 import { renderAssets } from './lit-templates/assets.js';
@@ -24,7 +26,7 @@ window.Buffer = Buffer;
 
 // Define the lit-html template function
 const renderLabScene = (options = {}) => {
-    const { showShadows = true } = options; // Default to true if not specified
+    const { showShadows = false } = options; // Default to true if not specified
 
     // Construct the environment attributes string, conditionally including shadow
     const environmentAttributes = `preset: forest; dressing: trees; dressingAmount: 100; dressingColor: #ceebd5; dressingScale: 15; fog: 0.6; fogColor: #adc2d6; playArea: 30; ${showShadows ? 'shadow: true;' : 'shadow: false;'} horizonsColor: #b1d1f0; skyColor: #88c0f4; stageSize: 200; lighting: none; `;
@@ -38,8 +40,11 @@ const renderLabScene = (options = {}) => {
             
             ${renderSceneLab()} 
         
-            <!-- Default A-Frame Camera (no explicit camera entity needed for default VR POV) -->
+            <!-- Explicitly define camera and disable controls -->
+            <a-entity camera look-controls="enabled: false;" position="0 1.6 0"></a-entity>
         </a-scene>
+
+        <hud-panel></hud-panel>
     `;
 };
 
