@@ -12,6 +12,9 @@ import './components/linear-animation.js';
 import './components/ar-utils.js';
 import './components/floating-in-jar.js';
 import './components/timed-sound.js';
+import './components/homie-brain-scale.js';
+
+import { createMqttHomieObserver } from '@cmcrobotics/homie-lit';
 
 // Import HUD functions
 import { HudPanel } from './lit-templates/hud-panel.js';
@@ -44,7 +47,7 @@ const renderLabScene = (options = {}) => {
             <a-entity camera look-controls="enabled: false;" position="0 1.6 0"></a-entity>
         </a-scene>
 
-        <hud-panel></hud-panel>
+        <!-- <hud-panel></hud-panel> -->
     `;
 };
 
@@ -54,6 +57,30 @@ if (container) {
     // Default options: shadows enabled
     const options = { showShadows: true };
     render(renderLabScene(options), container);
+
+    const observer = createMqttHomieObserver('ws://localhost:9001');
+
+    observer.updated$.subscribe(
+        (event) => {
+            if (event.type == 'property') {
+                if (event.node.id === 'brain' && event.property.id === 'scale') {
+                    const brainEl = document.getElementById('brain');
+                    if (brainEl) {
+                        const scale = parseFloat(event.property.value);
+                        if (!isNaN(scale)) {
+                            brainEl.setAttribute('scale', { x: scale, y: scale, z: scale });
+                        }
+                    }
+                }
+            }
+        },
+        (error) => {
+            console.error('Error in subscription:', error);
+        }
+    );
+
+    observer.subscribe('team-white/brain/+');
+
 
     // showHudPanel(); // Show the HUD panel when the scene is rendered
 

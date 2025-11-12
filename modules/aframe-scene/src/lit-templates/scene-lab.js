@@ -11,7 +11,7 @@ export const renderSceneLab = () => html`
     <a-entity id="base" gltf-model="#base" scale="1.2 1.2 1.2" rotation="0 180 0" position="-2.204 0.3 -5.697"
             sound="src: #underwaterSound; loop: true; volume: 0.9; autoplay: true; positional: true"></a-entity>
 
-    <a-entity id="brain" gltf-model="#cyberbrain" position="-0.87447 2.54043 -4.50151" rotation="0 -30 0" floating-in-jar>
+    <a-entity id="brain" gltf-model="#cyberbrain" position="-0.87447 2.54043 -4.50151" rotation="0 -30 0" floating-in-jar homie-brain-scale>
        <a-entity geometry="primitive: sphere; radius: 0.06" scale="1 0.9 1" material="color: #091f27" position="-0.20225 0.09337 0.95721"></a-entity>
        <a-entity geometry="primitive: sphere; radius: 0.06" scale="1 0.9 1" material="color: #091f27" position="0.20224 0.10982 0.96035"></a-entity>
         <!-- a-entity geometry="primitive: torus; arc: -120.01; radius: 0.23; radiusTubular: 0.009; segmentsRadial: 34; segmentsTubular: 34" material="color: #000000" 0.03123="" 0.00383="" 0.97574"="" rotation="21.772396214971284 1.1682609442717484 -25.956134035016554" position="-0.01916 0.05287 1.00781"></a-entity -->

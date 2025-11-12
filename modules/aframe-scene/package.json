@@ -8,6 +8,7 @@
         "build": "webpack --mode production"
     },
     "dependencies": {
+        "@cmcrobotics/homie-lit": "0.7.3",
         "@tweenjs/tween.js": "25.0.0",
         "aframe": "^1.7.0",
         "aframe-draw-component": "^1.5.0",
