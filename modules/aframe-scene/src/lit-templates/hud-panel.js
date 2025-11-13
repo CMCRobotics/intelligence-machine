@@ -1,5 +1,6 @@
 import { LitElement, html, css } from 'lit';
 import { ViewManager } from './ViewManager.js';
+import { SessionManager } from './SessionManager.js';
 // Example views are now managed by ViewManager using tag names, so direct imports are not needed here.
 
 class HudPanel extends LitElement {
@@ -15,6 +16,13 @@ class HudPanel extends LitElement {
     
   }
 
+  firstUpdated() {
+    const sessionManager = this.shadowRoot.querySelector('#session-manager');
+    const viewManager = this.shadowRoot.querySelector('view-manager');
+    if (viewManager) {
+      viewManager.sessionManager = sessionManager;
+    }
+  }
   
   static styles = css`
     :host {
@@ -77,6 +85,8 @@ class HudPanel extends LitElement {
   render() {
     return html`
       <div class="hud-content">
+
+        <session-manager id="session-manager"></session-manager>
 
         <div class="view-container">
           <view-manager deviceId="u6342"

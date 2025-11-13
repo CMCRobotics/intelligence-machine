@@ -18,7 +18,8 @@ class ViewManager extends LitElement {
     activeViewName: { type: String },
     modelURL: {type: String},
     metadataURL: {type: String},
-    deviceId: {type: String}
+    deviceId: {type: String},
+    sessionManager: { type: Object }
   };
 
   
@@ -107,6 +108,7 @@ class ViewManager extends LitElement {
       // For TeamSelectorView, we need to pass deviceId
       if (activeViewConfig.tagName === 'team-selector-view') {
         newViewElement.deviceId = this.deviceId;
+        newViewElement.sessionManager = this.sessionManager;
         // Add event listener for team-selected event
         newViewElement.addEventListener('team-selected', this.handleTeamSelected.bind(this));
       }
@@ -125,6 +127,9 @@ class ViewManager extends LitElement {
 
   // Handler for the 'team-selected' event from TeamSelectorView
   handleTeamSelected(event) {
+    if (this.sessionManager) {
+      this.sessionManager._handleTeamSelected(event);
+    }
     console.log('Team selected:', event.detail);
     const { teamId, teamName } = event.detail;
     
