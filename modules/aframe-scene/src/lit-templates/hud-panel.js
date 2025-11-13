@@ -12,22 +12,10 @@ class HudPanel extends LitElement {
   constructor() {
     super();
     this.visible = true; // Initially hidden
-    this.views = [
-      { name: 'view1', tagName: 'example-view-1' }, // Use tag name string
-      { name: 'view2', tagName: 'example-view-2' }, // Use tag name string
-    ];
-    // Set the initial active view to the first one in the list
-    this.activeViewName = this.views.length > 0 ? this.views[0].name : '';
+    
   }
 
-  /**
-   * Switches the active view to the one specified by viewName.
-   * @param {string} viewName - The name of the view to switch to.
-   */
-  switchView(viewName) {
-    this.activeViewName = viewName;
-  }
-
+  
   static styles = css`
     :host {
       display: block;
@@ -65,27 +53,7 @@ class HudPanel extends LitElement {
       padding-top: 20px; /* Add some padding at the top */
     }
 
-    .view-controls {
-      margin-bottom: 20px; /* Space between controls and view */
-      display: flex;
-      gap: 10px; /* Space between buttons */
-    }
-
-    .view-controls button {
-      padding: 10px 20px;
-      font-size: 18px;
-      cursor: pointer;
-      background-color: #4CAF50; /* Green */
-      color: white;
-      border: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
-    }
-
-    .view-controls button:hover {
-      background-color: #45a049;
-    }
-
+    
     .view-container {
       flex-grow: 1; /* Allow view-container to take available space */
       width: 95%; /* Make view container take up most of the width */
@@ -95,6 +63,7 @@ class HudPanel extends LitElement {
       display: flex;
       justify-content: center;
       align-items: center;
+      color: black;
     }
 
     /* Ensure the view-manager itself takes up the space */
@@ -103,22 +72,15 @@ class HudPanel extends LitElement {
       height: 100%;
     }
 
-    #pronolab-container {
-      display: none; /* Hide the old pronolab-container as it's replaced by ViewManager */
-    }
   `;
 
   render() {
     return html`
       <div class="hud-content">
-        <div class="view-controls">
-          <button @click="${() => this.switchView('view1')}">View 1</button>
-          <button @click="${() => this.switchView('view2')}">View 2</button>
-        </div>
+
         <div class="view-container">
-          <view-manager
-            .views="${this.views}"
-            .activeViewName="${this.activeViewName}"
+          <view-manager deviceId="u6342"
+            .activeViewName="example1"
           ></view-manager>
         </div>
       </div>

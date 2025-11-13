@@ -1,18 +1,65 @@
 import { LitElement, html, css } from 'lit';
 import { ExampleView1 } from './ExampleView1.js';
 import { ExampleView2 } from './ExampleView2.js'; 
+import { createMqttHomieObserver, setLogLevel } from '@cmcrobotics/homie-lit';
+
+let VIEWS = [
+       { name: 'example1', tagName: 'example-view-1' }
+      ,{ name: 'example2', tagName: 'example-view-2' }];
+
+
 
 class ViewManager extends LitElement {
   static properties = {
     views: { type: Array }, // Array of { name: string, tagName: string }
     activeViewName: { type: String },
+    modelURL: {type: String},
+    metadataURL: {type: String},
+    deviceId: {type: String}
   };
 
+  
   constructor() {
     super();
-    this.views = [{ name: 'example1', tagName: 'example-view-1' },{ name: 'example2', tagName: 'example-view-2' }];
-    this.activeViewName = '';
+    this.views = VIEWS;
+    this.activeViewName = VIEWS[0].name;
     this._currentViewElement = null; // To keep track of the currently rendered element
+
+    // setLogLevel('debug'); // Set Homie-lit log level
+    
+  }
+
+  connect() {
+    console.log('connect() called'); // Added log to track calls
+    if (!this.homieObserver) {
+      console.log('this.homieObserver is undefined, attempting to create...'); // Added log
+      try {
+        this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
+        console.log('Value of this.homieObserver after assignment:', this.homieObserver); // Added log
+
+        if (this.homieObserver) {
+          this.homieObserver.updated$.subscribe(
+            (event) => {
+              if (event.type == 'property') {
+                if (event.device.id === 'terminal-' + this.deviceId && event.node.id === 'ui-control' && event.property.id === 'switch') {
+                  // TODO : Check if view is already known
+                  this.activeViewName = event.property.value;
+                }
+              }
+            },
+            (error) => {
+              console.error('Error in subscription:', error);
+            }
+          );
+
+          this.homieObserver.subscribe("terminal-" + this.deviceId + "/#"); 
+        } else {
+          console.error('createMqttHomieObserver returned undefined or null.'); // Added log for failure
+        }
+      } catch (error) {
+        console.error('Error during createMqttHomieObserver or subscription:', error); // Added error handling
+      }
+    }
   }
 
   /**
@@ -66,6 +113,11 @@ class ViewManager extends LitElement {
         <!-- The view element will be appended here by _updateView -->
       </div>
     `;
+  }
+
+  connectedCallback() {
+    super.connectedCallback(); // Ensure LitElement's connectedCallback is called
+    this.connect();
   }
 
   static styles = css`

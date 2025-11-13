@@ -52,10 +52,8 @@ const renderLabScene = (options = {}) => {
             <a-entity camera="fov: 50; zoom: 0.7" look-controls="enabled: false" position="-2.43017 1.6 0.83541" rotation="0 -50.80072994747931 0"></a-entity>
         </a-scene>
 
-        <!-- Render ViewManager and HudPanel -->
-        <view-manager
-            activeViewName="example1"
-        ></view-manager>
+        
+        
         <hud-panel></hud-panel>
     `;
 };
@@ -68,37 +66,29 @@ if (container) {
     const options = { showShadows: true };
     render(renderLabScene(options), container);
 
-    const observer = createMqttHomieObserver('ws://localhost:9001');
+    // const observer = createMqttHomieObserver('ws://localhost:9001');
 
-    observer.updated$.subscribe(
-        (event) => {
-            if (event.type == 'property') {
-                if (event.node.id === 'brain' && event.property.id === 'scale') {
-                    const brainEl = document.getElementById('brain');
-                    if (brainEl) {
-                        const scale = parseFloat(event.property.value);
-                        if (!isNaN(scale)) {
-                            brainEl.setAttribute('scale', { x: scale, y: scale, z: scale });
-                        }
-                    }
-                }
-            }
-        },
-        (error) => {
-            console.error('Error in subscription:', error);
-        }
-    );
+    // observer.updated$.subscribe(
+    //     (event) => {
+    //         if (event.type == 'property') {
+    //             if (event.node.id === 'brain' && event.property.id === 'scale') {
+    //                 const brainEl = document.getElementById('brain');
+    //                 if (brainEl) {
+    //                     const scale = parseFloat(event.property.value);
+    //                     if (!isNaN(scale)) {
+    //                         brainEl.setAttribute('scale', { x: scale, y: scale, z: scale });
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     },
+    //     (error) => {
+    //         console.error('Error in subscription:', error);
+    //     }
+    // );
 
-    observer.subscribe('team-white/brain/+');
+    // observer.subscribe('team-white/brain/+');
 
-    // showHudPanel(); // Show the HUD panel when the scene is rendered
-
-    // Example of how you might toggle shadows later (e.g., via a UI element)
-    // setTimeout(() => {
-    //     options.showShadows = false;
-    //     render(renderLabScene(options), container);
-    //     console.log("Shadows turned off");
-    // }, 5000);
 } else {
     console.error("Could not find #aframe-container to render the scene.");
 }
