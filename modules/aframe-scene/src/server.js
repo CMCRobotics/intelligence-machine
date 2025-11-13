@@ -1,0 +1,63 @@
+const express = require('express');
+const multer = require('multer');
+const unzipper = require('unzipper');
+const cors = require('cors');
+const fs = require('fs');
+const path = require('path');
+const mqtt = require('mqtt');
+
+const app = express();
+const port = 3000;
+
+app.use(cors());
+
+const upload = multer({ storage: multer.memoryStorage() });
+const client = mqtt.connect('ws://localhost:9001');
+
+client.on('connect', () => {
+  console.log('Connected to MQTT broker');
+});
+
+app.post('/upload', upload.single('model'), (req, res) => {
+  const { name, 'team-id': teamId } = req.body;
+  const file = req.file;
+
+  if (!name || !teamId || !file) {
+    return res.status(400).send('Missing name, team-id, or file.');
+  }
+
+  const modelName = `${teamId}-${name}`;
+  const modelPath = path.join(__dirname, '..', 'public', 'models', modelName);
+
+  fs.mkdirSync(modelPath, { recursive: true });
+
+  const stream = unzipper.Extract({ path: modelPath });
+  stream.on('finish', () => {
+    const modelUrl = `/models/${modelName}/model.json`;
+    const metadataUrl = `/models/${modelName}/metadata.json`;
+    const modelType = 'image'; // Assuming image models for now
+
+    const homieBaseTopic = `homie/${teamId}/model-${name}`;
+    const properties = {
+      'modelUrl': modelUrl,
+      'metadataUrl': metadataUrl,
+      'type': modelType,
+      'timestamp': new Date().toISOString(),
+      'modelName': name,
+      'terminalId': req.body.terminalId || 'unknown'
+    };
+
+    for (const [key, value] of Object.entries(properties)) {
+      client.publish(`${homieBaseTopic}/${key}`, value.toString(), { retain: true });
+    }
+
+    res.status(200).send({ message: 'Model uploaded and advertised successfully.' });
+  });
+
+  stream.write(file.buffer);
+  stream.end();
+});
+
+app.listen(port, () => {
+  console.log(`Server listening at http://localhost:${port}`);
+});

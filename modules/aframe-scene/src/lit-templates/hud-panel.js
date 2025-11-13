@@ -67,7 +67,6 @@ class HudPanel extends LitElement {
       flex-grow: 1; /* Allow view-container to take available space */
       width: 95%; /* Make view container take up most of the width */
       height: calc(100% - 60px); /* Adjust height to account for controls and padding */
-      border: 2px dashed yellow; /* For visualization */
       box-sizing: border-box;
       display: flex;
       justify-content: center;

@@ -3,12 +3,15 @@ import { ExampleView1 } from './ExampleView1.js';
 import { ExampleView2 } from './ExampleView2.js';
 import { TeamSelectorView } from './TeamSelectorView.js';
 import { TeachableMachineImageView } from './TeachableMachineImageView.js';
+import { TeachableMachineUploadView } from './TeachableMachineUploadView.js';
 import { createMqttHomieObserver, setLogLevel } from '@cmcrobotics/homie-lit';
+import { merge } from 'rxjs';
 
 // Define the list of views, placing the team selector first
 let VIEWS = [
        { name: 'team-selector', tagName: 'team-selector-view' } // New team selector view
       ,{ name: 'teachable-machine-image', tagName: 'teachable-machine-image-view' }
+      ,{ name: 'teachable-machine-upload', tagName: 'teachable-machine-upload-view' }
       ,{ name: 'example1', tagName: 'example-view-1' }
       ,{ name: 'example2', tagName: 'example-view-2' }];
 
@@ -30,7 +33,7 @@ class ViewManager extends LitElement {
     this.activeViewName = ''; 
     this._currentViewElement = null; // To keep track of the currently rendered element
 
-    // setLogLevel('debug'); // Set Homie-lit log level
+    setLogLevel('debug'); // Set Homie-lit log level
     
   }
 
@@ -41,7 +44,10 @@ class ViewManager extends LitElement {
         this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
         
         if (this.homieObserver) {
-          this.homieObserver.updated$.subscribe(
+          merge(
+            this.homieObserver.created$,
+            this.homieObserver.updated$
+            ).subscribe(
             (event) => {
               if (event.type === 'property') {
                 // Listen for view switch commands from UI control
@@ -118,6 +124,10 @@ class ViewManager extends LitElement {
         newViewElement.name = "Teachable Machine Image Model";
       }
 
+      if (activeViewConfig.tagName === 'teachable-machine-upload-view') {
+        newViewElement.deviceId = this.deviceId;
+      }
+
       container.appendChild(newViewElement);
       this._currentViewElement = newViewElement;
     } else {
@@ -192,7 +202,6 @@ class ViewManager extends LitElement {
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 1px solid #ccc; /* For visualization */
       box-sizing: border-box;
     }
   `;
