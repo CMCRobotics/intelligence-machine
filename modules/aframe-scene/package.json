@@ -8,7 +8,7 @@
         "build": "webpack --mode production"
     },
     "dependencies": {
-        "@cmcrobotics/homie-lit": "^0.7.3",
+        "@cmcrobotics/homie-lit": "^0.7.4",
         "@teachablemachine/image": "0.8.3",
         "@teachablemachine/pose": "0.8.3",
         "@tensorflow-models/speech-commands": "0.4.0",

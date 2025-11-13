@@ -1,4 +1,4 @@
-import mqtt from 'mqtt';
+import { createHomieObserver} from '@cmcrobotics/homie-lit';
 
 import { logger } from '../logger';
 import { Subject, Observable } from 'rxjs';
@@ -9,6 +9,7 @@ export class Session {
     public onConnect = new Subject<void>();
 
     // private mqttClient: mqtt.MqttClient;
+    private homieObserver;
     private model: any;
     private maxPredictions: number;
     private modelURL: string | null = null;
@@ -21,12 +22,16 @@ export class Session {
     private messageSubjects: { [topic: string]: Subject<string> } = {};
 
     constructor() {
-        // TODO : Add HomieObserver
+        this.homieObserver = createHomieObserver("ws://localhost:9001");
 
         this.maxPredictions = 0;
 
         this.onPrediction.subscribe(prediction => {
             this.handlePrediction(prediction);
+        });
+
+        this.homieObserver.connected$.subscribe( () => {
+            console.log("HomieObserver is connected now.")
         });
 
     }
@@ -43,9 +48,9 @@ export class Session {
         return this.messageSubjects[topic].asObservable();
     }
 
-    public publish(topic: string, message: string, options?: mqtt.IClientPublishOptions) {
+    // public publish(topic: string, message: string, options?: mqtt.IClientPublishOptions) {
         // this.mqttClient.publish(topic, message, options);
-    }
+    // }
 
     public testModel(className: string, minConfidence: number, duration: number) {
         this.testClassName = className;

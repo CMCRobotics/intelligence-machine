@@ -73,11 +73,11 @@ module.exports = {
     alias: {
       '@cmcrobotics/homie-lit': '@cmcrobotics/homie-lit',
       // Add aliases for pronolab modules to point to their .ts files
-      './pronolab/core/session': './pronolab/core/session.ts',
-      './pronolab/view/view-manager': './pronolab/view/view-manager.ts',
-      './pronolab/view/image-view': './pronolab/view/image-view.ts',
-      './pronolab/view/audio-view': './pronolab/view/audio-view.ts',
-      './pronolab/view/pose-view': './pronolab/view/pose-view.ts',
+      // './pronolab/core/session': './pronolab/core/session.ts',
+      // './pronolab/view/view-manager': './pronolab/view/view-manager.ts',
+      // './pronolab/view/image-view': './pronolab/view/image-view.ts',
+      // './pronolab/view/audio-view': './pronolab/view/audio-view.ts',
+      // './pronolab/view/pose-view': './pronolab/view/pose-view.ts',
     },
     mainFields: ['module', 'browser', 'main']
   },
