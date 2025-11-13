@@ -1,5 +1,6 @@
 import AFRAME from 'aframe';
-import { html, render } from 'lit-html';
+import { LitElement, html, css } from 'lit'; // Import LitElement, html, css for ViewManager
+import { render } from 'lit-html';
 
 import 'js-yaml';
 import 'loglevel';
@@ -23,6 +24,11 @@ import { HudPanel } from './lit-templates/hud-panel.js';
 import { renderAssets } from './lit-templates/assets.js';
 import { renderSceneLab } from './lit-templates/scene-lab.js';
 
+// Import ViewManager
+import { ViewManager } from './lit-templates/ViewManager.js';
+import { ExampleView1 } from './lit-templates/ExampleView1.js';
+import { ExampleView2 } from './lit-templates/ExampleView2.js'; 
+
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
 window.Buffer = Buffer;
@@ -37,27 +43,28 @@ const renderLabScene = (options = {}) => {
     return html`
         <a-scene id="aframe-scene" light="defaultLightsEnabled: false"
                  sound="src: #forestAmbientSound; loop: true; volume: 0.10; autoplay: true">
-            ${renderAssets()} 
+            ${renderAssets()}
 
             <a-entity environment="${environmentAttributes}"></a-entity>
-            
-            ${renderSceneLab()} 
-        
+
+            ${renderSceneLab()}
+
             <!-- Explicitly define camera and disable controls -->
             <a-entity camera="fov: 50; zoom: 0.7" look-controls="enabled: false" position="-2.43017 1.6 0.83541" rotation="0 -50.80072994747931 0"></a-entity>
         </a-scene>
 
-        <!-- <hud-panel></hud-panel> -->
+        <!-- Render ViewManager and HudPanel -->
+        <view-manager
+            .views="${[{ name: 'example1', tagName: 'example-view-1' },{ name: 'example2', tagName: 'example-view-2' }]}"
+            activeViewName="example1"
+        ></view-manager>
+        <hud-panel></hud-panel>
     `;
 };
 
 // Find the container and render the scene directly
 const container = document.getElementById('aframe-container');
 if (container) {
-
-    // TODO : Initialize ViewManager element
-    // TODO : Setup localstorage
-
 
     // Default options: shadows enabled
     const options = { showShadows: true };
@@ -85,7 +92,6 @@ if (container) {
     );
 
     observer.subscribe('team-white/brain/+');
-
 
     // showHudPanel(); // Show the HUD panel when the scene is rendered
 
