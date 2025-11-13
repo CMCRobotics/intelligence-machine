@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { ViewManager } from './ViewManager.js';
-import { SessionManager } from './SessionManager.js';
 // Example views are now managed by ViewManager using tag names, so direct imports are not needed here.
 
 class HudPanel extends LitElement {
@@ -78,7 +77,6 @@ class HudPanel extends LitElement {
   render() {
     return html`
       <div class="hud-content">
-        <session-manager></session-manager>
 
         <div class="view-container">
           <view-manager deviceId="u6342"

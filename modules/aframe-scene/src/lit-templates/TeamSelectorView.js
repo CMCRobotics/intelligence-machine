@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
 import { createMqttHomieObserver, setLogLevel } from '@cmcrobotics/homie-lit'; // Assuming this is available
-import './SessionManager.js'; // Import the SessionManager
 
 
 export class TeamSelectorView extends LitElement {
@@ -17,116 +16,122 @@ export class TeamSelectorView extends LitElement {
         this.teams = [];
         this.currentTeamId = null;
         this.teamName = '';
-        // this.homieObserver = null; // Removed as it's now in SessionManager
+        this.homieObserver = null;
 
-        // setLogLevel('debug'); // Moved to SessionManager
+        setLogLevel('debug');
     }
 
     // Lifecycle callback for when the element is added to the DOM
     connectedCallback() {
         super.connectedCallback();
-        // this.initTeamSelection(); // Removed, SessionManager handles initialization
-
+        this.initTeamSelection();
         // Check localStorage immediately on connection
         this.currentTeamId = localStorage.getItem('teamId');
-        // If teamId is found, we'll try to display it once teams are loaded
-        // For now, we just store it. The render method will handle conditional display.
-
-        // Add event listeners for SessionManager events
-        this.addEventListener('session-team-selected', this.handleTeamSelected);
-        this.addEventListener('session-team-updated', this.handleTeamUpdated);
-        this.addEventListener('session-teams-ready', this.handleTeamsReady); // Listen for the new event
-
-        // Note: We no longer query for sessionManager here.
-        // State updates will be handled by the event listeners.
-        // If deviceId is available, it should ideally be set on SessionManager
-        // when SessionManager is ready or rendered. For now, we assume it will be set.
+        if (this.currentTeamId) {
+            // If teamId is found, we'll try to display it once teams are loaded
+            // For now, we just store it. The render method will handle conditional display.
+        }
     }
 
     // Lifecycle callback for when the element is removed from the DOM
     disconnectedCallback() {
         super.disconnectedCallback();
-        // Remove event listeners to prevent memory leaks
-        this.removeEventListener('session-team-selected', this.handleTeamSelected);
-        this.removeEventListener('session-team-updated', this.handleTeamUpdated);
-        this.removeEventListener('session-teams-ready', this.handleTeamsReady); // Remove listener for new event
+        if (this.homieObserver) {
+            // Clean up subscription if necessary
+            // Note: createMqttHomieObserver might manage its own lifecycle,
+            // but explicit cleanup is good practice if possible.
+            // For now, we assume it's managed or doesn't need explicit unsubscribe here.
+            // this.homieObserver.disconnect();
+        }
     }
 
-    // Handle team selection event from SessionManager
-    handleTeamSelected(event) {
-        const { teamId, teamName } = event.detail;
+    // Initialize MQTT observer and subscriptions
+    async initTeamSelection() {
+        try {
+            // Assuming the MQTT broker is accessible at ws://localhost:9001
+            // This URL might need to be configurable or passed as a property
+            
+            
+            if (! this.homieObserver) {
+                this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
+                
+                this.homieObserver.updated$.subscribe(
+                    (event) => {
+                        if (event.type === 'property' 
+                             && event.device.id.startsWith('team-') 
+                             && event.node.id === 'info'
+                             && event.property.id === 'name') {
+                            const topicParts = event.topic.split('/');
+                            // Expected topic: homie/team-XYZ/info/name
+                            if (topicParts.length >= 3 && topicParts[1].startsWith('team-')) {
+                                const teamId = topicParts[1];
+                                const teamName = event.property.value;
+
+                                // Update or add team to the list
+                                const existingTeamIndex = this.teams.findIndex(team => team.id === teamId);
+                                if (existingTeamIndex === -1) {
+                                    this.teams = [...this.teams, { id: teamId, name: teamName }];
+                                } else {
+                                    // Update existing team name if it changed
+                                    const updatedTeams = [...this.teams];
+                                    updatedTeams[existingTeamIndex] = { id: teamId, name: teamName };
+                                    this.teams = updatedTeams;
+                                }
+
+                                // If a teamId was previously selected and now we have its name, update teamName
+                                if (this.currentTeamId === teamId) {
+                                    this.teamName = teamName;
+                                }
+                            }
+                        }
+                    },
+                    (error) => {
+                        console.error('Error in Homie subscription:', error);
+                    }
+                );
+
+                // Subscribe to team names
+                this.homieObserver.subscribe("+/info/name");
+            } else {
+                console.error('Failed to create Homie observer.');
+            }
+        } catch (error) {
+            console.error('Error initializing team selection:', error);
+        }
+    }
+
+    // Handle team selection via button click
+    selectTeam(teamId, teamName) {
+        localStorage.setItem('teamId', teamId);
         this.currentTeamId = teamId;
         this.teamName = teamName;
-        // The actual selection logic (localStorage, publish) is handled by SessionManager
-        // We just update our local state to re-render.
-        
-        // Update teams list as well, in case it was not fully populated before selection
-        const sessionManager = this.shadowRoot.querySelector('session-manager');
-        if (sessionManager) {
-            this.teams = sessionManager.getTeams();
-        }
-    }
 
-    // Handle team update event from SessionManager (e.g., if team name changes)
-    handleTeamUpdated(event) {
-        const { teamId, teamName } = event.detail;
-        if (this.currentTeamId === teamId) {
-            this.teamName = teamName;
+        // Publish the selected team ID if deviceId is available
+        if (this.deviceId) {
+            // Assuming 'terminal' is a known device type or part of the session context
+            // The topic format might need adjustment based on actual system
+            const publishTopic = `terminal-${this.deviceId}/team-id/set`;
+            this.homieObserver?.publish(publishTopic, teamId);
         }
-        // Update the teams list as well, in case it changed
-        const sessionManager = this.shadowRoot.querySelector('session-manager');
-        if (sessionManager) {
-            this.teams = sessionManager.getTeams();
-        }
-    }
 
-    // Handle the event when SessionManager signals that teams are ready
-    handleTeamsReady(event) {
-        const { teams } = event.detail;
-        this.teams = teams;
-
-        // If a team was previously selected from localStorage, ensure its name is updated
-        if (this.currentTeamId) {
-            const selectedTeam = this.teams.find(team => team.id === this.currentTeamId);
-            if (selectedTeam) {
-                this.teamName = selectedTeam.name;
-            }
-        }
+        // Dispatch a custom event to notify the parent (ViewManager) that a team has been selected
+        this.dispatchEvent(new CustomEvent('team-selected', {
+            detail: { teamId: teamId, teamName: teamName },
+            bubbles: true,
+            composed: true
+        }));
     }
 
     // Render the view based on the current state
     render() {
-        // Get the SessionManager instance to access its state
-        const sessionManager = this.shadowRoot.querySelector('session-manager');
-        
-        // If SessionManager is not yet available or not ready, show loading
-        if (!sessionManager) {
-            return html`
-                <div class="team-selector-container">
-                    <p>Loading session...</p>
-                </div>
-            `;
-        }
+        const selectedTeam = this.teams.find(team => team.id === this.currentTeamId);
 
-        // Ensure deviceId is set on SessionManager if it's available
-        // This might be called multiple times, but it's safe.
-        if (this.deviceId && sessionManager.deviceId !== this.deviceId) {
-            sessionManager.setDeviceId(this.deviceId);
-        }
-
-        // Use state from SessionManager
-        const teams = sessionManager.getTeams();
-        const currentTeamId = sessionManager.getCurrentTeam().id;
-        const currentTeamName = sessionManager.getCurrentTeam().name;
-
-        const selectedTeam = teams.find(team => team.id === currentTeamId);
-
-        if (currentTeamId && selectedTeam) {
+        if (this.currentTeamId && selectedTeam) {
             // Display current team name if teamId is set and team is found
             return html`
                 <div class="team-selector-container">
                     <h2>Current Team: ${selectedTeam.name}</h2>
-                    <p>Team ID: ${currentTeamId}</p>
+                    <p>Team ID: ${this.currentTeamId}</p>
                 </div>
             `;
         } else {
@@ -134,11 +139,11 @@ export class TeamSelectorView extends LitElement {
             return html`
                 <div class="team-selector-container">
                     <h1>Select a Team</h1>
-                    ${teams.length === 0
+                    ${this.teams.length === 0
                         ? html`<p>Loading teams...</p>`
                         : html`
-                            ${teams.map(team => html`
-                                <button @click=${() => sessionManager.selectTeam(team.id, team.name)}>
+                            ${this.teams.map(team => html`
+                                <button @click=${() => this.selectTeam(team.id, team.name)}>
                                     ${team.name}
                                 </button>
                             `)}
@@ -184,3 +189,4 @@ export class TeamSelectorView extends LitElement {
 
 // Define the custom element
 customElements.define('team-selector-view', TeamSelectorView);
+
