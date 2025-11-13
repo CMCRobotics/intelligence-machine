@@ -8,6 +8,8 @@ class HudPanel extends LitElement {
     visible: { type: Boolean },
     views: { type: Array }, // Array of { name: string, tagName: string }
     activeViewName: { type: String },
+    modelURL: { type: String },
+    metadataURL: { type: String },
   };
 
   constructor() {
@@ -90,7 +92,9 @@ class HudPanel extends LitElement {
 
         <div class="view-container">
           <view-manager deviceId="u6342"
-            .activeViewName="example1"
+            .activeViewName="teachable-machine-image"
+            .modelURL=${this.modelURL}
+            .metadataURL=${this.metadataURL}
           ></view-manager>
         </div>
       </div>

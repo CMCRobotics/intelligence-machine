@@ -1,12 +1,14 @@
 import { LitElement, html, css } from 'lit';
 import { ExampleView1 } from './ExampleView1.js';
 import { ExampleView2 } from './ExampleView2.js';
-import { TeamSelectorView } from './TeamSelectorView.js'; // Import the new view
+import { TeamSelectorView } from './TeamSelectorView.js';
+import { TeachableMachineImageView } from './TeachableMachineImageView.js';
 import { createMqttHomieObserver, setLogLevel } from '@cmcrobotics/homie-lit';
 
 // Define the list of views, placing the team selector first
 let VIEWS = [
        { name: 'team-selector', tagName: 'team-selector-view' } // New team selector view
+      ,{ name: 'teachable-machine-image', tagName: 'teachable-machine-image-view' }
       ,{ name: 'example1', tagName: 'example-view-1' }
       ,{ name: 'example2', tagName: 'example-view-2' }];
 
@@ -113,9 +115,11 @@ class ViewManager extends LitElement {
         newViewElement.addEventListener('team-selected', this.handleTeamSelected.bind(this));
       }
       
-      // Pass other common properties if needed, e.g., modelURL, metadataURL
-      // newViewElement.modelURL = this.modelURL;
-      // newViewElement.metadataURL = this.metadataURL;
+      if (activeViewConfig.tagName === 'teachable-machine-image-view') {
+        newViewElement.modelURL = this.modelURL;
+        newViewElement.metadataURL = this.metadataURL;
+        newViewElement.name = "Teachable Machine Image Model";
+      }
 
       container.appendChild(newViewElement);
       this._currentViewElement = newViewElement;
