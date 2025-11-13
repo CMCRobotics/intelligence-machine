@@ -55,16 +55,13 @@ export class TeamSelectorView extends LitElement {
             if (! this.homieObserver) {
                 this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
                 
-                this.homieObserver.updated$.subscribe(
+                this.homieObserver.created$.subscribe(
                     (event) => {
                         if (event.type === 'property' 
                              && event.device.id.startsWith('team-') 
                              && event.node.id === 'info'
                              && event.property.id === 'name') {
-                            const topicParts = event.topic.split('/');
-                            // Expected topic: homie/team-XYZ/info/name
-                            if (topicParts.length >= 3 && topicParts[1].startsWith('team-')) {
-                                const teamId = topicParts[1];
+                                const teamId = event.device.id;
                                 const teamName = event.property.value;
 
                                 // Update or add team to the list
@@ -82,7 +79,6 @@ export class TeamSelectorView extends LitElement {
                                 if (this.currentTeamId === teamId) {
                                     this.teamName = teamName;
                                 }
-                            }
                         }
                     },
                     (error) => {
@@ -103,6 +99,8 @@ export class TeamSelectorView extends LitElement {
     // Handle team selection via button click
     selectTeam(teamId, teamName) {
         localStorage.setItem('teamId', teamId);
+        localStorage.setItem('teamName', teamName);
+        localStorage.setItem('teamColor', teamName.toLowerCase());
         this.currentTeamId = teamId;
         this.teamName = teamName;
 
