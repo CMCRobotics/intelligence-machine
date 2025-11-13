@@ -26,8 +26,7 @@ import { renderSceneLab } from './lit-templates/scene-lab.js';
 
 // Import ViewManager
 import { ViewManager } from './lit-templates/ViewManager.js';
-import { ExampleView1 } from './lit-templates/ExampleView1.js';
-import { ExampleView2 } from './lit-templates/ExampleView2.js'; 
+
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
@@ -55,7 +54,6 @@ const renderLabScene = (options = {}) => {
 
         <!-- Render ViewManager and HudPanel -->
         <view-manager
-            .views="${[{ name: 'example1', tagName: 'example-view-1' },{ name: 'example2', tagName: 'example-view-2' }]}"
             activeViewName="example1"
         ></view-manager>
         <hud-panel></hud-panel>

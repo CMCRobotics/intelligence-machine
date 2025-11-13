@@ -1,4 +1,6 @@
 import { LitElement, html, css } from 'lit';
+import { ExampleView1 } from './ExampleView1.js';
+import { ExampleView2 } from './ExampleView2.js'; 
 
 class ViewManager extends LitElement {
   static properties = {
@@ -8,7 +10,7 @@ class ViewManager extends LitElement {
 
   constructor() {
     super();
-    this.views = [];
+    this.views = [{ name: 'example1', tagName: 'example-view-1' },{ name: 'example2', tagName: 'example-view-2' }];
     this.activeViewName = '';
     this._currentViewElement = null; // To keep track of the currently rendered element
   }
