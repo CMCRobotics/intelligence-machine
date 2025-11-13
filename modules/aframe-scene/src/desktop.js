@@ -44,7 +44,7 @@ const renderLabScene = (options = {}) => {
             ${renderSceneLab()} 
         
             <!-- Explicitly define camera and disable controls -->
-            <a-entity camera look-controls="enabled: false;" position="0 1.6 0"></a-entity>
+            <a-entity camera="fov: 50; zoom: 0.7" look-controls="enabled: false" position="-2.43017 1.6 0.83541" rotation="0 -50.80072994747931 0"></a-entity>
         </a-scene>
 
         <!-- <hud-panel></hud-panel> -->
@@ -54,6 +54,11 @@ const renderLabScene = (options = {}) => {
 // Find the container and render the scene directly
 const container = document.getElementById('aframe-container');
 if (container) {
+
+    // TODO : Initialize ViewManager element
+    // TODO : Setup localstorage
+
+
     // Default options: shadows enabled
     const options = { showShadows: true };
     render(renderLabScene(options), container);
