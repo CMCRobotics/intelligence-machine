@@ -8,14 +8,13 @@ class HudPanel extends LitElement {
     visible: { type: Boolean },
     views: { type: Array }, // Array of { name: string, tagName: string }
     activeViewName: { type: String },
-    modelURL: { type: String },
-    metadataURL: { type: String },
+    deviceId: { type: String },
   };
 
   constructor() {
     super();
     this.visible = true; // Initially hidden
-    
+    this.deviceId = localStorage.getItem('deviceId');
   }
 
   firstUpdated() {
@@ -91,10 +90,9 @@ class HudPanel extends LitElement {
         <session-manager id="session-manager"></session-manager>
 
         <div class="view-container">
-          <view-manager deviceId="u6342"
+          <view-manager 
+            .deviceId=${this.deviceId}
             .activeViewName="teachable-machine-image"
-            .modelURL=${this.modelURL}
-            .metadataURL=${this.metadataURL}
           ></view-manager>
         </div>
       </div>

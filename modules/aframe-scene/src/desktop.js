@@ -34,7 +34,7 @@ window.Buffer = Buffer;
 
 // Define the lit-html template function
 const renderLabScene = (options = {}) => {
-    const { showShadows = false, modelURL, metadataURL } = options; // Default to true if not specified
+    const { showShadows = false } = options; // Default to true if not specified
 
     // Construct the environment attributes string, conditionally including shadow
     const environmentAttributes = `preset: forest; dressing: trees; dressingAmount: 100; dressingColor: #ceebd5; dressingScale: 15; fog: 0.6; fogColor: #adc2d6; playArea: 30; ${showShadows ? 'shadow: true;' : 'shadow: false;'} horizonsColor: #b1d1f0; skyColor: #88c0f4; stageSize: 200; lighting: none; `;
@@ -52,7 +52,7 @@ const renderLabScene = (options = {}) => {
             <a-entity camera="fov: 50; zoom: 0.7" look-controls="enabled: false" position="-2.43017 1.6 0.83541" rotation="0 -50.80072994747931 0"></a-entity>
         </a-scene>
 
-        <hud-panel .modelURL=${modelURL} .metadataURL=${metadataURL}></hud-panel>
+        <hud-panel></hud-panel>
     `;
 };
 
@@ -62,9 +62,7 @@ if (container) {
 
     // Default options: shadows enabled
     const options = { 
-        showShadows: true,
-        modelURL: 'models/sign-language/model.json',
-        metadataURL: 'models/sign-language/metadata.json'
+        showShadows: true
     };
     render(renderLabScene(options), container);
 

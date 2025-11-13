@@ -18,8 +18,6 @@ class ViewManager extends LitElement {
   static properties = {
     views: { type: Array }, // Array of { name: string, tagName: string }
     activeViewName: { type: String },
-    modelURL: {type: String},
-    metadataURL: {type: String},
     deviceId: {type: String},
     sessionManager: { type: Object }
   };
@@ -116,8 +114,7 @@ class ViewManager extends LitElement {
       }
       
       if (activeViewConfig.tagName === 'teachable-machine-image-view') {
-        newViewElement.modelURL = this.modelURL;
-        newViewElement.metadataURL = this.metadataURL;
+        newViewElement.deviceId = this.deviceId;
         newViewElement.name = "Teachable Machine Image Model";
       }
 

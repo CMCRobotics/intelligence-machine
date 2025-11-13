@@ -6,7 +6,9 @@
     "scripts": {
         "start": "webpack serve --mode development",
         "build": "webpack --mode production",
-        "init-teams": "node bin/init-teams.js"
+        "init-teams": "node bin/init-teams.js",
+        "set-model": "node bin/set-model.js",
+        "trigger-test": "node bin/trigger-test.js"
     },
     "dependencies": {
         "@teachablemachine/image": "^0.8.5",
@@ -29,7 +31,8 @@
         "stream-http": "^3.2.0",
         "url": "^0.11.4",
         "uuid": "^10.0.0",
-        "nools": "^0.4.4"
+        "nools": "^0.4.4",
+        "mqtt": "^5.3.4"
     },
     "devDependencies": {
         "copy-webpack-plugin": "^12.0.2",
