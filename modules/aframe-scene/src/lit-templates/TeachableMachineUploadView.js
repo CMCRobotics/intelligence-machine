@@ -63,7 +63,7 @@ class TeachableMachineUploadView extends LitElement {
     this.uploadStatus = 'Uploading...';
 
     try {
-      const response = await fetch('http://localhost:3000/upload', {
+      const response = await fetch(`http://${window.location.hostname}:3000/upload`, {
         method: 'POST',
         body: formData,
       });
