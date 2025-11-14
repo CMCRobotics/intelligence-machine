@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     vr: './src/vr.js',
     presentation: './src/presentation.js',
-    desktop: './src/desktop.js'
+    desktop: './src/desktop.js',
+    game: './src/game.js'
   },
   output: {
     filename: '[name].bundle.js',
@@ -74,6 +75,7 @@ module.exports = {
       directory: path.join(__dirname, 'public'),
     },
     host: '0.0.0.0',
+    allowedHosts: 'all',
     hot: true,
     compress: true,
     port: 9000,

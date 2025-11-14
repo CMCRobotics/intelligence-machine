@@ -1,0 +1,14 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "imachine.fullname" . }}-mosquitto-ws
+  labels:
+    {{- include "imachine.labels" . | nindent 4 }}
+    app.kubernetes.ioio/component: mosquitto
+spec:
+  path: {{ .Values.mosquitto.path }}
+  to:
+    kind: Service
+    name: {{ include "imachine.fullname" . }}-mosquitto
+  port:
+    targetPort: ws

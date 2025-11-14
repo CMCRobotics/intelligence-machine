@@ -8,14 +8,60 @@ class HudPanel extends LitElement {
     visible: { type: Boolean },
     views: { type: Array }, // Array of { name: string, tagName: string }
     activeViewName: { type: String },
+    deviceId: { type: String },
+    teamColor: { type: String },
   };
 
   constructor() {
     super();
     this.visible = true; // Initially hidden
-    
+    this.deviceId = localStorage.getItem('deviceId');
+    this.teamColor = 'gray'; // Default color
+    this._handleSessionUpdate = this._handleSessionUpdate.bind(this);
   }
 
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('session-updated', this._handleSessionUpdate);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('session-updated', this._handleSessionUpdate);
+  }
+
+  _handleSessionUpdate(event) {
+    const { selectedTeam } = event.detail;
+    if (selectedTeam && selectedTeam.id) {
+      const color = selectedTeam.id.split('-')[1] || 'gray';
+      this.teamColor = color;
+    } else {
+      this.teamColor = 'gray';
+    }
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('teamColor')) {
+      const teamColorMapping = {
+        red: '175, 0, 0',
+        blue: '0, 0, 175',
+        green: '0, 175, 0',
+        yellow: '175, 175, 0',
+        white: '255, 255, 255',
+        gray: '128, 128, 128'
+      };
+      const rgb = teamColorMapping[this.teamColor] || teamColorMapping['gray'];
+      this.style.setProperty('--team-color-rgb', rgb);
+    }
+  }
+
+  firstUpdated() {
+    const sessionManager = this.shadowRoot.querySelector('#session-manager');
+    const viewManager = this.shadowRoot.querySelector('view-manager');
+    if (viewManager) {
+      viewManager.sessionManager = sessionManager;
+    }
+  }
   
   static styles = css`
     :host {
@@ -30,8 +76,9 @@ class HudPanel extends LitElement {
       pointer-events: auto; /* Allow pointer events to interact with the HUD */
       z-index: 1000; /* Ensure it's on top of other content */
       border-radius: 15px; /* Add rounded corners */
-      border: 15px solid rgba(175, 0, 0, 1); /* Opaque red border */
-      box-shadow: 0 0 15px 5px rgba(175, 0, 0, 0.9); /* Neon glow effect */
+      --team-color-rgb: 128, 128, 128; /* Default to gray */
+      border: 15px solid rgba(var(--team-color-rgb), 1);
+      box-shadow: 0 0 15px 5px rgba(var(--team-color-rgb), 0.9);
       display: flex; /* Use flexbox for layout */
       flex-direction: column; /* Stack children vertically */
       align-items: center; /* Center horizontally */
@@ -59,7 +106,6 @@ class HudPanel extends LitElement {
       flex-grow: 1; /* Allow view-container to take available space */
       width: 95%; /* Make view container take up most of the width */
       height: calc(100% - 60px); /* Adjust height to account for controls and padding */
-      border: 2px dashed yellow; /* For visualization */
       box-sizing: border-box;
       display: flex;
       justify-content: center;
@@ -80,9 +126,12 @@ class HudPanel extends LitElement {
       <div class="hud-content">
         <session-manager></session-manager>
 
+        <session-manager id="session-manager"></session-manager>
+
         <div class="view-container">
-          <view-manager deviceId="u6342"
-            .activeViewName="example1"
+          <view-manager 
+            .deviceId=${this.deviceId}
+            .activeViewName="teachable-machine-image"
           ></view-manager>
         </div>
       </div>

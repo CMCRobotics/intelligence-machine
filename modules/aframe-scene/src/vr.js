@@ -17,10 +17,23 @@ import './components/timed-sound.js';
 // Import the asset template function
 import { renderAssets } from './lit-templates/assets.js';
 import { renderSceneLab } from './lit-templates/scene-lab.js';
+import { initializeTeamScoreManager } from './team-score-manager.js';
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
 window.Buffer = Buffer;
+
+// Parse URL parameters to set team-id in local storage
+const urlParams = new URLSearchParams(window.location.search);
+const teamColor = urlParams.get('team');
+if (teamColor) {
+  const lowerCaseTeamColor = teamColor.toLowerCase();
+  const teamId = `team-${lowerCaseTeamColor}`;
+  localStorage.setItem('teamId', teamId);
+  localStorage.setItem('teamName', lowerCaseTeamColor);
+  console.log(`Team ID set to: ${teamId}`);
+  console.log(`Team Name set to: ${lowerCaseTeamColor}`);
+}
 
 // Define the lit-html template function
 const renderLabScene = (options = {}) => {
@@ -50,14 +63,7 @@ if (container) {
     const options = { showShadows: true };
     render(renderLabScene(options), container);
 
-    // showHudPanel(); // Show the HUD panel when the scene is rendered
-
-    // Example of how you might toggle shadows later (e.g., via a UI element)
-    // setTimeout(() => {
-    //     options.showShadows = false;
-    //     render(renderLabScene(options), container);
-    //     console.log("Shadows turned off");
-    // }, 5000);
+    initializeTeamScoreManager();
 } else {
     console.error("Could not find #aframe-container to render the scene.");
 }

@@ -1,14 +1,18 @@
 import { LitElement, html, css } from 'lit';
-import { ExampleView1 } from './ExampleView1.js';
-import { ExampleView2 } from './ExampleView2.js';
-import { TeamSelectorView } from './TeamSelectorView.js'; // Import the new view
+
+import { TeamSelectorView } from './TeamSelectorView.js';
+import { TeachableMachineImageView } from './TeachableMachineImageView.js';
+import { TeachableMachineUploadView } from './TeachableMachineUploadView.js';
+import { WaitingView } from './WaitingView.js';
 import { createMqttHomieObserver, setLogLevel } from '@cmcrobotics/homie-lit';
+import { merge } from 'rxjs';
 
 // Define the list of views, placing the team selector first
 let VIEWS = [
        { name: 'team-selector', tagName: 'team-selector-view' } // New team selector view
-      ,{ name: 'example1', tagName: 'example-view-1' }
-      ,{ name: 'example2', tagName: 'example-view-2' }];
+      ,{ name: 'waiting-view', tagName: 'waiting-view' }
+      ,{ name: 'teachable-machine-image', tagName: 'teachable-machine-image-view' }
+      ,{ name: 'teachable-machine-upload', tagName: 'teachable-machine-upload-view' }];
 
 
 
@@ -16,9 +20,8 @@ class ViewManager extends LitElement {
   static properties = {
     views: { type: Array }, // Array of { name: string, tagName: string }
     activeViewName: { type: String },
-    modelURL: {type: String},
-    metadataURL: {type: String},
-    deviceId: {type: String}
+    deviceId: {type: String},
+    sessionManager: { type: Object }
   };
 
   
@@ -29,18 +32,21 @@ class ViewManager extends LitElement {
     this.activeViewName = ''; 
     this._currentViewElement = null; // To keep track of the currently rendered element
 
-    // setLogLevel('debug'); // Set Homie-lit log level
+    setLogLevel('debug'); // Set Homie-lit log level
     
   }
 
   connect() {
     if (!this.homieObserver) {
       try {
-        // Assuming the MQTT broker is accessible at ws://localhost:9001
-        this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
+        const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
         
         if (this.homieObserver) {
-          this.homieObserver.updated$.subscribe(
+          merge(
+            this.homieObserver.created$,
+            this.homieObserver.updated$
+            ).subscribe(
             (event) => {
               if (event.type === 'property') {
                 // Listen for view switch commands from UI control
@@ -107,13 +113,19 @@ class ViewManager extends LitElement {
       // For TeamSelectorView, we need to pass deviceId
       if (activeViewConfig.tagName === 'team-selector-view') {
         newViewElement.deviceId = this.deviceId;
+        newViewElement.sessionManager = this.sessionManager;
         // Add event listener for team-selected event
         newViewElement.addEventListener('team-selected', this.handleTeamSelected.bind(this));
       }
       
-      // Pass other common properties if needed, e.g., modelURL, metadataURL
-      // newViewElement.modelURL = this.modelURL;
-      // newViewElement.metadataURL = this.metadataURL;
+      if (activeViewConfig.tagName === 'teachable-machine-image-view') {
+        newViewElement.deviceId = this.deviceId;
+        newViewElement.name = "Teachable Machine Image Model";
+      }
+
+      if (activeViewConfig.tagName === 'teachable-machine-upload-view') {
+        newViewElement.deviceId = this.deviceId;
+      }
 
       container.appendChild(newViewElement);
       this._currentViewElement = newViewElement;
@@ -125,27 +137,13 @@ class ViewManager extends LitElement {
 
   // Handler for the 'team-selected' event from TeamSelectorView
   handleTeamSelected(event) {
-    console.log('Team selected:', event.detail);
-    const { teamId, teamName } = event.detail;
-    
-    // After a team is selected, we should transition to the next view.
-    // Find the index of the current 'team-selector' view.
-    const currentViewIndex = this.views.findIndex(view => view.name === 'team-selector');
-    
-    if (currentViewIndex !== -1 && currentViewIndex < this.views.length - 1) {
-      // Switch to the next view in the list
-      const nextViewName = this.views[currentViewIndex + 1].name;
-      this.switchView(nextViewName);
-    } else {
-      // If it's the last view or something went wrong, default to the first view (or another fallback)
-      // For now, let's default to example1 if it exists
-      const defaultView = this.views.find(view => view.name === 'example1');
-      if (defaultView) {
-        this.switchView(defaultView.name);
-      } else {
-        console.warn("No default view found after team selection.");
-      }
+    if (this.sessionManager) {
+      this.sessionManager._handleTeamSelected(event);
     }
+    console.log('Team selected:', event.detail);
+    
+    // After a team is selected, we should transition to the waiting view.
+    this.switchView('waiting-view');
   }
 
   render() {
@@ -165,14 +163,8 @@ class ViewManager extends LitElement {
     // Determine the initial view based on localStorage
     const storedTeamId = localStorage.getItem('teamId');
     if (storedTeamId) {
-      // If teamId is set, skip the team selector and go to the first non-selector view
-      const firstNonSelectorView = this.views.find(view => view.name !== 'team-selector');
-      if (firstNonSelectorView) {
-        this.activeViewName = firstNonSelectorView.name;
-      } else {
-        // Fallback if no other views are defined
-        this.activeViewName = this.views.length > 0 ? this.views[0].name : '';
-      }
+      // If teamId is set, go to the waiting view
+      this.activeViewName = 'waiting-view';
     } else {
       // If teamId is not set, start with the team selector
       this.activeViewName = 'team-selector';
@@ -186,7 +178,6 @@ class ViewManager extends LitElement {
       display: flex;
       justify-content: center;
       align-items: center;
-      border: 1px solid #ccc; /* For visualization */
       box-sizing: border-box;
     }
   `;

@@ -26,6 +26,7 @@ import { renderSceneLab } from './lit-templates/scene-lab.js';
 
 // Import ViewManager
 import { ViewManager } from './lit-templates/ViewManager.js';
+import { initializeTeamScoreManager } from './team-score-manager.js';
 
 
 // Polyfill global Buffer
@@ -52,8 +53,6 @@ const renderLabScene = (options = {}) => {
             <a-entity camera="fov: 50; zoom: 0.7" look-controls="enabled: false" position="-2.43017 1.6 0.83541" rotation="0 -50.80072994747931 0"></a-entity>
         </a-scene>
 
-        
-        
         <hud-panel></hud-panel>
     `;
 };
@@ -62,8 +61,15 @@ const renderLabScene = (options = {}) => {
 const container = document.getElementById('aframe-container');
 if (container) {
 
+    if (!localStorage.getItem('deviceId')) {
+        const generateShortUUID = () => Math.random().toString(36).substring(2, 10);
+        localStorage.setItem('deviceId', generateShortUUID());
+    }
+
     // Default options: shadows enabled
-    const options = { showShadows: true };
+    const options = { 
+        showShadows: true
+    };
     render(renderLabScene(options), container);
 
     // const observer = createMqttHomieObserver('ws://localhost:9001');
@@ -88,6 +94,8 @@ if (container) {
     // );
 
     // observer.subscribe('team-white/brain/+');
+
+    initializeTeamScoreManager();
 
 } else {
     console.error("Could not find #aframe-container to render the scene.");
