@@ -10,6 +10,7 @@ class TeachableMachineImageView extends LitElement {
       predictions: { type: Array },
       deviceId: { type: String },
       testCountdown: { type: Number },
+      overallCountdown: { type: Number },
     };
   }
 
@@ -25,6 +26,7 @@ class TeachableMachineImageView extends LitElement {
     this.flashingInterval = null;
     this.isLabelFlashing = false;
     this.countdownInterval = null;
+    this.overallCountdownInterval = null;
   }
 
   connectedCallback() {
@@ -80,9 +82,10 @@ class TeachableMachineImageView extends LitElement {
   handleTestRequest(payload) {
     try {
       const params = JSON.parse(payload);
-      if (params.duration !== undefined && params.confidence !== undefined) {
+      if (params.duration !== undefined && params.confidence !== undefined && params.class !== undefined && params.overallTimeout !== undefined) {
         if (this.flashingInterval) clearInterval(this.flashingInterval);
         if (this.countdownInterval) clearInterval(this.countdownInterval);
+        if (this.overallCountdownInterval) clearInterval(this.overallCountdownInterval);
 
         this.testParameters = params;
         this.isTesting = true;
@@ -96,6 +99,18 @@ class TeachableMachineImageView extends LitElement {
           this.isLabelFlashing = !this.isLabelFlashing;
           this.requestUpdate();
         }, 500);
+
+        const overallEndTime = Date.now() + this.testParameters.overallTimeout;
+        this.overallCountdownInterval = setInterval(() => {
+          const remaining = overallEndTime - Date.now();
+          this.overallCountdown = Math.ceil(remaining / 1000);
+          if (remaining <= 0) {
+            this.overallCountdown = 0;
+            clearInterval(this.overallCountdownInterval);
+            this.publishTestResult(false);
+            this.isTesting = false;
+          }
+        }, 100);
       }
     } catch (e) {
       console.error('Invalid test payload:', e);
@@ -139,10 +154,9 @@ class TeachableMachineImageView extends LitElement {
   checkConfidenceTest() {
     if (!this.isTesting || !this.testParameters) return;
 
-    const { duration, confidence } = this.testParameters;
+    const { duration, confidence, class: classIndex } = this.testParameters;
 
-    // TODO : Replace  hard-coded class index 2 by a random number
-    const prediction = this.predictions[2];
+    const prediction = this.predictions[classIndex];
 
     if (prediction && (prediction.probability * 100) >= confidence) {
       if (this.testStartTime === null) {
@@ -166,6 +180,7 @@ class TeachableMachineImageView extends LitElement {
         this.testParameters = null;
         if (this.flashingInterval) clearInterval(this.flashingInterval);
         if (this.countdownInterval) clearInterval(this.countdownInterval);
+        if (this.overallCountdownInterval) clearInterval(this.overallCountdownInterval);
         this.isLabelFlashing = false;
         this.testCountdown = null;
       }
@@ -197,6 +212,7 @@ class TeachableMachineImageView extends LitElement {
     return html`
       <div class="view">
         <h2>${this.name}</h2>
+        ${this.isTesting ? html`<h3>Overall Test Ends In: ${this.overallCountdown}s</h3>` : ''}
         <div id="webcam-container"></div>
         <div id="label-container">
           ${this.predictions.map(

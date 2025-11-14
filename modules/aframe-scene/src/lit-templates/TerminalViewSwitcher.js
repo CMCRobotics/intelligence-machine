@@ -10,6 +10,7 @@ class TerminalViewSwitcher extends LitElement {
     selectedModel: { type: String },
     confidence: { type: Number },
     duration: { type: Number },
+    overallTimeout: { type: Number },
   };
 
   constructor() {
@@ -26,6 +27,7 @@ class TerminalViewSwitcher extends LitElement {
     this.selectedModel = this.models.length > 0 ? this.models[0].modelName : '';
     this.confidence = 80;
     this.duration = 1000;
+    this.overallTimeout = 10000;
     this.homieObserver = createMqttHomieObserver('ws://localhost:9001');
     setLogLevel('debug');
   }
@@ -116,6 +118,8 @@ class TerminalViewSwitcher extends LitElement {
       const payload = JSON.stringify({
         confidence: this.confidence,
         duration: this.duration,
+        class: Math.floor(Math.random() * 3),
+        overallTimeout: this.overallTimeout
       });
       this.homieObserver.publish(`terminal-${terminalId}/activeModel/test`, payload);
       console.log(`Running test for model '${selectedModelData.modelName}' on terminal '${terminalId}'`);
@@ -144,6 +148,10 @@ class TerminalViewSwitcher extends LitElement {
           <label>
             Duration (ms):
             <input type="number" .value=${this.duration} @input=${(e) => this.duration = e.target.value}>
+          </label>
+          <label>
+            Overall Timeout (ms):
+            <input type="number" .value=${this.overallTimeout} @input=${(e) => this.overallTimeout = e.target.value}>
           </label>
           <button @click=${this.setupTest}>Setup Test on Terminals</button>
           <button @click=${this.runTest}>Run Test on All</button>
