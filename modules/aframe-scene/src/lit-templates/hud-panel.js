@@ -9,12 +9,50 @@ class HudPanel extends LitElement {
     views: { type: Array }, // Array of { name: string, tagName: string }
     activeViewName: { type: String },
     deviceId: { type: String },
+    teamColor: { type: String },
   };
 
   constructor() {
     super();
     this.visible = true; // Initially hidden
     this.deviceId = localStorage.getItem('deviceId');
+    this.teamColor = 'gray'; // Default color
+    this._handleSessionUpdate = this._handleSessionUpdate.bind(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
+    this.addEventListener('session-updated', this._handleSessionUpdate);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    this.removeEventListener('session-updated', this._handleSessionUpdate);
+  }
+
+  _handleSessionUpdate(event) {
+    const { selectedTeam } = event.detail;
+    if (selectedTeam && selectedTeam.id) {
+      const color = selectedTeam.id.split('-')[1] || 'gray';
+      this.teamColor = color;
+    } else {
+      this.teamColor = 'gray';
+    }
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('teamColor')) {
+      const teamColorMapping = {
+        red: '175, 0, 0',
+        blue: '0, 0, 175',
+        green: '0, 175, 0',
+        yellow: '175, 175, 0',
+        white: '255, 255, 255',
+        gray: '128, 128, 128'
+      };
+      const rgb = teamColorMapping[this.teamColor] || teamColorMapping['gray'];
+      this.style.setProperty('--team-color-rgb', rgb);
+    }
   }
 
   firstUpdated() {
@@ -38,8 +76,9 @@ class HudPanel extends LitElement {
       pointer-events: auto; /* Allow pointer events to interact with the HUD */
       z-index: 1000; /* Ensure it's on top of other content */
       border-radius: 15px; /* Add rounded corners */
-      border: 15px solid rgba(175, 0, 0, 1); /* Opaque red border */
-      box-shadow: 0 0 15px 5px rgba(175, 0, 0, 0.9); /* Neon glow effect */
+      --team-color-rgb: 128, 128, 128; /* Default to gray */
+      border: 15px solid rgba(var(--team-color-rgb), 1);
+      box-shadow: 0 0 15px 5px rgba(var(--team-color-rgb), 0.9);
       display: flex; /* Use flexbox for layout */
       flex-direction: column; /* Stack children vertically */
       align-items: center; /* Center horizontally */
