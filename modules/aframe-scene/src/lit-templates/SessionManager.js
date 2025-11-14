@@ -159,7 +159,7 @@ class SessionManager extends LitElement {
       // and deviceId is available or can be inferred.
       // For now, we'll use a placeholder topic.
       const publishTopic = `terminal-${deviceId}/info/team`; // Example topic
-      this.homieObserver.publish(publishTopic, team.id);
+      this.homieObserver.publish(publishTopic, team.id, {retain:true});
     } else {
         console.warn('MQTT not connected or HomieObserver not available. Cannot publish tea m selection.');
     }
