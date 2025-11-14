@@ -19,7 +19,7 @@ class WaitingView extends LitElement {
     return html`
       <div class="view">
         <h2>Team: ${this.teamName}</h2>
-        <p>Please wait for the next instruction.</p>
+        <p>Please wait for the next instructions.</p>
       </div>
     `;
   }

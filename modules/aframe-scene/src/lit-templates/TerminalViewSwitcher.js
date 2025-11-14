@@ -72,6 +72,12 @@ class TerminalViewSwitcher extends LitElement {
     }
   }
 
+  switchToWaitingView() {
+    for (const terminalId of Object.keys(this.terminals)) {
+      this.homieObserver.publish(`${terminalId}/ui-control/switch`, 'waiting-view');
+    }
+  }
+
   setupTest() {
     const selectedModelData = this.models.find(model => model.modelName === this.selectedModel);
     if (!selectedModelData) {
@@ -135,6 +141,7 @@ class TerminalViewSwitcher extends LitElement {
             ${this.models.map(model => html`<option value=${model.modelName}>${model.modelName}</option>`)}
           </select>
           <button @click=${this.switchToUploadView}>Switch All to Upload</button>
+          <button @click=${this.switchToWaitingView}>Switch all to Waiting View</button>
         </div>
         <div class="control-section">
           <h2>Teachable Model Test Trigger</h2>
