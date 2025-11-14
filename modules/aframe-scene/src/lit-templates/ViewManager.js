@@ -1,6 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { ExampleView1 } from './ExampleView1.js';
-import { ExampleView2 } from './ExampleView2.js';
+
 import { TeamSelectorView } from './TeamSelectorView.js';
 import { TeachableMachineImageView } from './TeachableMachineImageView.js';
 import { TeachableMachineUploadView } from './TeachableMachineUploadView.js';
@@ -13,9 +12,7 @@ let VIEWS = [
        { name: 'team-selector', tagName: 'team-selector-view' } // New team selector view
       ,{ name: 'waiting-view', tagName: 'waiting-view' }
       ,{ name: 'teachable-machine-image', tagName: 'teachable-machine-image-view' }
-      ,{ name: 'teachable-machine-upload', tagName: 'teachable-machine-upload-view' }
-      ,{ name: 'example1', tagName: 'example-view-1' }
-      ,{ name: 'example2', tagName: 'example-view-2' }];
+      ,{ name: 'teachable-machine-upload', tagName: 'teachable-machine-upload-view' }];
 
 
 
@@ -47,6 +44,7 @@ class ViewManager extends LitElement {
         
         if (this.homieObserver) {
           merge(
+            this.homieObserver.created$,
             this.homieObserver.updated$
             ).subscribe(
             (event) => {
