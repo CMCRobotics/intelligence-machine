@@ -17,10 +17,47 @@ import './components/timed-sound.js';
 // Import the asset template function
 import { renderAssets } from './lit-templates/assets.js';
 import { renderSceneLab } from './lit-templates/scene-lab.js';
+import { createMqttHomieObserver } from '@cmcrobotics/homie-lit';
+import { filter } from 'rxjs/operators';
+import { merge } from 'rxjs';
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
 window.Buffer = Buffer;
+
+// Parse URL parameters to set team-id in local storage
+const urlParams = new URLSearchParams(window.location.search);
+const teamColor = urlParams.get('team');
+if (teamColor) {
+  const lowerCaseTeamColor = teamColor.toLowerCase();
+  const teamId = `team-${lowerCaseTeamColor}`;
+  localStorage.setItem('teamId', teamId);
+  localStorage.setItem('teamName', lowerCaseTeamColor);
+  console.log(`Team ID set to: ${teamId}`);
+  console.log(`Team Name set to: ${lowerCaseTeamColor}`);
+
+  try {
+    const homieObserver = createMqttHomieObserver("ws://localhost:9001");
+    const scoreTopic = `${teamId}/info/score`;
+
+    homieObserver.subscribe('+/info/score');
+
+    const scoreUpdates$ = merge(
+        homieObserver.created$,
+        homieObserver.updated$
+    ).pipe(
+        filter(event => event.type === 'property' && event.device.id === teamId && event.node.id === 'info' && event.property.id === 'score')
+    );
+
+    scoreUpdates$.subscribe(event => {
+        console.log(`Score for team ${teamId} is now: ${event.property.value}`);
+    });
+
+    console.log(`Subscribed to score updates for team ${teamId}`);
+  } catch (error) {
+    console.error('Error initializing Homie observer:', error);
+  }
+}
 
 // Define the lit-html template function
 const renderLabScene = (options = {}) => {
