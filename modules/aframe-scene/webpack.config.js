@@ -6,7 +6,8 @@ module.exports = {
   entry: {
     vr: './src/vr.js',
     presentation: './src/presentation.js',
-    desktop: './src/desktop.js'
+    desktop: './src/desktop.js',
+    game: './src/game.js'
   },
   output: {
     filename: '[name].bundle.js',
