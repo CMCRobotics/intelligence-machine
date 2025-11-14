@@ -33,6 +33,18 @@ app.post('/upload', upload.single('model'), (req, res) => {
 
   const stream = unzipper.Extract({ path: modelPath });
   stream.on('finish', () => {
+    const metadataFilePath = path.join(modelPath, 'metadata.json');
+    let classCount = 0;
+    try {
+      const metadataContent = fs.readFileSync(metadataFilePath, 'utf-8');
+      const metadata = JSON.parse(metadataContent);
+      if (metadata.labels && Array.isArray(metadata.labels)) {
+        classCount = metadata.labels.length;
+      }
+    } catch (error) {
+      console.error('Could not read or parse metadata.json:', error);
+    }
+
     const modelUrl = `/models/${modelName}/model.json`;
     const metadataUrl = `/models/${modelName}/metadata.json`;
     const modelType = 'image'; // Assuming image models for now
@@ -44,7 +56,9 @@ app.post('/upload', upload.single('model'), (req, res) => {
       'type': modelType,
       'timestamp': new Date().toISOString(),
       'modelName': name,
-      'terminalId': req.body.terminalId || 'unknown'
+      'terminalId': req.body.terminalId || 'unknown',
+      'classCount': classCount,
+      'storagePath': modelPath
     };
 
     for (const [key, value] of Object.entries(properties)) {
