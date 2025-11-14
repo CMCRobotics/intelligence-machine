@@ -39,8 +39,8 @@ class ViewManager extends LitElement {
   connect() {
     if (!this.homieObserver) {
       try {
-        // Assuming the MQTT broker is accessible at ws://localhost:9001
-        this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
+        const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+        this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
         
         if (this.homieObserver) {
           merge(

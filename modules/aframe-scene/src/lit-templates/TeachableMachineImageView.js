@@ -39,7 +39,8 @@ class TeachableMachineImageView extends LitElement {
 
   connect() {
     if (!this.homieObserver) {
-      this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
+      const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+      this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
       const topic = `homie/terminal-${this.deviceId}/activeModel/#`;
 
       merge(

@@ -42,9 +42,8 @@ class SessionManager extends LitElement {
 
   _initializeHomieObserver() {
     try {
-      // Assuming the MQTT broker is accessible at ws://localhost:9001
-      // This URL might need to be configurable or passed as a property
-      this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
+      const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+      this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
       this.mqttConnected = true; // Assume connected upon creation for now
 
       this.homieObserver.created$.subscribe(

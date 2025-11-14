@@ -22,7 +22,8 @@ class ScoreManager extends LitElement {
 
   _initializeHomieObserver() {
     try {
-      this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
+      const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+      this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
 
     this.homieObserver.created$.subscribe((event) => {
         if (event.type === 'property') {
