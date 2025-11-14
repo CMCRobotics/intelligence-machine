@@ -50,7 +50,11 @@ if (teamColor) {
     );
 
     scoreUpdates$.subscribe(event => {
-        console.log(`Score for team ${teamId} is now: ${event.property.value}`);
+        const score = parseInt(event.property.value, 10);
+        if (!isNaN(score)) {
+            console.log(`Score for team ${teamId} is now: ${score}`);
+            updateBrainScale(score);
+        }
     });
 
     console.log(`Subscribed to score updates for team ${teamId}`);
@@ -58,6 +62,8 @@ if (teamColor) {
     console.error('Error initializing Homie observer:', error);
   }
 }
+
+let previousScore = 0;
 
 // Define the lit-html template function
 const renderLabScene = (options = {}) => {
@@ -97,4 +103,36 @@ if (container) {
     // }, 5000);
 } else {
     console.error("Could not find #aframe-container to render the scene.");
+}
+
+function updateBrainScale(score) {
+    const brainEntity = document.getElementById('brain');
+    if (brainEntity) {
+        const minScore = 0;
+        const maxScore = 30;
+        const minScale = 0.4;
+        const maxScale = 1.6;
+
+        const scale = minScale + (score - minScore) / (maxScore - minScore) * (maxScale - minScale);
+        const clampedScale = Math.max(minScale, Math.min(maxScale, scale));
+
+        brainEntity.setAttribute('scale', `${clampedScale} ${clampedScale} ${clampedScale}`);
+
+        if (score > previousScore) {
+            const floatingComponent = brainEntity.components['floating-in-jar'];
+            if (floatingComponent) {
+                const originalBobbingSpeed = floatingComponent.data.bobbingSpeed;
+                const originalRockingSpeed = floatingComponent.data.rockingSpeed;
+
+                floatingComponent.data.bobbingSpeed *= 10;
+                floatingComponent.data.rockingSpeed *= 10;
+
+                setTimeout(() => {
+                    floatingComponent.data.bobbingSpeed = originalBobbingSpeed;
+                    floatingComponent.data.rockingSpeed = originalRockingSpeed;
+                }, 5000);
+            }
+        }
+        previousScore = score;
+    }
 }
