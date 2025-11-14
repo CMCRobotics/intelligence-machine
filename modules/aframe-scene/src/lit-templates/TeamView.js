@@ -59,10 +59,22 @@ class TeamView extends LitElement {
     }
   }
 
+  _handleResetScores() {
+    if (confirm('Are you sure you want to reset all scores? This action cannot be undone.')) {
+        const scoreManager = document.querySelector('score-manager');
+        if (scoreManager) {
+            scoreManager.resetAllScores();
+        } else {
+            console.error('ScoreManager component not found.');
+        }
+    }
+  }
+
   render() {
     return html`
       <div class="team-list">
         <h1>Teams</h1>
+        <button @click="${this._handleResetScores}" class="reset-button">Reset All Scores</button>
         ${Object.values(this.teams).map(
           (team) => html`
             <div class="team-container">
@@ -134,6 +146,19 @@ class TeamView extends LitElement {
     th {
       background-color: #4CAF50;
       color: white;
+    }
+    .reset-button {
+        background-color: #f44336;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+    .reset-button:hover {
+        background-color: #da190b;
     }
   `;
 }

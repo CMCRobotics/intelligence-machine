@@ -12,6 +12,7 @@ class ScoreManager extends LitElement {
     this.scores = {};
     this.terminalToTeamMap = {};
     this.homieObserver = null;
+    this.pendingIncrements = {};
   }
 
   connectedCallback() {
@@ -23,36 +24,43 @@ class ScoreManager extends LitElement {
     try {
       this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
 
-    merge(
-      this.homieObserver.created$,
-      this.homieObserver.updated$)
-      .subscribe(
-        (event) => {
-          if (event.type === 'property') {
-            if (event.property.id === 'testSuccess') {
-              const deviceId = event.device.id;
-              const teamId = this.terminalToTeamMap[deviceId];
-              if (teamId) {
-                this._incrementScore(teamId);
-              }
+    this.homieObserver.created$.subscribe((event) => {
+        if (event.type === 'property') {
+            if (event.device.id.startsWith('team-') && event.node.id === 'info' && event.property.id === 'score') {
+                const teamId = event.device.id;
+                const score = parseInt(event.property.value, 10);
+                if (!isNaN(score)) {
+                    const newScores = { ...this.scores };
+                    newScores[teamId] = score;
+                    this.scores = newScores;
+                    console.log(`Initialized score for team ${teamId}: ${score}`);
+                    this._applyPendingIncrements(teamId);
+                }
             } else if (event.device.id.startsWith('terminal-') && event.node.id === 'info' && event.property.id === 'team') {
-              const deviceId = event.device.id;
-              const teamId = event.property.value;
-              this.terminalToTeamMap[deviceId] = teamId;
-              console.log(`Associated terminal ${deviceId} with team ${teamId}`);
-            } else if (event.device.id.startsWith('team-') && event.node.id === 'info' && event.property.id === 'name') {
-              const teamId = event.device.id;
-              if (this.scores[teamId] === undefined) {
-                this._initializeScore(teamId);
-              }
+                const deviceId = event.device.id;
+                const teamId = event.property.value;
+                this.terminalToTeamMap[deviceId] = teamId;
+                console.log(`Associated terminal ${deviceId} with team ${teamId}`);
             }
-          }
         }
-      );
+    });
+
+    this.homieObserver.updated$.subscribe((event) => {
+        if (event.type === 'property') {
+            if (event.property.id === 'testSuccess') {
+                const deviceId = event.device.id;
+                const teamId = this.terminalToTeamMap[deviceId];
+                if (teamId) {
+                    this._incrementScore(teamId);
+                }
+            }
+        }
+    });
 
       this.homieObserver.subscribe("+/info/team");
       this.homieObserver.subscribe("+/info/name");
       this.homieObserver.subscribe("+/+/testSuccess");
+      this.homieObserver.subscribe('+/info/score');
       console.log('ScoreManager initialized and subscribed to team, terminal, and testSuccess events');
 
     } catch (error) {
@@ -60,12 +68,27 @@ class ScoreManager extends LitElement {
     }
   }
 
-  _initializeScore(teamId) {
+  resetAllScores() {
     const newScores = { ...this.scores };
-    newScores[teamId] = 0;
+    const teamIds = Object.keys(newScores);
+    teamIds.forEach(teamId => {
+        newScores[teamId] = 0;
+        this._publishScore(teamId, 0);
+    });
     this.scores = newScores;
-    this._publishScore(teamId, 0);
-    console.log(`Initialized score for team ${teamId}`);
+    console.log('All scores have been reset to 0.');
+  }
+
+  _applyPendingIncrements(teamId) {
+    if (this.pendingIncrements[teamId]) {
+        const count = this.pendingIncrements[teamId];
+        console.log(`Applying ${count} pending increments for ${teamId}`);
+        const newScores = { ...this.scores };
+        newScores[teamId] += count;
+        this.scores = newScores;
+        this._publishScore(teamId, newScores[teamId]);
+        delete this.pendingIncrements[teamId];
+    }
   }
 
   _publishScore(teamId, score) {
@@ -78,18 +101,20 @@ class ScoreManager extends LitElement {
 
   _incrementScore(teamId) {
     const newScores = { ...this.scores };
-    if (newScores[teamId] === undefined) {
-      newScores[teamId] = 0;
+    if (typeof newScores[teamId] === 'number') {
+        newScores[teamId]++;
+        this.scores = newScores;
+        this._publishScore(teamId, newScores[teamId]);
+        console.log(`Score updated: ${JSON.stringify(this.scores)}`);
+        this.dispatchEvent(new CustomEvent('score-updated', {
+            detail: { scores: this.scores },
+            bubbles: true,
+            composed: true
+        }));
+    } else {
+        this.pendingIncrements[teamId] = (this.pendingIncrements[teamId] || 0) + 1;
+        console.log(`Buffered increment for ${teamId}. Total pending: ${this.pendingIncrements[teamId]}`);
     }
-    newScores[teamId]++;
-    this.scores = newScores;
-    this._publishScore(teamId, newScores[teamId]);
-    console.log(`Score updated: ${JSON.stringify(this.scores)}`);
-    this.dispatchEvent(new CustomEvent('score-updated', {
-        detail: { scores: this.scores },
-        bubbles: true,
-        composed: true
-    }));
   }
 
   render() {
