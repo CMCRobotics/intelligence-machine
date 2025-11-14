@@ -197,7 +197,7 @@ class TeachableMachineImageView extends LitElement {
   publishTestResult(success) {
     if (success) {
         const resultTopic = `terminal-${this.deviceId}/activeModel/testSuccess`;
-        const payload = JSON.stringify(this.testParameters);
+        const payload = JSON.stringify({ ...this.testParameters, timestamp: Date.now() });
         this.homieObserver.publish(resultTopic, payload);
         console.log(`Test succeeded. Publishing result to ${resultTopic}.`);
     } else {

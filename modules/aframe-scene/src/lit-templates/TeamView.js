@@ -29,6 +29,10 @@ class TeamView extends LitElement {
             this.teams[teamId].name = event.property.value;
           }
 
+          if (event.type === 'property' && event.node.id==="info" && event.property.id === 'score') {
+            this.teams[teamId].score = event.property.value;
+          }
+
           if (event.node && event.node.id.startsWith('model-')) {
             const modelId = event.node.id;
             if (!this.teams[teamId].models[modelId]) {
@@ -59,36 +63,38 @@ class TeamView extends LitElement {
     return html`
       <div class="team-list">
         <h1>Teams</h1>
-        <table>
-          <thead>
-            <tr>
-              <th>Color</th>
-              <th>Team</th>
-              <th>Model Name</th>
-              <th>Model Type</th>
-              <th>Uploaded by</th>
-              <th>Timestamp</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${Object.values(this.teams).map(
-              (team) => html`
-                ${Object.values(team.models).map(
-                  (model) => html`
-                    <tr>
-                      <td style="background-color: ${team.name.toLowerCase()}">&nbsp;</td>
-                      <td>${team.name}</td>
-                      <td>${model.modelName}</td>
-                      <td>${model.type}</td>
-                      <td>${model.terminalId}</td>
-                      <td>${new Date(model.timestamp).toLocaleString()}</td>
-                    </tr>
-                  `
-                )}
-              `
-            )}
-          </tbody>
-        </table>
+        ${Object.values(this.teams).map(
+          (team) => html`
+            <div class="team-container">
+              <h2>
+                <span class="team-color" style="background-color: ${team.name ? team.name.toLowerCase() : 'grey'}"></span>
+                 ${team.name} - Score: ${team.score || 0}
+              </h2>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Model Name</th>
+                    <th>Model Type</th>
+                    <th>Uploaded by</th>
+                    <th>Timestamp</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${Object.values(team.models).map(
+                    (model) => html`
+                      <tr>
+                        <td>${model.modelName}</td>
+                        <td>${model.type}</td>
+                        <td>${model.terminalId}</td>
+                        <td>${new Date(model.timestamp).toLocaleString()}</td>
+                      </tr>
+                    `
+                  )}
+                </tbody>
+              </table>
+            </div>
+          `
+        )}
       </div>
     `;
   }
@@ -101,7 +107,21 @@ class TeamView extends LitElement {
       background-color: rgba(0, 0, 0, 0.5);
       padding: 20px;
       border-radius: 10px;
+      width: 80%;
+      max-width: 1200px;
     }
+    .team-container {
+      margin-bottom: 20px;
+    }
+    .team-color {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
     table {
       width: 100%;
       border-collapse: collapse;
@@ -109,6 +129,7 @@ class TeamView extends LitElement {
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
+      text-align: left;
     }
     th {
       background-color: #4CAF50;
