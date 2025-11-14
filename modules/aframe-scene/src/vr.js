@@ -93,14 +93,25 @@ if (container) {
     const options = { showShadows: true };
     render(renderLabScene(options), container);
 
-    // showHudPanel(); // Show the HUD panel when the scene is rendered
+    // Add team-colored circle around the base
+    const teamColorName = localStorage.getItem('teamName');
+    if (teamColorName) {
+        const scene = document.querySelector('a-scene');
+        if (scene) {
+            // Wait for the scene to load before adding the circle
+            scene.addEventListener('loaded', function () {
+                const ring = document.createElement('a-ring');
+                ring.setAttribute('position', `-1 0.15 -4.73`);
+                ring.setAttribute('rotation', '-90 0 0');
+                ring.setAttribute('radius-outer', '2.8');
+                ring.setAttribute('radius-inner', '2.4');
+                ring.setAttribute('color', teamColorName);
+                ring.setAttribute('material', 'shader: flat');
+                scene.appendChild(ring);
+            });
+        }
+    }
 
-    // Example of how you might toggle shadows later (e.g., via a UI element)
-    // setTimeout(() => {
-    //     options.showShadows = false;
-    //     render(renderLabScene(options), container);
-    //     console.log("Shadows turned off");
-    // }, 5000);
 } else {
     console.error("Could not find #aframe-container to render the scene.");
 }
@@ -111,7 +122,7 @@ function updateBrainScale(score) {
         const minScore = 0;
         const maxScore = 30;
         const minScale = 0.4;
-        const maxScale = 1.6;
+        const maxScale = 1.5;
 
         const scale = minScale + (score - minScore) / (maxScore - minScore) * (maxScale - minScale);
         const clampedScale = Math.max(minScale, Math.min(maxScale, scale));
@@ -130,7 +141,33 @@ function updateBrainScale(score) {
                 setTimeout(() => {
                     floatingComponent.data.bobbingSpeed = originalBobbingSpeed;
                     floatingComponent.data.rockingSpeed = originalRockingSpeed;
-                }, 5000);
+                }, 4000);
+            }
+
+            // Add halo effect
+            const scene = document.querySelector('a-scene');
+            if (scene) {
+                const existingHalo = document.getElementById('brain-halo');
+                if (existingHalo) {
+                    existingHalo.parentNode.removeChild(existingHalo);
+                }
+
+                const halo = document.createElement('a-sphere');
+                halo.setAttribute('id', 'brain-halo');
+                const brainPosition = brainEntity.getAttribute('position');
+                halo.setAttribute('position', brainPosition);
+                const haloRadius = clampedScale * 1.2;
+                halo.setAttribute('radius', haloRadius);
+                halo.setAttribute('material', 'color: yellow; opacity: 0.4; transparent: true; side: back');
+                
+                scene.appendChild(halo);
+
+                setTimeout(() => {
+                    const haloToRemove = document.getElementById('brain-halo');
+                    if (haloToRemove) {
+                        haloToRemove.parentNode.removeChild(haloToRemove);
+                    }
+                }, 4000);
             }
         }
         previousScore = score;
