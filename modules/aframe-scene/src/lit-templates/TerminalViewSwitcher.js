@@ -64,11 +64,16 @@ class TerminalViewSwitcher extends LitElement {
   switchToUploadView() {
     const selectedModelData = this.models.find(model => model.modelName === this.selectedModel);
     if (!selectedModelData) return;
-
+  
     for (const terminalId of Object.keys(this.terminals)) {
-      this.homieObserver.publish(`${terminalId}/model-upload/name`, selectedModelData.modelName);
-      this.homieObserver.publish(`${terminalId}/model-upload/type`, selectedModelData.modelType);
+      // First, switch the view
       this.homieObserver.publish(`${terminalId}/ui-control/switch`, 'teachable-machine-upload');
+  
+      // Then, after a short delay, send the model data
+      setTimeout(() => {
+        this.homieObserver.publish(`${terminalId}/model-upload/name`, selectedModelData.modelName);
+        this.homieObserver.publish(`${terminalId}/model-upload/type`, selectedModelData.modelType);
+      }, 200);
     }
   }
 
