@@ -1,10 +1,12 @@
 import { LitElement, html, css } from 'lit';
 import './TerminalView.js';
 import './TeamView.js';
+import './TerminalViewSwitcher.js';
 
 const VIEWS = [
   { name: 'terminal-view', tagName: 'terminal-view' },
   { name: 'team-view', tagName: 'team-view' },
+  { name: 'terminal-view-switcher', tagName: 'terminal-view-switcher' },
 ];
 
 class GameViewManager extends LitElement {
@@ -59,6 +61,7 @@ class GameViewManager extends LitElement {
         <div class="navigation tabs">
           <button class="${this.activeViewName === 'terminal-view' ? 'active' : ''}" @click=${() => this.switchView('terminal-view')}>Terminal View</button>
           <button class="${this.activeViewName === 'team-view' ? 'active' : ''}" @click=${() => this.switchView('team-view')}>Team View</button>
+          <button class="${this.activeViewName === 'terminal-view-switcher' ? 'active' : ''}" @click=${() => this.switchView('terminal-view-switcher')}>Terminal Switcher</button>
         </div>
         <div class="view-manager">
         </div>
