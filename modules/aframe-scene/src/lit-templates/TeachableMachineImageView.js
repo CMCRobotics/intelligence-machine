@@ -49,11 +49,11 @@ class TeachableMachineImageView extends LitElement {
           const value = event.property.value;
 
           switch (propertyId) {
-            case 'model-url':
-              this.modelURL = value;
+            case 'name':
+              this.modelName = value;
               break;
-            case 'metadata-url':
-              this.metadataURL = value;
+            case 'uploaderTeamId':
+              this.uploaderTeamId = value;
               break;
             case 'type':
               this.modelType = value;
@@ -63,7 +63,10 @@ class TeachableMachineImageView extends LitElement {
               break;
           }
 
-          if (this.modelURL && this.metadataURL && this.modelType === 'image') {
+          if ((!this.isTesting) && this.modelName && this.uploaderTeamId && this.modelType) {
+            const modelBaseName = `${this.uploaderTeamId}-${this.modelName}`;
+            this.modelURL = `/models/${modelBaseName}/model.json`;
+            this.metadataURL = `/models/${modelBaseName}/metadata.json`;
             this.init();
           }
         }
@@ -76,7 +79,7 @@ class TeachableMachineImageView extends LitElement {
   handleTestRequest(payload) {
     try {
       const params = JSON.parse(payload);
-      if (params.class !== undefined && params.duration !== undefined && params.confidence !== undefined) {
+      if (params.duration !== undefined && params.confidence !== undefined) {
         if (this.flashingInterval) clearInterval(this.flashingInterval);
         if (this.countdownInterval) clearInterval(this.countdownInterval);
 
@@ -135,8 +138,10 @@ class TeachableMachineImageView extends LitElement {
   checkConfidenceTest() {
     if (!this.isTesting || !this.testParameters) return;
 
-    const { class: classIndex, duration, confidence } = this.testParameters;
-    const prediction = this.predictions[classIndex];
+    const { duration, confidence } = this.testParameters;
+
+    // TODO : Replace  hard-coded class index 2 by a random number
+    const prediction = this.predictions[2];
 
     if (prediction && (prediction.probability * 100) >= confidence) {
       if (this.testStartTime === null) {

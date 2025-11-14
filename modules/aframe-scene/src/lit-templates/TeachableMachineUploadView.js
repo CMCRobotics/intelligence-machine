@@ -9,6 +9,7 @@ class TeachableMachineUploadView extends LitElement {
       deviceId: { type: String },
       teamId: { type: String },
       modelName: { type: String },
+      modelType: { type: String },
       uploadStatus: { type: String },
     };
   }
@@ -31,19 +32,25 @@ class TeachableMachineUploadView extends LitElement {
   connect() {
     if (!this.homieObserver) {
       this.homieObserver = createMqttHomieObserver("ws://localhost:9001");
-      const topic = `homie/terminal-${this.deviceId}/model-upload/name`;
+      const nameTopic = `terminal-${this.deviceId}/model-upload/name`;
+      const typeTopic = `terminal-${this.deviceId}/model-upload/type`;
 
       merge(
             this.homieObserver.created$,
             this.homieObserver.updated$
         ).subscribe(event => {
-        if (event.type === 'property' && event.property.id === 'name') {
-          this.modelName = event.property.value;
+        if (event.type === 'property') {
+          if (event.property.id === 'name') {
+            this.modelName = event.property.value;
+          } else if (event.property.id === 'type') {
+            this.modelType = event.property.value;
+          }
           this.requestUpdate();
         }
       });
 
-      this.homieObserver.subscribe(topic);
+      this.homieObserver.subscribe(nameTopic);
+      this.homieObserver.subscribe(typeTopic);
     }
   }
 
@@ -81,7 +88,12 @@ class TeachableMachineUploadView extends LitElement {
           
           <div class="form-field">
             <label for="name">Model Name:</label>
-            <input type="text" id="name" name="name" .value="${this.modelName}" required>
+            <input type="text" id="name" name="name" .value="${this.modelName}" readonly required>
+          </div>
+
+          <div class="form-field">
+            <label for="name">Model Type:</label>
+            <input type="text" id="type" name="modelType" .value="${this.modelType}" readonly required>
           </div>
           
           <div class="form-field">

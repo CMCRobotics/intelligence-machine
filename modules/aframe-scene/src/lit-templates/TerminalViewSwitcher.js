@@ -22,6 +22,7 @@ class TerminalViewSwitcher extends LitElement {
       { modelName: 'speak-to-me', modelType: 'speech' },
       { modelName: 'strike-a-pose', modelType: 'pose' }
     ];
+    this.uploadedModels = {}; // Tracks { modelName: [{ terminalId, teamId }] }
     this.selectedModel = this.models.length > 0 ? this.models[0].modelName : '';
     this.confidence = 80;
     this.duration = 1000;
@@ -36,6 +37,21 @@ class TerminalViewSwitcher extends LitElement {
         if (event.device) {
           if (event.device.id.startsWith('terminal-')) {
             this.terminals[event.device.id] = event.device;
+          } else if (event.device.id.startsWith('team-')) {
+            if (event.node && event.node.id.startsWith('model-') && event.property && event.property.id === 'terminalId') {
+              const teamId = event.device.id;
+              const modelName = event.node.id.substring('model-'.length);
+              const terminalId = event.property.value;
+
+              if (!this.uploadedModels[modelName]) {
+                this.uploadedModels[modelName] = [];
+              }
+              const existing = this.uploadedModels[modelName].find(e => e.terminalId === terminalId);
+              if (!existing) {
+                this.uploadedModels[modelName].push({ terminalId, teamId });
+                console.log(`Registered upload of model '${modelName}' from terminal '${terminalId}' on team '${teamId}'`);
+              }
+            }
           }
         }
       }
@@ -54,18 +70,51 @@ class TerminalViewSwitcher extends LitElement {
     }
   }
 
-  triggerTest() {
+  setupTest() {
     const selectedModelData = this.models.find(model => model.modelName === this.selectedModel);
-    if (!selectedModelData) return;
+    if (!selectedModelData) {
+      console.error('Selected model data not found.');
+      return;
+    }
 
-    for (const terminalId of Object.keys(this.terminals)) {
-      this.homieObserver.publish(`${terminalId}/ui-control/switch`, `teachable-machine-${selectedModelData.modelType}`);
-      this.homieObserver.publish(`${terminalId}/activeModel/name`, selectedModelData.modelName);
+    const uploadsToTrigger = this.uploadedModels[selectedModelData.modelName];
+
+    if (!uploadsToTrigger || uploadsToTrigger.length === 0) {
+      alert(`No team has uploaded the "${selectedModelData.modelName}" model yet.`);
+      return;
+    }
+
+    for (const uploadInfo of uploadsToTrigger) {
+      const { terminalId, teamId } = uploadInfo;
+      this.homieObserver.publish(`terminal-${terminalId}/ui-control/switch`, `teachable-machine-${selectedModelData.modelType}`);
+      this.homieObserver.publish(`terminal-${terminalId}/activeModel/name`, selectedModelData.modelName);
+      this.homieObserver.publish(`terminal-${terminalId}/activeModel/uploaderTeamId`, teamId);
+      console.log(`Setting up test for model '${selectedModelData.modelName}' on terminal '${terminalId}' (team: ${teamId})`);
+    }
+  }
+
+  runTest() {
+    const selectedModelData = this.models.find(model => model.modelName === this.selectedModel);
+    if (!selectedModelData) {
+      console.error('Selected model data not found.');
+      return;
+    }
+
+    const uploadsToTrigger = this.uploadedModels[selectedModelData.modelName];
+
+    if (!uploadsToTrigger || uploadsToTrigger.length === 0) {
+      alert(`No team has uploaded the "${selectedModelData.modelName}" model yet. Please set up the test first.`);
+      return;
+    }
+
+    for (const uploadInfo of uploadsToTrigger) {
+      const { terminalId } = uploadInfo;
       const payload = JSON.stringify({
         confidence: this.confidence,
         duration: this.duration,
       });
-      this.homieObserver.publish(`${terminalId}/activeModel/test`, payload);
+      this.homieObserver.publish(`terminal-${terminalId}/activeModel/test`, payload);
+      console.log(`Running test for model '${selectedModelData.modelName}' on terminal '${terminalId}'`);
     }
   }
 
@@ -92,7 +141,8 @@ class TerminalViewSwitcher extends LitElement {
             Duration (ms):
             <input type="number" .value=${this.duration} @input=${(e) => this.duration = e.target.value}>
           </label>
-          <button @click=${this.triggerTest}>Trigger Test on All</button>
+          <button @click=${this.setupTest}>Setup Test on Terminals</button>
+          <button @click=${this.runTest}>Run Test on All</button>
         </div>
       </div>
     `;
