@@ -89,24 +89,30 @@ class TerminalViewSwitcher extends LitElement {
       console.error('Selected model data not found.');
       return;
     }
-
+  
     const uploadsToTrigger = this.uploadedModels[selectedModelData.modelName];
-
+  
     if (!uploadsToTrigger || uploadsToTrigger.length === 0) {
       alert(`No team has uploaded the "${selectedModelData.modelName}" model yet.`);
       return;
     }
-
+  
     for (const uploadInfo of uploadsToTrigger) {
       const { terminalId, teamId } = uploadInfo;
-      const payload = {
-        name: selectedModelData.modelName,
-        uploaderTeamId: teamId,
-        type: selectedModelData.modelType
-      };
-      this.homieObserver.publish(`terminal-${terminalId}/activeModel/set`, JSON.stringify(payload));
+      
+      // First, switch the view
       this.homieObserver.publish(`terminal-${terminalId}/ui-control/switch`, `teachable-machine-${selectedModelData.modelType}`);
-      console.log(`Setting up test for model '${selectedModelData.modelName}' on terminal '${terminalId}' (team: ${teamId})`);
+      
+      // Then, after a short delay, send the model data
+      setTimeout(() => {
+        const payload = {
+          name: selectedModelData.modelName,
+          uploaderTeamId: teamId,
+          type: selectedModelData.modelType
+        };
+        this.homieObserver.publish(`terminal-${terminalId}/activeModel/set`, JSON.stringify(payload));
+        console.log(`Setting up test for model '${selectedModelData.modelName}' on terminal '${terminalId}' (team: ${teamId})`);
+      }, 200);
     }
   }
 
