@@ -84,9 +84,10 @@ export class TeamSelectorView extends LitElement {
 
     // Handle team selection via button click
     selectTeam(teamId, teamName) {
+        let deviceId = localStorage.getItem("deviceId");
         // Dispatch a custom event to inform SessionManager
         this.dispatchEvent(new CustomEvent('team-selected', {
-            detail: { teamId: teamId, teamName: teamName },
+            detail: { deviceId: deviceId, teamId: teamId, teamName: teamName },
             bubbles: true,
             composed: true
         }));

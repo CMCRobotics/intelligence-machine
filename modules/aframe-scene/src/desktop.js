@@ -60,6 +60,11 @@ const renderLabScene = (options = {}) => {
 const container = document.getElementById('aframe-container');
 if (container) {
 
+    if (!localStorage.getItem('deviceId')) {
+        const generateShortUUID = () => Math.random().toString(36).substring(2, 10);
+        localStorage.setItem('deviceId', generateShortUUID());
+    }
+
     // Default options: shadows enabled
     const options = { 
         showShadows: true

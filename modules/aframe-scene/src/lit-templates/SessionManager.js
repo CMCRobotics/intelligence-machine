@@ -128,7 +128,7 @@ class SessionManager extends LitElement {
   }
 
   _handleTeamSelected(event) {
-    const { teamId, teamName } = event.detail;
+    const { deviceId, teamId, teamName } = event.detail;
     const newTeam = { id: teamId, name: teamName };
     console.log('Team selected event received:', newTeam);
 
@@ -139,7 +139,7 @@ class SessionManager extends LitElement {
     }
     
     this._updateAndNotify(); // Save and notify listeners
-    this._publishTeamSelectionToMqtt(newTeam);
+    this._publishTeamSelectionToMqtt(deviceId,newTeam);
   }
 
   _handleTeamCleared() {
@@ -150,7 +150,7 @@ class SessionManager extends LitElement {
     this._updateAndNotify(); // Save and notify listeners
   }
 
-  _publishTeamSelectionToMqtt(team) {
+  _publishTeamSelectionToMqtt(deviceId,team) {
     if (this.homieObserver && this.mqttConnected) {
       console.log(`Publishing team selection to MQTT: ${JSON.stringify(team)}`);
       // Publish the selected team ID
@@ -158,10 +158,10 @@ class SessionManager extends LitElement {
       // Assuming 'terminal' is a known device type or part of the session context
       // and deviceId is available or can be inferred.
       // For now, we'll use a placeholder topic.
-      const publishTopic = `team-selector/selected-team/set`; // Example topic
-      this.homieObserver.publish(publishTopic, JSON.stringify(team));
+      const publishTopic = `terminal-${deviceId}/info/team`; // Example topic
+      this.homieObserver.publish(publishTopic, team.id, {retain:true});
     } else {
-        console.warn('MQTT not connected or HomieObserver not available. Cannot publish team selection.');
+        console.warn('MQTT not connected or HomieObserver not available. Cannot publish tea m selection.');
     }
   }
 

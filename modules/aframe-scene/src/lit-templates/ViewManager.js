@@ -1,19 +1,18 @@
 import { LitElement, html, css } from 'lit';
-import { ExampleView1 } from './ExampleView1.js';
-import { ExampleView2 } from './ExampleView2.js';
+
 import { TeamSelectorView } from './TeamSelectorView.js';
 import { TeachableMachineImageView } from './TeachableMachineImageView.js';
 import { TeachableMachineUploadView } from './TeachableMachineUploadView.js';
+import { WaitingView } from './WaitingView.js';
 import { createMqttHomieObserver, setLogLevel } from '@cmcrobotics/homie-lit';
 import { merge } from 'rxjs';
 
 // Define the list of views, placing the team selector first
 let VIEWS = [
        { name: 'team-selector', tagName: 'team-selector-view' } // New team selector view
+      ,{ name: 'waiting-view', tagName: 'waiting-view' }
       ,{ name: 'teachable-machine-image', tagName: 'teachable-machine-image-view' }
-      ,{ name: 'teachable-machine-upload', tagName: 'teachable-machine-upload-view' }
-      ,{ name: 'example1', tagName: 'example-view-1' }
-      ,{ name: 'example2', tagName: 'example-view-2' }];
+      ,{ name: 'teachable-machine-upload', tagName: 'teachable-machine-upload-view' }];
 
 
 
@@ -142,26 +141,9 @@ class ViewManager extends LitElement {
       this.sessionManager._handleTeamSelected(event);
     }
     console.log('Team selected:', event.detail);
-    const { teamId, teamName } = event.detail;
     
-    // After a team is selected, we should transition to the next view.
-    // Find the index of the current 'team-selector' view.
-    const currentViewIndex = this.views.findIndex(view => view.name === 'team-selector');
-    
-    if (currentViewIndex !== -1 && currentViewIndex < this.views.length - 1) {
-      // Switch to the next view in the list
-      const nextViewName = this.views[currentViewIndex + 1].name;
-      this.switchView(nextViewName);
-    } else {
-      // If it's the last view or something went wrong, default to the first view (or another fallback)
-      // For now, let's default to example1 if it exists
-      const defaultView = this.views.find(view => view.name === 'example1');
-      if (defaultView) {
-        this.switchView(defaultView.name);
-      } else {
-        console.warn("No default view found after team selection.");
-      }
-    }
+    // After a team is selected, we should transition to the waiting view.
+    this.switchView('waiting-view');
   }
 
   render() {
@@ -181,14 +163,8 @@ class ViewManager extends LitElement {
     // Determine the initial view based on localStorage
     const storedTeamId = localStorage.getItem('teamId');
     if (storedTeamId) {
-      // If teamId is set, skip the team selector and go to the first non-selector view
-      const firstNonSelectorView = this.views.find(view => view.name !== 'team-selector');
-      if (firstNonSelectorView) {
-        this.activeViewName = firstNonSelectorView.name;
-      } else {
-        // Fallback if no other views are defined
-        this.activeViewName = this.views.length > 0 ? this.views[0].name : '';
-      }
+      // If teamId is set, go to the waiting view
+      this.activeViewName = 'waiting-view';
     } else {
       // If teamId is not set, start with the team selector
       this.activeViewName = 'team-selector';
