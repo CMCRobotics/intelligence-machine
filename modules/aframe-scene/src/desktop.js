@@ -26,6 +26,7 @@ import { renderSceneLab } from './lit-templates/scene-lab.js';
 
 // Import ViewManager
 import { ViewManager } from './lit-templates/ViewManager.js';
+import { initializeTeamScoreManager } from './team-score-manager.js';
 
 
 // Polyfill global Buffer
@@ -93,6 +94,8 @@ if (container) {
     // );
 
     // observer.subscribe('team-white/brain/+');
+
+    initializeTeamScoreManager();
 
 } else {
     console.error("Could not find #aframe-container to render the scene.");
