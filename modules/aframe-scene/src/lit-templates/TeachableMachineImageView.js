@@ -49,25 +49,26 @@ class TeachableMachineImageView extends LitElement {
           const value = event.property.value;
 
           switch (propertyId) {
-            case 'name':
-              this.modelName = value;
-              break;
-            case 'uploaderTeamId':
-              this.uploaderTeamId = value;
-              break;
-            case 'type':
-              this.modelType = value;
+            case 'set':
+              try {
+                const modelData = JSON.parse(value);
+                this.modelName = modelData.name;
+                this.uploaderTeamId = modelData.uploaderTeamId;
+                this.modelType = modelData.type;
+
+                if (!this.isTesting) {
+                  const modelBaseName = `${this.uploaderTeamId}-${this.modelName}`;
+                  this.modelURL = `/models/${modelBaseName}/model.json`;
+                  this.metadataURL = `/models/${modelBaseName}/metadata.json`;
+                  this.init();
+                }
+              } catch (e) {
+                console.error('Invalid model data payload:', e);
+              }
               break;
             case 'test':
               this.handleTestRequest(value);
               break;
-          }
-
-          if ((!this.isTesting) && this.modelName && this.uploaderTeamId && this.modelType) {
-            const modelBaseName = `${this.uploaderTeamId}-${this.modelName}`;
-            this.modelURL = `/models/${modelBaseName}/model.json`;
-            this.metadataURL = `/models/${modelBaseName}/metadata.json`;
-            this.init();
           }
         }
       });

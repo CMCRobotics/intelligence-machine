@@ -86,9 +86,12 @@ class TerminalViewSwitcher extends LitElement {
 
     for (const uploadInfo of uploadsToTrigger) {
       const { terminalId, teamId } = uploadInfo;
-      this.homieObserver.publish(`terminal-${terminalId}/activeModel/name`, selectedModelData.modelName);
-      this.homieObserver.publish(`terminal-${terminalId}/activeModel/uploaderTeamId`, teamId);
-      this.homieObserver.publish(`terminal-${terminalId}/activeModel/type`, selectedModelData.modelType);
+      const payload = {
+        name: selectedModelData.modelName,
+        uploaderTeamId: teamId,
+        type: selectedModelData.modelType
+      };
+      this.homieObserver.publish(`terminal-${terminalId}/activeModel/set`, JSON.stringify(payload));
       this.homieObserver.publish(`terminal-${terminalId}/ui-control/switch`, `teachable-machine-${selectedModelData.modelType}`);
       console.log(`Setting up test for model '${selectedModelData.modelName}' on terminal '${terminalId}' (team: ${teamId})`);
     }
