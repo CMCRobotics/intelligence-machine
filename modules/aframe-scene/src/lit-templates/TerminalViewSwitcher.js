@@ -16,8 +16,13 @@ class TerminalViewSwitcher extends LitElement {
     super();
     this.terminals = {};
     this.teams = {};
-    this.models = [];
-    this.selectedModel = '';
+    this.models = [
+      { modelName: 'greeter', modelType: 'image' },
+      { modelName: 'sign-language', modelType: 'image' },
+      { modelName: 'speak-to-me', modelType: 'speech' },
+      { modelName: 'strike-a-pose', modelType: 'pose' }
+    ];
+    this.selectedModel = this.models.length > 0 ? this.models[0].modelName : '';
     this.confidence = 80;
     this.duration = 1000;
     this.homieObserver = createMqttHomieObserver('ws://localhost:9001');
@@ -31,21 +36,6 @@ class TerminalViewSwitcher extends LitElement {
         if (event.device) {
           if (event.device.id.startsWith('terminal-')) {
             this.terminals[event.device.id] = event.device;
-          } else if (event.device.id.startsWith('team-')) {
-            const teamId = event.device.id;
-            if (!this.teams[teamId]) {
-              this.teams[teamId] = { models: {} };
-            }
-            if (event.node && event.node.id.startsWith('model-')) {
-              const modelId = event.node.id;
-              if (!this.teams[teamId].models[modelId]) {
-                this.teams[teamId].models[modelId] = {};
-              }
-              if (event.type === 'property') {
-                this.teams[teamId].models[modelId][event.property.id] = event.property.value;
-              }
-              this.updateModels();
-            }
           }
         }
       }
@@ -53,32 +43,24 @@ class TerminalViewSwitcher extends LitElement {
     this.homieObserver.subscribe('homie/#');
   }
 
-  updateModels() {
-    const models = [];
-    for (const team of Object.values(this.teams)) {
-      for (const model of Object.values(team.models)) {
-        if (model.modelName) {
-          models.push(model);
-        }
-      }
-    }
-    this.models = models;
-    if (this.models.length > 0 && !this.selectedModel) {
-      this.selectedModel = this.models[0].modelName;
-    }
-    this.requestUpdate();
-  }
-
   switchToUploadView() {
+    const selectedModelData = this.models.find(model => model.modelName === this.selectedModel);
+    if (!selectedModelData) return;
+
     for (const terminalId of Object.keys(this.terminals)) {
       this.homieObserver.publish(`${terminalId}/ui-control/switch`, 'teachable-machine-upload');
-      this.homieObserver.publish(`${terminalId}/model-upload/name`, this.selectedModel);
+      this.homieObserver.publish(`${terminalId}/model-upload/name`, selectedModelData.modelName);
+      this.homieObserver.publish(`${terminalId}/model-upload/type`, selectedModelData.modelType);
     }
   }
 
   triggerTest() {
+    const selectedModelData = this.models.find(model => model.modelName === this.selectedModel);
+    if (!selectedModelData) return;
+
     for (const terminalId of Object.keys(this.terminals)) {
-      this.homieObserver.publish(`${terminalId}/ui-control/switch`, 'teachable-machine-image');
+      this.homieObserver.publish(`${terminalId}/ui-control/switch`, `teachable-machine-${selectedModelData.modelType}`);
+      this.homieObserver.publish(`${terminalId}/activeModel/name`, selectedModelData.modelName);
       const payload = JSON.stringify({
         confidence: this.confidence,
         duration: this.duration,
@@ -92,13 +74,16 @@ class TerminalViewSwitcher extends LitElement {
       <div class="switcher-container">
         <div class="control-section">
           <h2>Teachable Model Upload</h2>
-          <select @change=${(e) => this.selectedModel = e.target.value}>
+          <select .value=${this.selectedModel} @change=${(e) => this.selectedModel = e.target.value}>
             ${this.models.map(model => html`<option value=${model.modelName}>${model.modelName}</option>`)}
           </select>
           <button @click=${this.switchToUploadView}>Switch All to Upload</button>
         </div>
         <div class="control-section">
           <h2>Teachable Model Test Trigger</h2>
+          <select .value=${this.selectedModel} @change=${(e) => this.selectedModel = e.target.value}>
+            ${this.models.map(model => html`<option value=${model.modelName}>${model.modelName}</option>`)}
+          </select>
           <label>
             Confidence:
             <input type="number" .value=${this.confidence} @input=${(e) => this.confidence = e.target.value}>
