@@ -24,3 +24,14 @@ service:
   type: ClusterIP
   port: 8080
 
+mosquitto:
+  replicaCount: 1
+  image:
+    repository: eclipse-mosquitto
+    pullPolicy: IfNotPresent
+    tag: "2"
+  service:
+    type: ClusterIP
+    port: 1883
+  ws_port: 9001
+  path: /ws

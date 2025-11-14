@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "imachine.fullname" . }}-mosquitto
+  labels:
+    {{- include "imachine.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mosquitto
+spec:
+  type: {{ .Values.mosquitto.service.type }}
+  ports:
+    - port: {{ .Values.mosquitto.service.port }}
+      targetPort: mqtt
+      protocol: TCP
+      name: mqtt
+    - port: {{ .Values.mosquitto.ws_port }}
+      targetPort: ws
+      protocol: TCP
+      name: ws
+  selector:
+    {{- include "imachine.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: mosquitto
