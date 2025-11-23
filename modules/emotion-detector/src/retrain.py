@@ -19,9 +19,6 @@
 #
 # requires /data/test images to compare the models' accuracy
 # expects new images in /data/new_data
-
-# i fail to send the new model to pi from this script, we may need to just run this command at the end:
-# $ scp /home/kasik/Documents/Books/ai/tinyML/projects/emotion_detection/Emotion-detection/src/model_int8_personalized.tflite pi@192.168.3.231:/home/pi/projects/tinyml/emotions
 #------------------------------------------------------------------------------------------------------------
 
 
@@ -126,12 +123,11 @@ val_gen = train_datagen.flow_from_directory(
 )
 
 
-# # Freeze all layers except the final Dense
-# for layer in model.layers[:-1]:
-#     layer.trainable = False
 
 
 # Freeze layers
+for layer in model.layers[:-5]:
+    layer.trainable = False
 for layer in model.layers[-5:]:
     layer.trainable = True
 
@@ -198,21 +194,21 @@ if s == 'y':
     open("../models/model_int8_personalized.tflite", "wb").write(tflite_int8)
 
     #delete the newly used images
-    # if os.path.exists(new_data_dir):
-    #     shutil.rmtree(new_data_dir)
-    # os.makedirs(new_data_dir)
+    if os.path.exists(new_data_dir):
+        shutil.rmtree(new_data_dir)
+    os.makedirs(new_data_dir)
 
-    # #send to PI
-    # src = "/home/kasik/Documents/Books/ai/tinyML/projects/emotion_detection/Emotion-detection/src/model_int8_personalized.tflite"
-    # dst = "/home/pi/projects/tinyml/emotions/model_int8_personalized.tflite"
-    #
-    # ssh = paramiko.SSHClient()
-    # ssh.load_system_host_keys()
-    # ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    #
-    # ssh.connect("192.168.3.231", username="pi", password="") #the IP may be different in the venue?
-    #
-    # with SCPClient(ssh.get_transport()) as scp:
-    #     scp.put(src, dst)
-    #
-    # ssh.close()
+    #send to PI
+    src = "/home/kasik/projects/intelligence-machine/modules/emotion-detector/models/model_int8_personalized.tflite"
+    dst = "/home/pi/projects/tinyml/emotions/model_int8_personalized.tflite"
+    
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    
+    ssh.connect("192.168.3.231", username="pi", password="") #the IP may be different in the venue?
+    
+    with SCPClient(ssh.get_transport()) as scp:
+        scp.put(src, dst)
+    
+    ssh.close()
