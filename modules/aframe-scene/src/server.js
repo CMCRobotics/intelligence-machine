@@ -4,7 +4,7 @@ const unzipper = require('unzipper');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
-const mqtt = require('mqtt');
+const Paho = require('paho-mqtt'); // Added Paho MQTT client
 
 const app = express();
 const port = 3000;
@@ -12,10 +12,31 @@ const port = 3000;
 app.use(cors());
 
 const upload = multer({ storage: multer.memoryStorage() });
-const client = mqtt.connect('ws://localhost:9001');
 
-client.on('connect', () => {
-  console.log('Connected to MQTT broker');
+// Paho MQTT client setup
+const clientId = 'mqtt-server-' + Math.random().toString(16).substr(2, 8);
+const client = new Paho.Client('localhost', 9001, '/mqtt', clientId); // Connect to ws://localhost:9001/mqtt
+
+client.onConnectionLost = (responseObject) => {
+  if (responseObject.errorCode !== 0) {
+    console.log('Connection lost:', responseObject.errorMessage);
+  }
+};
+
+client.onMessageArrived = (message) => {
+  console.log(`Message arrived [${message.destinationName}]: ${message.payloadString}`);
+};
+
+client.connect({
+  onSuccess: () => {
+    console.log('Connected to MQTT broker (Paho)');
+    // Subscribe to any topics if needed
+  },
+  onFailure: (responseObject) => {
+    console.error('Failed to connect to MQTT broker (Paho):', responseObject.errorMessage);
+  },
+  useSSL: false, // Assuming ws://, not wss://
+  // For Paho, the WebSocket path is typically /mqtt, ensure your broker supports it
 });
 
 app.post('/upload', upload.single('model'), (req, res) => {
@@ -62,7 +83,10 @@ app.post('/upload', upload.single('model'), (req, res) => {
     };
 
     for (const [key, value] of Object.entries(properties)) {
-      client.publish(`${homieBaseTopic}/${key}`, value.toString(), { retain: true });
+      const message = new Paho.Message(value.toString());
+      message.destinationName = `${homieBaseTopic}/${key}`;
+      message.retained = true;
+      client.send(message);
     }
 
     res.status(200).send({ message: 'Model uploaded and advertised successfully.' });

@@ -177,3 +177,5 @@ class SessionManager extends LitElement {
 }
 
 customElements.define('session-manager', SessionManager);
+
+export { SessionManager };
