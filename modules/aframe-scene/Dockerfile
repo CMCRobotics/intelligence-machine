@@ -1,7 +1,11 @@
-FROM registry.cern.ch/docker.io/node:20
-
-COPY . /app
+FROM oven/bun
 
 WORKDIR /app
 
-RUN npm install
+COPY package.json ./ 
+RUN bun install
+
+COPY . .
+RUN bun run build
+
+CMD ["bun", "run", "start"]
