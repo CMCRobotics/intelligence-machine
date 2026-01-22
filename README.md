@@ -13,8 +13,8 @@ Bun is an integrated Typescript-native Javascript runtime that acts as a drop-in
 To install and use bun for development :
 * Execute ```curl -fsSL https://bun.com/install | bash```
 * Run ```bun install```
-* You can then use ```bun run <task>```
-
+* Execute ```bun run start```
+* Open a browser on port 3000
 
 ### 🛠️ Creating a GitHub Personal Access Token for npm
 
