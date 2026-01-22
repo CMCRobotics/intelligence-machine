@@ -31,7 +31,10 @@ import { initializeTeamScoreManager } from './team-score-manager.js';
 
 // Polyfill global Buffer
 import { Buffer } from 'buffer';
-window.Buffer = Buffer;
+
+if (typeof window !== "undefined") {
+    window.Buffer = Buffer;
+}
 
 // Define the lit-html template function
 const renderLabScene = (options = {}) => {

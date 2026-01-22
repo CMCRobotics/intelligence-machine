@@ -5,13 +5,13 @@
     "main": "index.js",
     "scripts": {
         "start": "bun run copy-public && bun run start:frontend & bun run start:server",
-        "start:frontend": "bun --watch src/desktop.js --outdir dist/ --target browser",
+        "start:frontend": "bun build --watch src/desktop.js src/vr.js src/presentation.js src/game.js --outdir dist/ --target browser",
         "start:server": "bun src/server.js",
         "build": "bun build src/vr.js src/presentation.js src/desktop.js src/game.js --outdir dist/ --target browser && bun run copy-public",
         "init-teams": "bun bin/init-teams.js",
         "set-model": "bun bin/set-model.js",
         "trigger-test": "bun bin/trigger-test.js",
-        "copy-public": "cp -r public/* dist/"
+        "copy-public": "mkdir -p dist/ && cp -r public/* dist/"
     },
     "dependencies": {
         "@teachablemachine/image": "^0.8.5",

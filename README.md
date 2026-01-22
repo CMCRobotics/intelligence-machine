@@ -6,6 +6,16 @@ An educational experience about Artificial Intelligence and Machine Learning.
 
 In order to obtain the latest dev version of dependencies, you may need a Github token.
 
+### 🧅 Installing Bun
+
+Bun is an integrated Typescript-native Javascript runtime that acts as a drop-in replacement for Node.
+
+To install and use bun for development :
+* Execute ```curl -fsSL https://bun.com/install | bash```
+* Run ```bun install```
+* You can then use ```bun run <task>```
+
+
 ### 🛠️ Creating a GitHub Personal Access Token for npm
 
 * Go to GitHub.com and log in to your account.
