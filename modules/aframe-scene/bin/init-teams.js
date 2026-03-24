@@ -5,15 +5,18 @@ const client = mqtt.connect('ws://localhost:9001');
 const TEAMS = [
     {
         id: 'team-blue',
-        name: 'Blue'
+        name: 'Blue',
+        score: '0'
     },
     {
         id: 'team-red',
-        name: 'Red'
+        name: 'Red',
+        score: '0'
     },
     {
         id: 'team-white',
-        name: 'White'
+        name: 'White',
+        score: '0'
     }
 ]
 
@@ -29,6 +32,7 @@ client.on('connect', () => {
         client.publish(`homie/${team.id}/info/$properties`, 'id,name', { retain: true });
         client.publish(`homie/${team.id}/info/id`, team.id, { retain: true });
         client.publish(`homie/${team.id}/info/name`, team.name, { retain: true });
+        client.publish(`homie/${team.id}/info/score`, team.score, { retain: true });
     }
     console.log('Done.');
     client.end();
