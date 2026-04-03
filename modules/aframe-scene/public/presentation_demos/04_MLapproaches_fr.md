@@ -4,7 +4,7 @@
 * Non supervisé
 * Apprentissage par renforcement
 
-![](presentation/images/polly_enlightened.svg)<!-- .element style="position: fixed; bottom: 50px; right: -120px; width:250px" -->
+![](presentation_demos/images/polly_enlightened.svg)<!-- .element style="position: fixed; bottom: 50px; right: -120px; width:250px" -->
 
 --
 ### Apprentissage supervisé

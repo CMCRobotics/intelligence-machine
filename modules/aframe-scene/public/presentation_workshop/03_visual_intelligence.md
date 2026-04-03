@@ -1,11 +1,11 @@
 # How a machine can have a visual intelligence?
-![](presentation/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
+![](presentation_workshop/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
 --
 
 If we use the eyes to see, the computer uses camera.
 This means that both the camera and the eyes are the sensors that enable the sigth.
 
-![](presentation/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
+![](presentation_workshop/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
 
 --
 
@@ -14,12 +14,15 @@ This means that both the camera and the eyes are the sensors that enable the sig
 We see thought the eyes -> the variations of light perceived by the eyes are converted to an electrical stimuly -> 
 the signal is sent to the brain thanks to a neuron and there is processed.
 
-![](presentation/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
+![](presentation_workshop/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
 --
 
 # Machine Intelligence
 Machine see thought a camera -> the variations of light perceived are converted to an image in pixels -> 
 the is processed and thanks to algorithms the machine can be enabled to recognise what is in the picture
+
+![](presentation_workshop/images/image segmentation.jpg)<!-- .element style="position: fixed; bottom: 60px; left: -120px; width:300px" -->
+
 
 --
 

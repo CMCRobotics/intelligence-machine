@@ -35,16 +35,16 @@ Pay attention also when you wear sunglasses, hats, etc. — the camera needs to 
 Same as before! Take pictures of different hands and angles to let the system recognise the symbol.
 --
 
-![](presentation/images/asl_robot.png)<!-- .element style="width:300px" -->
+![](presentation_workshop/images/asl_robot.png)<!-- .element style="width:300px" -->
 --
 
-![](presentation/images/asl_symbol2.png)<!-- .element style="width:300px" -->
+![](presentation_workshop/images/asl_symbol2.png)<!-- .element style="width:300px" -->
 --
 
-![](presentation/images/asl_symbol3.png)<!-- .element style="width:300px" -->
+![](presentation_workshop/images/asl_symbol3.png)<!-- .element style="width:300px" -->
 --
 
-![](presentation/images/asl_all_symbols.png)<!-- .element style="width:400px" -->
+![](presentation_workshop/images/asl_all_symbols.png)<!-- .element style="width:400px" -->
 
 ---
 
@@ -86,4 +86,4 @@ The words are:
 ---
 
 # Now we will dicover the winner Group...
-![](presentation/images/trophy.jpg)<!-- .element style="width:300px" -->
+![](presentation_workshop/images/trophy.jpg)<!-- .element style="width:300px" -->
