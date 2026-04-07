@@ -1,12 +1,12 @@
 # Where is the intelligence ?
-![](presentation/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
+![](presentation_demos/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
 --
 
 # In the brain!
 
 Not only... It depends...
 
-![](presentation/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
+![](presentation_demos/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
 
 --
 
@@ -14,24 +14,24 @@ Not only... It depends...
 
 Intelligence emerges from the brain, <br> but it’s not located in a single spot.
 
-![](presentation/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
+![](presentation_demos/images/polly_normal.svg)<!-- .element style="position: fixed; bottom: 30px; right: -130px; width:350px" -->
 --
 
 # The human brain
 
-![](presentation/images/brain.svg)<!-- .element style="width:300px" -->
+![](presentation_demos/images/brain.svg)<!-- .element style="width:300px" -->
 
 --
 
 ## The human brain
-![](presentation/images/brain_hippocampus.svg)<!-- .element style="width:250px" -->
+![](presentation_demos/images/brain_hippocampus.svg)<!-- .element style="width:250px" -->
 
 Memory has key hubs in the hippocampus and surrounding structures.
 
 --
 
 ## The human brain
-![](presentation/images/brain_amygdala.svg)<!-- .element style="width:300px" -->
+![](presentation_demos/images/brain_amygdala.svg)<!-- .element style="width:300px" -->
 
 Emotions rely heavily on the amygdala and limbic system.
 
@@ -39,7 +39,7 @@ Emotions rely heavily on the amygdala and limbic system.
 
 ## The human brain
 
-![](presentation/images/brain_cerebellum.svg)<!-- .element style="width:350px" -->
+![](presentation_demos/images/brain_cerebellum.svg)<!-- .element style="width:350px" -->
 
 Motor coordination and prediction involve the cerebellum.
 
@@ -47,11 +47,11 @@ Motor coordination and prediction involve the cerebellum.
 
 ## The human brain
 
-![](presentation/images/brain.svg)<!-- .element style="width:300px" -->
+![](presentation_demos/images/brain.svg)<!-- .element style="width:300px" -->
 
 Intelligence is distributed across networks in the brain rather than stored in a single place.
 
-![](presentation/images/polly_surprised.svg)<!-- .element style="position: fixed; bottom: 230px; right: -200px; width:350px" -->
+![](presentation_demos/images/polly_surprised.svg)<!-- .element style="position: fixed; bottom: 230px; right: -200px; width:350px" -->
 
 ---
 
@@ -66,7 +66,7 @@ but many researchers argue they show a kind of distributed intelligence. <!-- .e
 ## Plants
 
 
-![](presentation/images/roots_of_strength.png)<!-- .element style="width:350px" -->
+![](presentation_demos/images/roots_of_strength.png)<!-- .element style="width:350px" -->
 
 <p>
 Roots can detect water, nutrients, toxins, and even obstacles, then “decide” which way to grow.
@@ -76,7 +76,7 @@ Roots can detect water, nutrients, toxins, and even obstacles, then “decide”
 ## Plants
 
 
-![](presentation/images/myccorhizal_network.png)<!-- .element style="width:350px" -->
+![](presentation_demos/images/myccorhizal_network.png)<!-- .element style="width:350px" -->
 
 <p>
 Plants send chemical signals through the air (volatile organic compounds) and underground via fungal networks (the “wood-wide web”).
