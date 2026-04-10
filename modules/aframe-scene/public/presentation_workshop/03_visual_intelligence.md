@@ -21,7 +21,7 @@ the signal is sent to the brain thanks to a neuron and there is processed.
 Machine see thought a camera -> the variations of light perceived are converted to an image in pixels -> 
 the is processed and thanks to algorithms the machine can be enabled to recognise what is in the picture
 
-![](presentation_workshop/images/image segmentation.jpg)<!-- .element style="position: fixed; bottom: 60px; left: -120px; width:300px" -->
+![](presentation_workshop/images/image_segmentation.jpg)<!-- .element style="position: fixed; bottom: 60px; left: -120px; width:300px" -->
 
 
 --
