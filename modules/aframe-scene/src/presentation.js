@@ -10,6 +10,6 @@ Reveal.initialize({
     // width: 1920,
     progress: false,
     controls: true,
-    autoSlideMethod: "right",
+    hash: true,
     transition: "none"
   });
