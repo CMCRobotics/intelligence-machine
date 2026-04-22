@@ -8,12 +8,12 @@ import 'loglevel';
 import 'aframe-extras';
 import 'aframe-environment-component';
 
-import './components/load-fragment.js';
-import './components/linear-animation.js';
-import './components/ar-utils.js';
-import './components/floating-in-jar.js';
-import './components/timed-sound.js';
-import './components/homie-brain-scale.js';
+import './aframe-components/load-fragment.js';
+import './aframe-components/linear-animation.js';
+import './aframe-components/ar-utils.js';
+import './aframe-components/floating-in-jar.js';
+import './aframe-components/timed-sound.js';
+import './aframe-components/homie-brain-scale.js';
 
 import { createMqttHomieObserver } from '@cmcrobotics/homie-lit';
 
