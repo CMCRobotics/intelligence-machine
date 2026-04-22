@@ -50,7 +50,7 @@
 
 * Tout d'abord, nous devons créer le réservoir de données que la machine devra reconnaître.
 * Nous pouvons avoir différentes images représentant plusieurs sujets ... <!-- .element class="fragment"-->
-* et nous devons étiqueter chaque image avec sa propre **classe**. <!-- .element class="fragment"-->
+* et nous devons étiqueter chaque image avec sa propre classe. <!-- .element class="fragment"-->
 
 --
 

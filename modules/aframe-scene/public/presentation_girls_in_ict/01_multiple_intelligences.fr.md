@@ -15,7 +15,7 @@
 
 #### Théorie des intelligences multiples
 
-* La théorie des intelligences multiples (H. Gardner) stipule que :
+* Cette théorie publiée par H. Gardner stipule que :
   * L'intelligence n'est pas une capacité générale unique... <!-- .element class="fragment"-->
     * mais un ensemble d'intelligences indépendantes. <!-- .element class="fragment"-->
   * Chaque personne possède une combinaison unique de ces intelligences... <!-- .element class="fragment"-->
