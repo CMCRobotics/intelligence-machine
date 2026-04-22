@@ -2,6 +2,6 @@
 
 * Francesca Schettino
 * Katarzyna Stachyra
-* Roberto Cittadini
+* Karla Pena
 * Brice Copy
 

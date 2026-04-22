@@ -1,3 +1,9 @@
+## Welcome to the <br> CERN Science Gateway
+
+Here are some essential safety rules...
+
+--
+
 ## Exit procedure
 
 
@@ -24,10 +30,10 @@ No naked flames / No Smoking
 
 --
 
-## General Safety Rules
+## In the Science Gateway Labs
 
-* Eating and drinking 🍵🍔 
-* Bathrooms 🚻
-* Photos 📸
+* Eating and drinking is prohibited 🍵🍔 
+* Bathrooms access 🚻
+* Taking photos 📸
 *  Social Media posts **#CERNScienceGateway**
 

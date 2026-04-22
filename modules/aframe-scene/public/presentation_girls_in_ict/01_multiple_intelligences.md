@@ -28,7 +28,7 @@
 ![](presentation_girls_in_ict/images/multiple-intelligences.jpg) <!-- .element style="width:500px" -->
 
 --
-## When can we say a machine thinks ?
+## When can we say <br>a machine thinks ?
 --
 
 <blockquote>
