@@ -79,5 +79,9 @@ module.exports = {
     hot: true,
     compress: true,
     port: 9000,
+    proxy: {
+      '/config.js': 'http://localhost:3000',
+      '/upload': 'http://localhost:3000',
+    },
   }
 };
