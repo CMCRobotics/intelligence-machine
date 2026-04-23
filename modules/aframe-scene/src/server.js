@@ -7,12 +7,22 @@ const path = require('path');
 const mqtt = require('mqtt');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 
 const upload = multer({ storage: multer.memoryStorage() });
-const client = mqtt.connect('ws://localhost:9001');
+const mqttBrokerUrl = process.env.MQTT_BROKER_URL || 'ws://localhost:9001';
+const client = mqtt.connect(mqttBrokerUrl);
+
+app.get('/config.js', (req, res) => {
+  const config = {
+    MQTT_BROKER_URL: process.env.MQTT_BROKER_URL_CLIENT || `ws://${req.hostname}:9001`,
+    API_URL: process.env.API_URL || `http://${req.hostname}:${port}`
+  };
+  res.type('application/javascript');
+  res.send(`window.APP_CONFIG = ${JSON.stringify(config)};`);
+});
 
 client.on('connect', () => {
   console.log('Connected to MQTT broker');

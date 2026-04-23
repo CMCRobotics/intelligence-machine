@@ -43,7 +43,8 @@ class SessionManager extends LitElement {
   _initializeHomieObserver() {
     try {
       const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
-      this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
+      const mqttUrl = (window.APP_CONFIG && window.APP_CONFIG.MQTT_BROKER_URL) || `${scheme}://${window.location.hostname}:9001`;
+      this.homieObserver = createMqttHomieObserver(mqttUrl);
       this.mqttConnected = true; // Assume connected upon creation for now
 
       this.homieObserver.created$.subscribe(

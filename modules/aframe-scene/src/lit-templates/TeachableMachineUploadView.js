@@ -32,7 +32,8 @@ class TeachableMachineUploadView extends LitElement {
   connect() {
     if (!this.homieObserver) {
       const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
-      this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
+      const mqttUrl = (window.APP_CONFIG && window.APP_CONFIG.MQTT_BROKER_URL) || `${scheme}://${window.location.hostname}:9001`;
+      this.homieObserver = createMqttHomieObserver(mqttUrl);
       const nameTopic = `terminal-${this.deviceId}/model-upload/name`;
       const typeTopic = `terminal-${this.deviceId}/model-upload/type`;
 
@@ -63,7 +64,8 @@ class TeachableMachineUploadView extends LitElement {
     this.uploadStatus = 'Uploading...';
 
     try {
-      const response = await fetch(`http://${window.location.hostname}:3000/upload`, {
+      const apiUrl = (window.APP_CONFIG && window.APP_CONFIG.API_URL) || `http://${window.location.hostname}:3000`;
+      const response = await fetch(`${apiUrl}/upload`, {
         method: 'POST',
         body: formData,
       });

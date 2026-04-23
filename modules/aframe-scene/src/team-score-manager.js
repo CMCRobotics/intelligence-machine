@@ -67,7 +67,8 @@ export function initializeTeamScoreManager() {
     if (teamId) {
         try {
             const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
-            const homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
+            const mqttUrl = (window.APP_CONFIG && window.APP_CONFIG.MQTT_BROKER_URL) || `${scheme}://${window.location.hostname}:9001`;
+            const homieObserver = createMqttHomieObserver(mqttUrl);
             homieObserver.subscribe('+/info/score');
 
             const scoreUpdates$ = merge(
