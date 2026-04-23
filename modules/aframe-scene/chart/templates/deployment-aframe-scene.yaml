@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aframe-scene
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: aframe-scene
+  template:
+    metadata:
+      labels:
+        app: aframe-scene
+    spec:
+      securityContext: {}
+      containers:
+        - name: aframe-scene
+          securityContext: {}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 3000
+              protocol: TCP
+          env:
+            - name: PORT
+              value: "3000"
+            - name: MQTT_BROKER_URL
+              value: "mqtt://mosquitto:1883"
+            - name: MQTT_BROKER_URL_CLIENT
+              value: {{ .Values.config.mqttBrokerUrl | default (printf "wss://%s/mqtt" .Values.domain) | quote }}
+            - name: API_URL
+              value: {{ .Values.config.apiUrl | default (printf "https://%s" .Values.domain) | quote }}
+          volumeMounts:
+            - name: models
+              mountPath: /app/public/models
+            # Optional: Overriding the dynamic config.js by mounting a custom one
+            # - name: custom-config
+            #   mountPath: /app/public/config.js
+            #   subPath: config.js
+      volumes:
+        - name: models
+          emptyDir: {}
+        # - name: custom-config
+        #   configMap:
+        #     name: aframe-custom-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: aframe-scene
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: 3000
+      protocol: TCP
+      name: http
+  selector:
+    app: aframe-scene
