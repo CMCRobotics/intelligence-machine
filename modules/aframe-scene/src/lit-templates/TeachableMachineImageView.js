@@ -37,6 +37,13 @@ class TeachableMachineImageView extends LitElement {
     }
   }
 
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this.flashingInterval) clearInterval(this.flashingInterval);
+    if (this.countdownInterval) clearInterval(this.countdownInterval);
+    if (this.overallCountdownInterval) clearInterval(this.overallCountdownInterval);
+  }
+
   connect() {
     if (!this.homieObserver) {
       const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -85,6 +92,19 @@ class TeachableMachineImageView extends LitElement {
     try {
       const params = JSON.parse(payload);
       if (params.duration !== undefined && params.confidence !== undefined && params.class !== undefined && params.overallTimeout !== undefined) {
+        
+        // Defensive Check: Model Readiness
+        if (!this.model) {
+          console.warn('Test requested but model is not yet loaded.');
+          return;
+        }
+
+        // Defensive Check: Class Index Validity
+        if (params.class < 0 || params.class >= this.maxPredictions) {
+          console.error(`Test requested for invalid class index: ${params.class}. Max index is ${this.maxPredictions - 1}`);
+          return;
+        }
+
         if (this.flashingInterval) clearInterval(this.flashingInterval);
         if (this.countdownInterval) clearInterval(this.countdownInterval);
         if (this.overallCountdownInterval) clearInterval(this.overallCountdownInterval);
