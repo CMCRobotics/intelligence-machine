@@ -226,12 +226,12 @@ class TeachableMachineImageView extends LitElement {
     if (success) {
         const resultTopic = `terminal-${this.deviceId}/activeModel/testSuccess`;
         const payload = JSON.stringify({ ...this.testParameters, timestamp: Date.now(), team: localStorage.getItem('teamId') });
-        this.homieObserver.publish(resultTopic, payload);
+        this.homieObserver.publish(resultTopic, payload, { qos: 1 });
         console.log(`Test succeeded. Publishing result to ${resultTopic}.`);
     } else {
         const resultTopic = `terminal-${this.deviceId}/activeModel/test-result`;
         const payload = JSON.stringify({ success });
-        this.homieObserver.publish(resultTopic, payload);
+        this.homieObserver.publish(resultTopic, payload, { qos: 1 });
         console.log(`Test failed. Publishing result.`);
     }
   }
