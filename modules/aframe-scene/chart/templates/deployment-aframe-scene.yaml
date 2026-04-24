@@ -12,6 +12,10 @@ spec:
       labels:
         app: aframe-scene
     spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       securityContext: {}
       containers:
         - name: aframe-scene

@@ -1,8 +1,10 @@
 image:
-  repository: gitlab-registry.cern.ch/cmcrobotics/intelligence-machine/aframe-scene
+  repository: gitlab-registry.cern.ch/cmcrobotics/workshops/intelligence-machine/aframe-scene
   pullPolicy: IfNotPresent
-  tag: "latest"
+  tag: "develop"
 
+imagePullSecrets:
+  - name: gitlab-registry
 
 domain: inmachine.app.cern.ch
 
