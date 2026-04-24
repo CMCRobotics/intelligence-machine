@@ -137,9 +137,11 @@ class TerminalViewSwitcher extends LitElement {
       const payload = JSON.stringify({
         confidence: this.confidence,
         duration: this.duration,
-        class: Math.floor(Math.random() * 3),
-        overallTimeout: this.overallTimeout
+        class: -1, // -1 tells the terminal to pick a random class among available ones
+        overallTimeout: this.overallTimeout,
+        timestamp: Date.now() // Ensure each request is unique to trigger MQTT updates
       });
+
       this.homieObserver.publish(`terminal-${terminalId}/activeModel/test`, payload);
       console.log(`Running test for model '${selectedModelData.modelName}' on terminal '${terminalId}'`);
     }
