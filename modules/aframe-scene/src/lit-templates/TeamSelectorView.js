@@ -63,6 +63,12 @@ export class TeamSelectorView extends LitElement {
     }
 
     // Handler for updates from SessionManager
+    _getTextColor(teamName) {
+        if (!teamName) return 'black';
+        const darkColors = ['blue', 'red', 'purple', 'green'];
+        return darkColors.includes(teamName.toLowerCase()) ? 'white' : 'black';
+    }
+
     _handleSessionUpdate = (event) => {
         const { teams, selectedTeam } = event.detail;
         if (teams !== undefined) { // Check for undefined to allow empty arrays
@@ -118,7 +124,10 @@ export class TeamSelectorView extends LitElement {
                         ? html`<p>Loading teams...</p>`
                         : html`
                             ${this.availableTeams.map(team => html`
-                                <button @click=${() => this.selectTeam(team.id, team.name)}>
+                                <button 
+                                    @click=${() => this.selectTeam(team.id, team.name)}
+                                    style="background-color: ${team.name.toLowerCase()}; color: ${this._getTextColor(team.name)}"
+                                >
                                     ${team.name}
                                 </button>
                             `)}

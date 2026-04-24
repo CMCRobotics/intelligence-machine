@@ -17,6 +17,21 @@ const TEAMS = [
         id: 'team-white',
         name: 'White',
         score: '0'
+    },
+    {
+        id: 'team-yellow',
+        name: 'Yellow',
+        score: '0'
+    },
+    {
+        id: 'team-purple',
+        name: 'Purple',
+        score: '0'
+    },
+    {
+        id: 'team-green',
+        name: 'Green',
+        score: '0'
     }
 ]
 

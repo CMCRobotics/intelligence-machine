@@ -47,6 +47,7 @@ class HudPanel extends LitElement {
         blue: '0, 0, 175',
         green: '0, 175, 0',
         yellow: '175, 175, 0',
+        purple: '128, 0, 128',
         white: '255, 255, 255',
         gray: '128, 128, 128'
       };
