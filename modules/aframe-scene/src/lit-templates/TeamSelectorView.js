@@ -162,7 +162,7 @@ export class TeamSelectorView extends LitElement {
             font-family: sans-serif;
         }
         h1, h2 {
-            color: #333;
+            color: #ccc;
             margin-bottom: 20px;
         }
         button {
