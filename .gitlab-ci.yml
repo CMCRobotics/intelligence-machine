@@ -6,3 +6,6 @@ include:
       kaniko-working-dir: $CI_PROJECT_DIR/modules/aframe-scene
       gitlab-image: $CI_PROJECT_PATH/aframe-scene
       kaniko-build-args: "--build-arg NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN"
+      image-promote-rules:
+        - when: never
+
