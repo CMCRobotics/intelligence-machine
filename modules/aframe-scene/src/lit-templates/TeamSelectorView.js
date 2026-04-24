@@ -161,25 +161,34 @@ export class TeamSelectorView extends LitElement {
             box-sizing: border-box;
             font-family: sans-serif;
         }
-        h1, h2 {
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-        button {
-            margin: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f0f0f0;
-        }
-        button:hover {
-            background-color: #e0e0e0;
-        }
-        p {
-            color: #666;
-        }
+    h1, h2 {
+        color: #fff;
+        margin-bottom: 20px;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+    button {
+        margin: 10px;
+        padding: 12px 24px;
+        font-size: 1.1rem;
+        font-weight: bold;
+        cursor: pointer;
+        border: none;
+        border-radius: 8px;
+        background-color: #2196F3;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        transition: transform 0.2s, background 0.3s;
+    }
+    button:hover {
+        background-color: #1976D2;
+        transform: translateY(-2px);
+    }
+    button:active {
+        transform: translateY(0);
+    }
+    p {
+        color: #ccc;
+    }
     `;
 }
 

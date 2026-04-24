@@ -237,43 +237,176 @@ class TeachableMachineImageView extends LitElement {
   }
 
   render() {
+    const teamName = localStorage.getItem('teamName') || '';
     return html`
       <div class="view">
-        <h2>${this.name}</h2>
-        ${this.isTesting ? html`<h3>Overall Test Ends In: ${this.overallCountdown}s</h3>` : ''}
-        <div id="webcam-container"></div>
-        <div id="label-container">
-          ${this.predictions.map(
-            (prediction, index) => {
-                const isTestingClass = this.isTesting && this.testParameters && this.testParameters.class === index;
-                const flashingClass = isTestingClass && this.isLabelFlashing ? 'flashing' : '';
-                return html`
-              <div class="prediction ${flashingClass}">
-                ${prediction.className}: ${prediction.probability.toFixed(2)}
-                ${isTestingClass && this.testCountdown !== null ? ` - Countdown: ${this.testCountdown}` : ''}
-              </div>
-            `}
-          )}
+        <div class="header">
+          <div class="team-badge" style="background-color: ${teamName.toLowerCase()}; color: ${this._getTextColor(teamName)}">
+            Team ${teamName}
+          </div>
+          <h2>${this.name}</h2>
+        </div>
+
+        <div class="content">
+          ${this.isTesting ? html`<div class="overall-countdown">Test ends in: <span>${this.overallCountdown}s</span></div>` : ''}
+          <div id="webcam-container"></div>
+          <div id="label-container">
+            ${this.predictions.map(
+              (prediction, index) => {
+                  const isTestingClass = this.isTesting && this.testParameters && this.testParameters.class === index;
+                  const flashingClass = isTestingClass && this.isLabelFlashing ? 'flashing' : '';
+                  return html`
+                <div class="prediction ${flashingClass}">
+                  <span class="label">${prediction.className}</span>
+                  <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${prediction.probability * 100}%"></div>
+                  </div>
+                  <span class="value">${(prediction.probability * 100).toFixed(0)}%</span>
+                  ${isTestingClass && this.testCountdown !== null ? html`<span class="countdown">⏱️ ${this.testCountdown}s</span>` : ''}
+                </div>
+              `}
+            )}
+          </div>
         </div>
       </div>
     `;
   }
 
+  _getTextColor(teamName) {
+    if (!teamName) return 'white';
+    const darkColors = ['blue', 'red', 'purple', 'green'];
+    return darkColors.includes(teamName.toLowerCase()) ? 'white' : 'black';
+  }
+
   static styles = css`
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
     .view {
       padding: 20px;
-      border: 1px dashed green;
-      background-color: #e8f5e9;
       text-align: center;
-      width: 80%;
-      height: 80%;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+      box-sizing: border-box;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .team-badge {
+      padding: 4px 15px;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .overall-countdown {
+      font-size: 1.2rem;
+      background: rgba(255, 0, 0, 0.3);
+      padding: 5px 15px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 0, 0, 0.5);
+    }
+
+    .overall-countdown span {
+      font-weight: bold;
+      color: #ff5252;
+    }
+
+    #webcam-container {
+      border: 4px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+      line-height: 0;
+    }
+
+    #label-container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .prediction {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
     .prediction.flashing {
-      background-color: yellow;
+      background: rgba(255, 255, 0, 0.2);
+      box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+      border: 1px solid yellow;
+    }
+
+    .label {
+      flex: 1;
+      text-align: left;
+      font-weight: bold;
+      font-size: 0.9rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .progress-bar {
+      flex: 2;
+      height: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: #4caf50;
+      transition: width 0.2s ease-out;
+    }
+
+    .value {
+      width: 40px;
+      font-size: 0.8rem;
+      font-family: monospace;
+    }
+
+    .countdown {
+      font-weight: bold;
+      color: #ffeb3b;
+      font-size: 0.9rem;
     }
   `;
 }

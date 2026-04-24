@@ -84,76 +84,171 @@ class TeachableMachineUploadView extends LitElement {
   }
 
   render() {
+    const teamName = localStorage.getItem('teamName') || '';
     return html`
       <div class="view">
-        <h2>${this.name}</h2>
+        <div class="header">
+          <div class="team-badge" style="background-color: ${teamName.toLowerCase()}; color: ${this._getTextColor(teamName)}">
+            Team ${teamName}
+          </div>
+          <h2>${this.name}</h2>
+        </div>
+
         <form @submit="${this._handleSubmit}">
           <input type="hidden" name="team-id" .value="${this.teamId}">
           <input type="hidden" name="terminalId" .value="${this.deviceId}">
           
-          <div class="form-field">
-            <label for="name">Model Name:</label>
-            <input type="text" id="name" name="name" .value="${this.modelName}" readonly required>
-          </div>
+          <div class="form-row">
+            <div class="form-field">
+              <label for="name">Model Name</label>
+              <input type="text" id="name" name="name" .value="${this.modelName}" readonly required>
+            </div>
 
-          <div class="form-field">
-            <label for="name">Model Type:</label>
-            <input type="text" id="type" name="modelType" .value="${this.modelType}" readonly required>
+            <div class="form-field">
+              <label for="name">Model Type</label>
+              <input type="text" id="type" name="modelType" .value="${this.modelType}" readonly required>
+            </div>
           </div>
           
-          <div class="form-field">
-            <label for="model">Model File (.zip):</label>
+          <div class="form-field file-field">
+            <label for="model">Model File (.zip)</label>
             <input type="file" id="model" name="model" accept=".zip" required>
           </div>
           
-          <button type="submit">Upload</button>
+          <button type="submit" class="${this.uploadStatus === 'Uploading...' ? 'loading' : ''}">
+            ${this.uploadStatus === 'Uploading...' ? 'Uploading...' : 'Upload Model'}
+          </button>
         </form>
-        ${this.uploadStatus ? html`<p>${this.uploadStatus}</p>` : ''}
+        ${this.uploadStatus ? html`<p class="status-msg">${this.uploadStatus}</p>` : ''}
       </div>
     `;
   }
 
+  _getTextColor(teamName) {
+    if (!teamName) return 'white';
+    const darkColors = ['blue', 'red', 'purple', 'green'];
+    return darkColors.includes(teamName.toLowerCase()) ? 'white' : 'black';
+  }
+
   static styles = css`
+    :host {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
     .view {
-      padding: 20px;
-      border: 1px dashed blue;
-      background-color: #e3f2fd;
+      padding: 30px;
       text-align: center;
-      width: 80%;
-      height: 80%;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      box-sizing: border-box;
+      color: white;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .team-badge {
+      padding: 4px 15px;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    form {
+      flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      align-items: center;
+      gap: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
     }
-    form {
+
+    .form-row {
       display: flex;
-      flex-direction: column;
       gap: 15px;
     }
+
     .form-field {
+      flex: 1;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+      gap: 5px;
     }
+
+    .file-field {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px dashed rgba(255, 255, 255, 0.2);
+    }
+
     label {
-      margin-bottom: 5px;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: #ccc;
     }
-    input {
-      padding: 8px;
-      border: 1px solid #ccc;
+
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       border-radius: 4px;
+      color: #fff;
+      box-sizing: border-box;
     }
+
+    input[type="file"] {
+      width: 100%;
+      color: #ccc;
+    }
+
     button {
-      padding: 10px 15px;
+      padding: 12px;
       border: none;
       background-color: #2196F3;
       color: white;
       border-radius: 4px;
       cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+      transition: background 0.3s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
     }
+
     button:hover {
       background-color: #1976D2;
+    }
+
+    button.loading {
+      background-color: #666;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      margin-top: 20px;
+      font-style: italic;
+      color: #4caf50;
     }
   `;
 }
