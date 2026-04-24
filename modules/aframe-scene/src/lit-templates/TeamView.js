@@ -72,17 +72,27 @@ class TeamView extends LitElement {
     }
   }
 
+  _handleIncrementScore(teamId) {
+    const scoreManager = document.querySelector('score-manager');
+    if (scoreManager) {
+        scoreManager._incrementScore(teamId);
+    } else {
+        console.error('ScoreManager component not found.');
+    }
+  }
+
   render() {
     return html`
       <div class="team-list">
         <h1>Teams</h1>
         <button @click="${this._handleResetScores}" class="reset-button">Reset All Scores</button>
-        ${Object.values(this.teams).map(
-          (team) => html`
+        ${Object.entries(this.teams).map(
+          ([teamId, team]) => html`
             <div class="team-container">
               <h2>
                 <span class="team-color" style="background-color: ${team.name ? team.name.toLowerCase() : 'grey'}"></span>
                  ${team.name} - Score: ${team.score || 0}
+                 <button @click="${() => this._handleIncrementScore(teamId)}" class="increment-button">+1</button>
               </h2>
               <table>
                 <thead>
@@ -161,6 +171,20 @@ class TeamView extends LitElement {
     }
     .reset-button:hover {
         background-color: #da190b;
+    }
+    .increment-button {
+        background-color: #4CAF50;
+        color: white;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+    .increment-button:hover {
+        background-color: #45a049;
     }
   `;
 }
