@@ -1,6 +1,6 @@
 const mqtt = require('mqtt');
-
-const client = mqtt.connect('ws://localhost:9001');
+const mqttBrokerUrl = process.env.MQTT_BROKER_URL || 'mqtt://localhost:1883';
+const client = mqtt.connect(mqttBrokerUrl);
 
 const TEAMS = [
     {
