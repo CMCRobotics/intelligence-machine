@@ -10,6 +10,8 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(cors());
+app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use('/dist', express.static(path.join(__dirname, '..', 'dist')));
 
 const upload = multer({ storage: multer.memoryStorage() });
 const mqttBrokerUrl = process.env.MQTT_BROKER_URL || 'ws://localhost:9001';
