@@ -23,13 +23,13 @@ function updateBrainScale(score) {
                 const originalBobbingSpeed = floatingComponent.data.bobbingSpeed;
                 const originalRockingSpeed = floatingComponent.data.rockingSpeed;
 
-                floatingComponent.data.bobbingSpeed *= 10;
-                floatingComponent.data.rockingSpeed *= 10;
+                floatingComponent.data.bobbingSpeed = 10;
+                floatingComponent.data.rockingSpeed = 5;
 
                 setTimeout(() => {
                     floatingComponent.data.bobbingSpeed = 1.0;
                     floatingComponent.data.rockingSpeed = 0.5;
-                }, 4000);
+                }, 5000);
             }
 
             // Add halo effect
