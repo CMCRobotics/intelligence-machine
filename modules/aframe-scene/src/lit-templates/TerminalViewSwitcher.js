@@ -29,7 +29,8 @@ class TerminalViewSwitcher extends LitElement {
     this.duration = 1000;
     this.overallTimeout = 10000;
     const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    this.homieObserver = createMqttHomieObserver(`${scheme}://${window.location.hostname}:9001`);
+    const mqttUrl = (window.APP_CONFIG && window.APP_CONFIG.MQTT_BROKER_URL) || `${scheme}://${window.location.hostname}:9001`;
+    this.homieObserver = createMqttHomieObserver(mqttUrl);
     setLogLevel('debug');
   }
 
