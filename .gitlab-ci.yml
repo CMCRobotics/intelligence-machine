@@ -1,7 +1,8 @@
 include:
-  - component: '$CI_SERVER_FQDN/acc-co/devops/ksc-hq/ksc-ci-components/container@v0.4.7'
+  - component: '$CI_SERVER_FQDN/acc-co/devops/ksc-hq/ksc-ci-components/container@develop'
     inputs:
       docker-file: modules/aframe-scene/docker/Dockerfile
       docker-path: modules/aframe-scene/docker
       gitlab-image: $CI_PROJECT_PATH/aframe-scene
       kaniko-build-args: "--build-arg NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN"
+      kaniko-working-dir: $CI_PROJECT_DIR/modules/aframe-scene
