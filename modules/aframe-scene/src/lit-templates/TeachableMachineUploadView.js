@@ -18,6 +18,8 @@ class TeachableMachineUploadView extends LitElement {
     super();
     this.name = "Model Upload";
     this.uploadStatus = '';
+    this.modelName = '';
+    this.modelType = '';
   }
 
   connectedCallback() {
@@ -42,9 +44,9 @@ class TeachableMachineUploadView extends LitElement {
             this.homieObserver.updated$
         ).subscribe(event => {
         if (event.type === 'property') {
-          if (event.property.id === 'name') {
+          if (event.property.id === 'name' && event.property.value !== undefined) {
             this.modelName = event.property.value;
-          } else if (event.property.id === 'type') {
+          } else if (event.property.id === 'type' && event.property.value !== undefined) {
             this.modelType = event.property.value;
           }
           this.requestUpdate();
