@@ -4,3 +4,4 @@ include:
       docker-file: modules/aframe-scene/docker/Dockerfile
       docker-path: modules/aframe-scene/docker
       gitlab-image: $CI_PROJECT_PATH/aframe-scene
+      kaniko-build-args: "--build-arg NPM_AUTH_TOKEN=$NPM_AUTH_TOKEN"
