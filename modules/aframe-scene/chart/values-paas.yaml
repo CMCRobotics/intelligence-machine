@@ -1,6 +1,6 @@
 image:
   repository: gitlab-registry.cern.ch/cmcrobotics/workshops/intelligence-machine/aframe-scene
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "develop"
 
 imagePullSecrets:
