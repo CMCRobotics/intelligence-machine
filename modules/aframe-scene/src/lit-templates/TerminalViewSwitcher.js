@@ -26,8 +26,8 @@ class TerminalViewSwitcher extends LitElement {
     this.uploadedModels = {}; // Tracks { modelName: [{ terminalId, teamId }] }
     this.selectedModel = this.models.length > 0 ? this.models[0].modelName : '';
     this.confidence = 80;
-    this.duration = 1000;
-    this.overallTimeout = 10000;
+    this.duration = 3000;
+    this.overallTimeout = 15000;
     const scheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const mqttUrl = (window.APP_CONFIG && window.APP_CONFIG.MQTT_BROKER_URL) || `${scheme}://${window.location.hostname}:9001`;
     this.homieObserver = createMqttHomieObserver(mqttUrl);
