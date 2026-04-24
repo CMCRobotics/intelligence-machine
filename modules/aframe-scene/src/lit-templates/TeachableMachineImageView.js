@@ -99,6 +99,12 @@ class TeachableMachineImageView extends LitElement {
           return;
         }
 
+        // Handle Random Class Selection
+        if (params.class === -1) {
+          params.class = Math.floor(Math.random() * this.maxPredictions);
+          console.log(`Randomly selected class index: ${params.class}`);
+        }
+
         // Defensive Check: Class Index Validity
         if (params.class < 0 || params.class >= this.maxPredictions) {
           console.error(`Test requested for invalid class index: ${params.class}. Max index is ${this.maxPredictions - 1}`);
