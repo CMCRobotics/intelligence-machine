@@ -47,7 +47,10 @@ class ScoreManager extends LitElement {
         }
     });
 
-    this.homieObserver.updated$.subscribe((event) => {
+    merge(
+        this.homieObserver.created$,
+        this.homieObserver.updated$
+    ).subscribe((event) => {
         if (event.type === 'property') {
             if (event.property.id === 'testSuccess') {
                 const deviceId = event.device.id;
