@@ -11,6 +11,7 @@ const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, '..', 'dist')));
+app.use('/assets', express.static(path.join(__dirname, '..', 'public', 'assets')));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const upload = multer({ storage: multer.memoryStorage() });
