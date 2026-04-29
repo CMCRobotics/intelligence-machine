@@ -117,6 +117,7 @@ class ViewManager extends LitElement {
         newViewElement.sessionManager = this.sessionManager;
         // Add event listener for team-selected event
         newViewElement.addEventListener('team-selected', this.handleTeamSelected.bind(this));
+        newViewElement.addEventListener('team-cleared', this.handleTeamCleared.bind(this));
       }
       
       if (activeViewConfig.tagName === 'teachable-machine-image-view') {
@@ -147,6 +148,11 @@ class ViewManager extends LitElement {
     this.switchView('waiting-view');
   }
 
+  handleTeamCleared() {
+    console.log('Team cleared event received in ViewManager, switching to team-selector.');
+    this.switchView('team-selector');
+  }
+
   render() {
     // The render method now only sets up the container.
     // The actual view element will be managed by _updateView.
@@ -170,6 +176,66 @@ class ViewManager extends LitElement {
       // If teamId is not set, start with the team selector
       this.activeViewName = 'team-selector';
     }
+
+    this._checkDeviceRegistration();
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    if (this._registrationTimeout) {
+      clearTimeout(this._registrationTimeout);
+    }
+    if (this._registrationSubscription) {
+      this._registrationSubscription.unsubscribe();
+    }
+  }
+
+  _checkDeviceRegistration() {
+    if (!this.deviceId) {
+      return;
+    }
+
+    const terminalId = `terminal-${this.deviceId}`;
+    console.log(`Checking registration for device: ${terminalId}`);
+
+    // Wait for the observer to be initialized
+    const checkRegistration = () => {
+      if (!this.homieObserver) {
+        setTimeout(checkRegistration, 100);
+        return;
+      }
+
+      // Let's use a timeout to decide if the device is missing.
+      this._registrationTimeout = setTimeout(() => {
+        console.warn(`Device ${terminalId} not found in MQTT broker after timeout. Resetting local storage.`);
+        this._resetApp();
+      }, 5000); // 5 seconds timeout to find the device
+
+      this._registrationSubscription = this.homieObserver.created$.subscribe(event => {
+        if (event.device && event.device.id === terminalId) {
+          console.log(`Device ${terminalId} confirmed registered in MQTT.`);
+          clearTimeout(this._registrationTimeout);
+          this._registrationSubscription.unsubscribe();
+          this._registrationSubscription = null;
+        }
+      });
+    };
+
+    checkRegistration();
+  }
+
+  _resetApp() {
+    console.log('Resetting local app storage from ViewManager...');
+    localStorage.removeItem('teamId');
+    localStorage.removeItem('teamName');
+    
+    if (this.sessionManager) {
+      this.sessionManager.dispatchEvent(new CustomEvent('team-cleared', {
+        bubbles: true,
+        composed: true
+      }));
+    }
+    this.handleTeamCleared();
   }
 
   static styles = css`
