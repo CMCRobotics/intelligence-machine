@@ -15,7 +15,7 @@ app.use('/assets', express.static(path.join(__dirname, '..', 'public', 'assets')
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 const upload = multer({ storage: multer.memoryStorage() });
-const mqttBrokerUrl = process.env.MQTT_BROKER_URL || 'ws://localhost:9001';
+const mqttBrokerUrl = process.env.MQTT_BROKER_URL || 'mqtt://localhost:1883';
 const client = mqtt.connect(mqttBrokerUrl);
 
 app.get('/config.js', (req, res) => {

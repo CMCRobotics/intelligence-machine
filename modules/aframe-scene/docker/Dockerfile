@@ -1,52 +1,47 @@
-# Stage 1: Build the frontend
-FROM registry.cern.ch/docker.io/node:20-slim AS build
+# Stage 1: Build the frontend and install dependencies
+FROM oven/bun:slim AS build
 
 WORKDIR /app
 
+# Accept the NPM Auth Token as a build argument
 ARG NPM_AUTH_TOKEN
 ENV NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
 
-COPY package*.json ./
+# Copy package configuration and npmrc auth settings
+COPY package.json ./
+COPY .npmrc ./
 
+# Install all dependencies (including packages on the private GitHub package registry)
+RUN bun install
+
+# Copy application source and assets
 COPY . .
 
-#COPY assets ./
-#COPY public ./
-#COPY src ./
-#COPY webpack.config.js ./
-#COPY .npmrc ./
-
-RUN npm install
-RUN npm run build
+# Build the frontend bundles
+RUN bun run build
 
 # Stage 2: Production environment
-FROM registry.cern.ch/docker.io/node:20-slim
-
-ARG NPM_AUTH_TOKEN
-ENV NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
+FROM oven/bun:slim
 
 WORKDIR /app
 
-# Install dependencies
-COPY package*.json ./
-COPY .npmrc ./
-RUN npm install
-
-# Copy built assets from stage 1
+# Copy built assets and runtime files from Stage 1
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/public ./public
 COPY --from=build /app/src ./src
 COPY --from=build /app/assets ./assets
-COPY --from=build /app/webpack.config.js ./webpack.config.js
+COPY --from=build /app/package.json ./package.json
+COPY --from=build /app/node_modules ./node_modules
 
-# Create models directory for uploads
+# Ensure model directory exists
 RUN mkdir -p public/models
 
 EXPOSE 3000
 EXPOSE 9000
 
-# The dynamic config.js is served from src/server.js
-# But we can allow overriding it by mounting a file to /app/public/config.js
+# Mount volumes for persistent assets
 VOLUME ["/app/public/config.js", "/app/public/models"]
 
-ENTRYPOINT ["npm", "run", "start"]
+ENTRYPOINT ["bun", "run", "start"]
+
+
