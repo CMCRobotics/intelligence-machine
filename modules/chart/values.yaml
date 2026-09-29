@@ -14,9 +14,6 @@ nameOverride: ""
 fullnameOverride: ""
 
 
-podAnnotations: {}
-
-workingDir: /eos/project-c/club-micro/projects/intelligence-machine/www
 
 command: ["/usr/local/bin/npm", "install","&&","npm","run","start"]
 
@@ -24,3 +21,23 @@ service:
   type: ClusterIP
   port: 8080
 
+mosquitto:
+  replicaCount: 1
+  image:
+    repository: eclipse-mosquitto
+    pullPolicy: IfNotPresent
+    tag: "2"
+  service:
+    type: ClusterIP
+    port: 1883
+  ws_port: 9001
+  path: /ws
+
+podAnnotations: 
+  eos.okd.cern.ch/mount-eos-with-credentials-from-secret: "eos-credentials"
+
+workingDir: /eos/project-c/club-micro/projects/intelligence-machine/www
+
+# eos:
+#   username:
+#   password: 

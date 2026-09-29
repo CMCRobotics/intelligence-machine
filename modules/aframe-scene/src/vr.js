@@ -1,0 +1,69 @@
+import AFRAME from 'aframe';
+import { html, render } from 'lit-html';
+
+import 'js-yaml';
+import 'loglevel';
+
+import 'aframe-extras';
+import 'aframe-environment-component';
+
+import './aframe-components/load-fragment.js';
+import './aframe-components/linear-animation.js';
+import './aframe-components/ar-utils.js';
+import './aframe-components/floating-in-jar.js';
+import './aframe-components/timed-sound.js';
+
+
+// Import the asset template function
+import { renderAssets } from './lit-templates/assets.js';
+import { renderSceneLab } from './lit-templates/scene-lab.js';
+import { initializeTeamScoreManager } from './team-score-manager.js';
+
+// Polyfill global Buffer
+import { Buffer } from 'buffer';
+window.Buffer = Buffer;
+
+// Parse URL parameters to set team-id in local storage
+const urlParams = new URLSearchParams(window.location.search);
+const teamColor = urlParams.get('team');
+if (teamColor) {
+  const lowerCaseTeamColor = teamColor.toLowerCase();
+  const teamId = `team-${lowerCaseTeamColor}`;
+  localStorage.setItem('teamId', teamId);
+  localStorage.setItem('teamName', lowerCaseTeamColor);
+  console.log(`Team ID set to: ${teamId}`);
+  console.log(`Team Name set to: ${lowerCaseTeamColor}`);
+}
+
+// Define the lit-html template function
+const renderLabScene = (options = {}) => {
+    const { showShadows = true } = options; // Default to true if not specified
+
+    // Construct the environment attributes string, conditionally including shadow
+    const environmentAttributes = `preset: forest; dressing: trees; dressingAmount: 100; dressingColor: #ceebd5; dressingScale: 15; fog: 0.6; fogColor: #adc2d6; playArea: 30; ${showShadows ? 'shadow: true;' : 'shadow: false;'} horizonsColor: #b1d1f0; skyColor: #88c0f4; stageSize: 200; lighting: none; `;
+
+    return html`
+        <a-scene id="aframe-scene" light="defaultLightsEnabled: false"
+                 sound="src: #forestAmbientSound; loop: true; volume: 0.10; autoplay: true">
+            ${renderAssets()} 
+
+            <a-entity environment="${environmentAttributes}"></a-entity>
+            
+            ${renderSceneLab()} 
+        
+            <!-- Default A-Frame Camera (no explicit camera entity needed for default VR POV) -->
+        </a-scene>
+    `;
+};
+
+// Find the container and render the scene directly
+const container = document.getElementById('aframe-container');
+if (container) {
+    // Default options: shadows enabled
+    const options = { showShadows: true };
+    render(renderLabScene(options), container);
+
+    initializeTeamScoreManager();
+} else {
+    console.error("Could not find #aframe-container to render the scene.");
+}

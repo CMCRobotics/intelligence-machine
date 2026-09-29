@@ -26,7 +26,7 @@ FMIN_HZ = 20
 FMAX_HZ = SAMPLE_RATE / 2
 NUM_MEL_FREQS = 40
 NUM_MFCCS = 18
-LIST_GENRES = ['disco', 'jazz', 'metal']
+LIST_GENRES = ['classical', 'hiphop', 'pop', 'reggae', 'rock']# ['disco', 'jazz', 'metal']
 
 # For 1 s audio: frames ~= 1 + floor((N - win)/hop)
 # With 22050, win=2048, hop=1024 -> T ≈ 20

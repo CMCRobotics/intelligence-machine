@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "imachine.fullname" . }}-mosquitto
+  labels:
+    {{- include "imachine.labels" . | nindent 4 }}
+    app.kubernetes.io/component: mosquitto
+spec:
+  replicas: {{ .Values.mosquitto.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "imachine.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: mosquitto
+  template:
+    metadata:
+      labels:
+        {{- include "imachine.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: mosquitto
+    spec:
+      containers:
+        - name: mosquitto
+          image: "{{ .Values.mosquitto.image.repository }}:{{ .Values.mosquitto.image.tag }}"
+          imagePullPolicy: {{ .Values.mosquitto.image.pullPolicy }}
+          ports:
+            - name: mqtt
+              containerPort: {{ .Values.mosquitto.service.port }}
+              protocol: TCP
+            - name: ws
+              containerPort: {{ .Values.mosquitto.ws_port }}
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /mosquitto/config/mosquitto.conf
+              subPath: mosquitto.conf
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "imachine.fullname" . }}-mosquitto

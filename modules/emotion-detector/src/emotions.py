@@ -42,7 +42,7 @@ train_dir = '../data/train'
 # num_val = 7178
 batch_size = 64
 
-num_epoch = 2 #50
+num_epoch = 50
 
 # train_datagen = ImageDataGenerator(rescale=1./255)
 # val_datagen = ImageDataGenerator(rescale=1./255)
@@ -61,62 +61,63 @@ num_epoch = 2 #50
 #         color_mode="grayscale",
 #         class_mode='categorical')
 
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    validation_split=0.2   # 20% goes to validation
-)
+if mode == "train":
+    train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        validation_split=0.2   # 20% goes to validation
+    )
 
-##consider adding augmentation above
-# validation_split = 0.2,
-# rotation_range = 15,
-# width_shift_range = 0.1,
-# height_shift_range = 0.1,
-# zoom_range = 0.1,
-# horizontal_flip = True,
-# fill_mode = 'nearest'
+    ##consider adding augmentation above
+    # validation_split = 0.2,
+    # rotation_range = 15,
+    # width_shift_range = 0.1,
+    # height_shift_range = 0.1,
+    # zoom_range = 0.1,
+    # horizontal_flip = True,
+    # fill_mode = 'nearest'
 
-# Training generator
-train_generator = train_datagen.flow_from_directory(
-    train_dir,
-    target_size=(48,48),
-    batch_size=batch_size,
-    color_mode="grayscale",
-    class_mode='categorical',
-    subset='training'      # specify training split
-)
+    # Training generator
+    train_generator = train_datagen.flow_from_directory(
+        train_dir,
+        target_size=(48,48),
+        batch_size=batch_size,
+        color_mode="grayscale",
+        class_mode='categorical',
+        subset='training'      # specify training split
+    )
 
-# Validation generator
-validation_generator = train_datagen.flow_from_directory(
-    train_dir,
-    target_size=(48,48),
-    batch_size=batch_size,
-    color_mode="grayscale",
-    class_mode='categorical',
-    subset='validation'    # specify validation split
-)
+    # Validation generator
+    validation_generator = train_datagen.flow_from_directory(
+        train_dir,
+        target_size=(48,48),
+        batch_size=batch_size,
+        color_mode="grayscale",
+        class_mode='categorical',
+        subset='validation'    # specify validation split
+    )
 
 
-# Create the model
-model = Sequential()
+    # Create the model
+    model = Sequential()
 
-model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(48,48,1)))
-model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+    model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=(48,48,1)))
+    model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
-model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
-model.add(Dropout(0.25))
+    model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(128, kernel_size=(3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
 
-model.add(Flatten())
-model.add(Dense(1024, activation='relu'))
-model.add(Dropout(0.5))
-model.add(Dense(7, activation='softmax'))
+    model.add(Flatten())
+    model.add(Dense(1024, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(7, activation='softmax'))
 
 # If you want to train the same model or try other models, go for this
-if mode == "train":
+# if mode == "train":
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.0001, decay=1e-6)
     model.compile(loss='categorical_crossentropy',optimizer=optimizer,metrics=['accuracy'])
     history = model.fit(

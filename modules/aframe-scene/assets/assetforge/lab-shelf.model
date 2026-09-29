@@ -1,0 +1,23 @@
+# Made using Asset Forge (2.5.2)
+
+:materials
+
+[name:wood;color:RGBA(1.000, 0.671, 0.671, 1.000);scale:(1.0, 1.0);texture:Wood/woodVertical.png;shader:Default;mapping:0;valueA:0;valueB:0.7;]
+[name:woodDark;color:RGBA(0.698, 0.316, 0.194, 1.000);scale:(1.0, 1.0);texture:Wood/woodHorizontal.png;shader:Default;mapping:0;valueA:0.35;valueB:0;]
+[name:custom2;color:RGBA(0.351, 0.225, 0.088, 1.000);scale:(1.0, 1.0);texture:Wood/woodVertical.png;shader:Default;mapping:0;valueA:0.5;valueB:0.15;]
+[name:_defaultMat;color:RGBA(0.597, 0.688, 0.993, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0.25;]
+[name:dark;color:RGBA(0.134, 0.201, 0.441, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0;]
+[name:metalLight;color:RGBA(0.698, 0.686, 0.867, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0.25;]
+[name:tan;color:RGBA(0.933, 0.835, 0.663, 1.000);scale:(1.0, 1.0);shader:Default;mapping:0;valueA:0.35;valueB:0;]
+[name:custom7;color:RGBA(0.632, 0.486, 0.486, 1.000);scale:(1.0, 1.0);texture:Wood/woodVertical.png;shader:Default;mapping:0;valueA:0;valueB:0.7;]
+
+:models
+
+[name:;collection:Mechanical;type:piston_baseSmall;position:(-2.6000, 0.3434, 0.9788);rotation:(0.0000, 180.0000, 270.0000);scale:(0.3500, 0.3500, 0.4000);group:;locked:False;hidden:True;materials:_defaultMat+dark;]
+[name:;collection:Primitives;type:block;position:(-0.1205, 2.0800, -0.0500);rotation:(0.0000, 0.0000, 0.0000);scale:(0.6282, 0.0700, 2.1000);group:;locked:False;hidden:False;materials:wood;]
+[name:;collection:Primitives;type:block;position:(-0.0765, 2.1400, -0.0351);rotation:(0.0000, 0.0000, 0.0000);scale:(0.7162, 0.4367, 2.3818);group:;locked:False;hidden:False;materials:wood;]
+[name:;collection:Primitives;type:block;position:(-0.1205, -0.0300, -0.0500);rotation:(0.0000, 0.0000, 0.0000);scale:(0.6282, 0.0700, 2.1000);group:;locked:False;hidden:False;materials:wood;]
+[name:;collection:Primitives;type:block;position:(-0.1362, 0.6800, -0.0491);rotation:(0.0000, 0.0000, 0.0000);scale:(0.5968, 0.0700, 1.9759);group:;locked:False;hidden:False;materials:wood;]
+[name:;collection:Primitives;type:block;position:(-0.1362, 1.3700, -0.0491);rotation:(0.0000, 0.0000, 0.0000);scale:(0.5968, 0.0700, 1.9759);group:;locked:False;hidden:False;materials:wood;]
+[name:;collection:Primitives;type:block;position:(-0.1205, 1.0900, -1.0200);rotation:(270.0000, 0.0000, 0.0000);scale:(0.6282, 0.0700, 2.1000);group:;locked:False;hidden:False;materials:wood;]
+[name:;collection:Primitives;type:block;position:(-0.1205, 1.0900, 0.9900);rotation:(270.0000, 0.0000, 0.0000);scale:(0.6282, 0.0700, 2.1000);group:;locked:False;hidden:False;materials:wood;]

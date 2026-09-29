@@ -35,6 +35,11 @@ You need to export your token as **NPM_AUTH_TOKEN**.
 sudo service mosquitto stop && sudo rm /var/lib/mosquitto/mosquitto.db && sudo service mosquitto start
 ```
 
+### Useful commands
+
+* Reset your broker ```MQTT_BROKER_URL="wss://inmachine-mqtt.app.cern.ch" npm run init-teams```
+
+
 ## 🔬 Technical Components
 
 - WebXR for augmented reality experiences

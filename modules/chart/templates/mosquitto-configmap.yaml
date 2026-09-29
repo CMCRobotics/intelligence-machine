@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "imachine.fullname" . }}-mosquitto
+  labels:
+    {{- include "imachine.labels" . | nindent 4 }}
+data:
+  mosquitto.conf: |
+    listener {{ .Values.mosquitto.service.port }}
+    protocol mqtt
+    listener {{ .Values.mosquitto.ws_port }}
+    protocol websockets
+    allow_anonymous true

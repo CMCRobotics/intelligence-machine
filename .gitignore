@@ -131,6 +131,6 @@ dist
 
 .npmrc
 
-*.glb
-*.obj
-*.mtl
+# *.glb
+# *.obj
+# *.mtl

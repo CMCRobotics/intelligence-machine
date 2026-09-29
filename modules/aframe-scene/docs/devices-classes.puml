@@ -1,0 +1,94 @@
+@startuml Homie Devices
+
+package "MQTT Homie Architecture" {
+
+  class "Terminal Device\n(terminal-<deviceId>)" as Terminal {
+    .. Identity ..
+    + deviceId: String
+  }
+
+  class "ui-control Node" as TerminalUIControl {
+    + switch: String ("team-selector" | "waiting-view" | "teachable-machine-image" | "teachable-machine-upload")
+  }
+
+  class "info Node" as TerminalInfo {
+    + team: String (e.g., "team-white")
+  }
+
+  class "model-upload Node" as TerminalModelUpload {
+    + name: String (e.g., "greeter")
+    + type: String ("image" | "pose" | "speech")
+  }
+
+  class "activeModel Node" as TerminalActiveModel {
+    + set: JSONString <ActiveModelSetPayload>
+    + test: JSONString <ActiveModelTestPayload>
+    + testSuccess: JSONString <ActiveModelTestSuccessPayload>
+    + test-result: JSONString <ActiveModelTestResultPayload>
+  }
+
+  Terminal *-- TerminalUIControl
+  Terminal *-- TerminalInfo
+  Terminal *-- TerminalModelUpload
+  Terminal *-- TerminalActiveModel
+
+  class "Team Device\n(team-<teamId>)" as Team {
+    .. Identity ..
+    + teamId: String (e.g., "team-white")
+  }
+
+  class "info Node" as TeamInfo {
+    + name: String (e.g., "White")
+    + score: Integer
+  }
+
+  class "model-<modelName> Node\n(Dynamic)" as TeamModel {
+    + modelName: String
+    + type: String
+    + modelUrl: String
+    + metadataUrl: String
+    + timestamp: String (ISO)
+    + terminalId: String
+    + classCount: Integer
+    + storagePath: String
+  }
+
+  Team *-- TeamInfo
+  Team *-- TeamModel
+
+  ' Relationships & Interactions
+  TerminalInfo ..> Team : "Associates terminal\nwith team"
+  TerminalActiveModel ..> TeamModel : "Retrieves, configures,\n& tests uploaded model"
+}
+
+package "JSON Payload Schemas" {
+  
+  class "ActiveModelSetPayload" as SetPayload {
+    + name: String
+    + uploaderTeamId: String
+    + type: String ("image" | "pose" | "speech")
+  }
+
+  class "ActiveModelTestPayload" as TestPayload {
+    + confidence: Number (0 - 100)
+    + duration: Number (ms)
+    + class: Number (index of target class)
+    + overallTimeout: Number (ms)
+  }
+
+  class "ActiveModelTestSuccessPayload" as TestSuccessPayload {
+    + confidence: Number (0 - 100)
+    + duration: Number (ms)
+    + class: Number (index of target class)
+    + overallTimeout: Number (ms)
+    + timestamp: Number (epoch ms)
+  }
+
+  class "ActiveModelTestResultPayload" as TestResultPayload {
+    + success: Boolean (false)
+  }
+
+}
+
+@enduml
+
