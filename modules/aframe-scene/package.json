@@ -4,13 +4,14 @@
     "description": "An educational experience about Artificial Intelligence and Machine Learning.",
     "main": "index.js",
     "scripts": {
-        "start": "concurrently \"npm run start:frontend\" \"npm run start:server\"",
-        "start:frontend": "webpack serve --mode development",
-        "start:server": "node src/server.js",
-        "build": "webpack --mode production",
-        "init-teams": "node bin/init-teams.js",
-        "set-model": "node bin/set-model.js",
-        "trigger-test": "node bin/trigger-test.js"
+        "start": "bun run copy-public && bun run start:frontend & bun run start:server",
+        "start:frontend": "bun build --watch src/desktop.js src/vr.js src/presentation.js src/game.js --outdir dist/ --target browser",
+        "start:server": "bun src/server.js",
+        "build": "bun build src/vr.js src/presentation.js src/desktop.js src/game.js --outdir dist/ --target browser && bun run copy-public",
+        "init-teams": "bun bin/init-teams.js",
+        "set-model": "bun bin/set-model.js",
+        "trigger-test": "bun bin/trigger-test.js",
+        "copy-public": "mkdir -p dist/ && cp -r public/* dist/"
     },
     "dependencies": {
         "@teachablemachine/image": "^0.8.5",
@@ -40,19 +41,7 @@
         "url": "^0.11.4",
         "uuid": "^10.0.0"
     },
-    "devDependencies": {
-        "concurrently": "^8.2.2",
-        "copy-webpack-plugin": "^12.0.2",
-        "crypto-browserify": "^3.12.0",
-        "css-loader": "^7.1.2",
-        "html-webpack-plugin": "^5.5.0",
-        "path-browserify": "^1.0.1",
-        "stream-browserify": "^3.0.0",
-        "style-loader": "^4.0.0",
-        "webpack": "^5.75.0",
-        "webpack-cli": "^5.0.1",
-        "webpack-dev-server": "^4.11.1"
-    },
+    "devDependencies": {},
     "publishConfig": {
         "registry": "https://npm.pkg.github.com"
     }

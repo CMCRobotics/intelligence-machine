@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { createMqttHomieObserver, setLogLevel } from '@cmcrobotics/homie-lit'; // Using HomieObserver as requested
 
-class SessionManager extends LitElement {
+export class SessionManager extends LitElement {
   static properties = {
     teams: { type: Array },
     selectedTeam: { type: Object },

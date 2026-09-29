@@ -42,7 +42,8 @@ const renderLabScene = (options = {}) => {
 
     return html`
         <a-scene id="aframe-scene" light="defaultLightsEnabled: false"
-                 sound="src: #forestAmbientSound; loop: true; volume: 0.10; autoplay: true">
+                 sound="src: #forestAmbientSound; loop: true; volume: 0.10; autoplay: true"
+                 vr-mode-ui="enabled: false">
             ${renderAssets()}
 
             <a-entity environment="${environmentAttributes}"></a-entity>
